@@ -2,8 +2,11 @@
 
 import argparse
 import logging
+import os
 import sys
 import time
+
+os.environ.setdefault("CONSOLE_LOG_LEVEL", "WARNING")  # before the app imports configure logging; full logs still go to logs/
 
 from rich.console import Console
 from rich.panel import Panel

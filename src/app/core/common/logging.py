@@ -7,6 +7,7 @@ console-friendly development logging and JSON-formatted production logging.
 
 import json
 import logging
+import os
 import sys
 from contextvars import ContextVar
 from datetime import datetime
@@ -180,7 +181,8 @@ def setup_logging() -> None:
 
     # Create console handler
     console_handler = logging.StreamHandler(sys.stdout)
-    console_handler.setLevel(log_level)
+    # the CLI keeps its terminal clean (full logs still go to the file); servers keep console logs
+    console_handler.setLevel(os.getenv("CONSOLE_LOG_LEVEL", logging.getLevelName(log_level)).upper())
 
     # Get shared processors
     shared_processors = get_structlog_processors(
