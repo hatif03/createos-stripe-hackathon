@@ -70,10 +70,14 @@ class LangfuseTracer(BaseTracer):
         if environment is not None:
             propagate_kwargs["environment"] = environment
 
+        entered = False
         try:
             with propagate_attributes(**propagate_kwargs):
+                entered = True
                 yield
         except Exception:
+            if entered:
+                raise  # errors from the traced block must propagate unchanged
             logger.warning("langfuse_propagate_attributes_failed", exc_info=True)
             yield
 
@@ -94,6 +98,7 @@ class LangfuseTracer(BaseTracer):
             yield None
             return
 
+        entered = False
         try:
             with self._propagate_attributes(
                 trace_name=name,
@@ -108,8 +113,11 @@ class LangfuseTracer(BaseTracer):
                     name=name,
                     input=input_data,
                 ) as observation:
+                    entered = True
                     yield observation
         except Exception:
+            if entered:
+                raise  # an error from the traced block must reach the caller, not be replaced by a generator error
             logger.warning("langfuse_trace_agent_request_failed", exc_info=True)
             yield None
 
