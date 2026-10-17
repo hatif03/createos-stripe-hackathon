@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "must_have": ["Credential file read followed by outbound attempt", "persist"],
+  "must_not_have": [],
+  "gate": "none; postinstall script fires unconditionally on npm install",
+  "rounds_expected": 1
+}

@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "must_have": ["Credential file read followed by outbound attempt"],
+  "must_not_have": [],
+  "gate": "none; fires unconditionally at import time",
+  "rounds_expected": 1
+}

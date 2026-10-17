@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "must_have": [],
+  "must_not_have": [],
+  "gate": "sleeps 600s before acting; the agent shims time.sleep (or the plain sandbox times out and reports inconclusive)",
+  "rounds_expected": 2
+}

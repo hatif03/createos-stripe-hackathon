@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "must_have": ["Canary credentials exfiltrated", "Behaviour only appears under lure"],
+  "must_not_have": [],
+  "gate": "NODE_ENV must hash to sha256('production') AND the host must resolve; the value is not readable, so the agent guesses candidates in parallel forks or cracks the hash with a probe",
+  "rounds_expected": 2
+}

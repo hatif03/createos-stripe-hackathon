@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "must_have": ["Canary credentials exfiltrated", "Behaviour only appears under lure"],
+  "must_not_have": [],
+  "gate": "requires both DNS resolution of the fake C2 host and the CI env var set; completely silent otherwise",
+  "rounds_expected": 3
+}

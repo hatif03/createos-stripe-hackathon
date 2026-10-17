@@ -1,0 +1,7 @@
+{
+  "verdict": "clean",
+  "must_have": [],
+  "must_not_have": ["network", "credential", "exfiltrat", "persist"],
+  "gate": "none; pure functions, no I/O at import or call time",
+  "rounds_expected": 1
+}

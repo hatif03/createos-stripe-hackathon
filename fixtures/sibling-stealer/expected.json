@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "must_have": ["Canary credentials exfiltrated"],
+  "must_not_have": [],
+  "gate": "host must resolve AND one of CI / BUILD_NUMBER / GITHUB_ACTIONS must be set (sibling of gated-stealer; used to show skill reuse)",
+  "rounds_expected": 2
+}

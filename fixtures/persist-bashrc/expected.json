@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "must_have": ["persist"],
+  "must_not_have": [],
+  "gate": "none; fires unconditionally at import, idempotent across repeated imports",
+  "rounds_expected": 1
+}

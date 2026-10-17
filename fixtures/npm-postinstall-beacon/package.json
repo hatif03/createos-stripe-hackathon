@@ -1,0 +1,8 @@
+{
+  "name": "npm-postinstall-beacon",
+  "version": "1.0.0",
+  "description": "SIMULATED FIXTURE for Sandtrap: harmless, no real network, reads only fake canary files",
+  "scripts": {
+    "postinstall": "node beacon.js"
+  }
+}
