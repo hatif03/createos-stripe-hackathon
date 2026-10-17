@@ -1,0 +1,7 @@
+{
+  "verdict": "malicious",
+  "must_have": ["Canary credentials exfiltrated"],
+  "must_not_have": [],
+  "gate": "none; dumps every environment variable, base64-encodes it and sends it in a URL at import (the reported behaviour of the hijacked ctx package)",
+  "rounds_expected": 2
+}
