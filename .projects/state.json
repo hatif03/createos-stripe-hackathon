@@ -1,0 +1,52 @@
+{
+  "version": 2,
+  "providers": {
+    "agentmail": {
+      "name": "AgentMail"
+    },
+    "createos": {
+      "name": "createos"
+    },
+    "neon": {
+      "name": "Neon"
+    }
+  },
+  "resources": {
+    "agentmail-api": {
+      "livemode": true,
+      "name": "agentmail-api",
+      "providerName": "AgentMail",
+      "serviceId": "api"
+    },
+    "agentmail-plan": {
+      "livemode": true,
+      "name": "agentmail-plan",
+      "providerName": "AgentMail",
+      "serviceId": "free"
+    },
+    "createos-plan": {
+      "livemode": true,
+      "name": "createos-plan",
+      "providerName": "createos",
+      "serviceId": "free"
+    },
+    "createos-project": {
+      "livemode": true,
+      "name": "createos-project",
+      "providerName": "createos",
+      "serviceId": "project"
+    },
+    "neon-plan": {
+      "livemode": true,
+      "name": "neon-plan",
+      "providerName": "Neon",
+      "serviceId": "free"
+    },
+    "neon-postgres": {
+      "livemode": true,
+      "name": "neon-postgres",
+      "providerName": "Neon",
+      "serviceId": "postgres"
+    }
+  }
+}
