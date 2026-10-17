@@ -24,6 +24,8 @@ def discover():
         items["elf-gated-beacon"] = (f"c:{ROOT / 'c' / 'gated_beacon.c'}", ROOT / "c" / "expected.json")
     if (ROOT / "npm-postinstall-beacon" / "package.json").exists():
         items["npm-postinstall-beacon"] = (f"npm:{ROOT / 'npm-postinstall-beacon'}", ROOT / "npm-postinstall-beacon" / "expected.json")
+    if (ROOT / "script-ci-uploader" / "uploader.sh").exists():
+        items["script-ci-uploader"] = (f"script:{ROOT / 'script-ci-uploader' / 'uploader.sh'}", ROOT / "script-ci-uploader" / "expected.json")
     return items
 
 
