@@ -22,7 +22,7 @@ from src.app.core.common.config import settings
 from src.app.core.common.logging import logger
 from src.app.core.tracing.factory import make_langfuse_tracer
 from src.app.sandtrap.analyst import AnalystContext, run_analyst
-from src.app.sandtrap.lab import Lab, binary_driver, default_driver, local_modules, npm_driver
+from src.app.sandtrap.lab import Lab, binary_driver, default_driver, local_modules, npm_driver, script_driver
 from src.app.static.capa import run_capa
 from src.app.static.virustotal import lookup as virustotal_lookup
 from src.app.sandtrap.learn import learn_skill
@@ -73,6 +73,7 @@ class RunCtx:
     learned: list[str] = field(default_factory=list)
     binary: bool = False
     npm: bool = False
+    script: str = ""
     static: list[StaticFinding] = field(default_factory=list)
 
 
@@ -114,6 +115,12 @@ def node_setup(state: ScanState) -> ScanState:
             ctx.static = run_capa(ctx.session, "/root/work/bin/sample") + virustotal_lookup(
                 ctx.session.run("sha256sum /root/work/bin/sample | cut -d' ' -f1").stdout.strip())
             ctx.emit("static", {"findings": len(ctx.static)})
+    elif target.startswith("script:"):
+        path = Path(target[7:])
+        ctx.script = path.name
+        ctx.sha256 = hashlib.sha256(path.read_bytes()).hexdigest()
+        ctx.emit("stage", {"name": "upload", "detail": f"{path.name} uploaded (it only runs inside probes, with CI-like fake credentials)"})
+        install = ctx.lab.install_script(path)
     elif target.startswith("npm:"):
         path = Path(target[4:])
         ctx.npm = True
@@ -145,7 +152,8 @@ def node_setup(state: ScanState) -> ScanState:
 def node_baseline(state: ScanState) -> ScanState:
     ctx = RUNS[state["job"]]
     ctx.emit("stage", {"name": "baseline", "detail": "traced run, fake DNS answers NXDOMAIN"})
-    driver = binary_driver() if ctx.binary else npm_driver() if ctx.npm else default_driver(ctx.modules)
+    driver = (binary_driver() if ctx.binary else npm_driver() if ctx.npm else script_driver(ctx.script) if ctx.script
+              else default_driver(ctx.modules))
     probe = Probe(round=0, label="baseline", driver_code=driver)
     result = ctx.lab.run_probe(probe)
     ctx.analyst = AnalystContext(
@@ -154,6 +162,14 @@ def node_baseline(state: ScanState) -> ScanState:
         probe_budget=ctx.probe_budget, emit=ctx.emit,
     )
     ctx.analyst.rounds.append(result)
+    if ctx.script:
+        ctx.analyst.default_driver_code = driver
+        ctx.analyst.source_roots = ["/root/work/src"]
+        ctx.analyst.task_note = (
+            f"TARGET IS A SHELL SCRIPT ({ctx.script}) in /root/work/src, run the way a CI job or installer would run it. The "
+            "environment already holds CI-style fake credentials (AWS_SECRET_ACCESS_KEY, GITHUB_TOKEN, NPM_TOKEN). For run_probe, "
+            "driver_code must be a bash script starting with #!/bin/bash (for example set variables, then bash the script)."
+        )
     if ctx.npm:
         ctx.analyst.default_driver_code = driver
         ctx.analyst.source_roots = ["/root/work/pkg"]
@@ -170,7 +186,7 @@ def node_baseline(state: ScanState) -> ScanState:
             "Python package. For run_probe, driver_code must be a bash script starting with #!/bin/bash that runs "
             "/root/work/bin/sample (set env vars inside the script or via env). capa static capabilities found: " + caps
         )
-    if ctx.use_memory and not ctx.binary and not ctx.npm:
+    if ctx.use_memory and not ctx.binary and not ctx.npm and not ctx.script:
         src = ctx.lab.session.run(f"head -c 3500 /root/work/pkg/{ctx.modules[0]}/__init__.py 2>/dev/null").stdout if ctx.modules else ""
         skills = get_memory().relevant_skills(f"{src}\n{ctx.modules}", limit=2)
         if skills:
@@ -203,7 +219,7 @@ def node_learn(state: ScanState) -> ScanState:
 
 def node_remediate(state: ScanState) -> ScanState:
     ctx = RUNS[state["job"]]
-    if ctx.remediate and not ctx.target.startswith("pypi:") and not ctx.binary and not ctx.npm:
+    if ctx.remediate and not ctx.target.startswith("pypi:") and not ctx.binary and not ctx.npm and not ctx.script:
         try:
             ctx.patch_diff, ctx.remediation = run_remediation(ctx)
         except Exception as exc:  # remediation is a bonus step: never lose the verdict

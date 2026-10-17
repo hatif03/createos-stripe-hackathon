@@ -63,6 +63,15 @@ class Lab:
         self.prepared = True
 
     @property
+    def canary_env(self) -> dict[str, str]:
+        """Fake credentials in the environment, as a CI runner would have (an `env` dump must be provable too)."""
+        return {
+            "AWS_SECRET_ACCESS_KEY": f"SNDTRP-{self.token}-AWS/fake-secret-not-real",
+            "GITHUB_TOKEN": f"ghp_SNDTRP-{self.token}-ENV",
+            "NPM_TOKEN": f"npm_SNDTRP-{self.token}-NPM",
+        }
+
+    @property
     def canary_labels(self) -> list[str]:
         return [f"SNDTRP-{self.token}-{k}" for k in ("SSH", "AWS", "NPM", "ENV")] + [f"AKIASNDTRP{self.token}"]
 
@@ -86,6 +95,14 @@ class Lab:
         out = self.session.run(f"cd /root/work/src && gcc -O1 -o /root/work/bin/sample {source.name}")
         return InstallResult(ok=out.ok, exit_code=out.exit_code, stdout=out.stdout, stderr=out.stderr)
 
+    def install_script(self, script: str | Path) -> InstallResult:
+        """Upload a shell script (CI helper, curl|bash installer); it runs only inside probes, never at upload."""
+        self.prepare()
+        script = Path(script)
+        self.session.run("mkdir -p /root/work/src")
+        self.session.put(f"/root/work/src/{script.name}", script.read_bytes())
+        return InstallResult(ok=True, exit_code=0)
+
     def install_npm(self, local_dir: str | Path) -> InstallResult:
         """Upload an npm package and install it WITHOUT running lifecycle scripts; the analyst runs them under the lure."""
         self.prepare()
@@ -94,7 +111,7 @@ class Lab:
         return InstallResult(ok=True, exit_code=0, stdout=out.stdout, stderr=out.stderr)
 
     def _install(self, target: str) -> InstallResult:
-        script = INSTALL_SCRIPT % {"syscalls": TRACE_SYSCALLS, "target": f"'{target}'"}
+        script = self._exports({}) + INSTALL_SCRIPT % {"syscalls": TRACE_SYSCALLS, "target": f"'{target}'"}
         started = time.time()
         out = self.session.run(script, timeout=600)
         events = self._events(f"{OUT_ROOT}/install/events.json", round_no=-1)
@@ -119,7 +136,7 @@ class Lab:
         interpreter = "/bin/bash" if shell else VENV_PY
         self.session.put(driver_file, probe.driver_code)
         self.session.put(f"{out_dir}/reply.txt", probe.sink_reply)
-        env_lines = "".join(f"export {k}={json.dumps(v)}\n" for k, v in probe.env.items())
+        env_lines = self._exports(probe.env)
         script = (
             f"{env_lines}"
             f"bash /opt/sandtrap/run_probe.sh {out_dir} {'lure' if probe.lure else 'observe'} {probe.timeout_s} "
@@ -147,6 +164,11 @@ class Lab:
         )
 
     # -- helpers -------------------------------------------------------------------------------------------------
+    def _exports(self, extra: dict[str, str]) -> str:
+        """Shell export lines: canary environment first, then the experiment's own variables. The API only accepts
+        variables declared at sandbox creation, so everything is exported inside the script."""
+        return "".join(f"export {k}={json.dumps(v)}\n" for k, v in {**self.canary_env, **extra}.items())
+
     def _raw(self, path: str) -> dict:
         text = self.session.get_text(path)
         try:
@@ -172,6 +194,11 @@ def default_driver(modules: list[str]) -> str:
         "    except Exception:\n"
         "        print('import-error', name); traceback.print_exc()\n"
     )
+
+
+def script_driver(name: str) -> str:
+    """Default driver for shell-script targets: run the script the way a CI job would."""
+    return f"#!/bin/bash\ncd /root/work\nbash /root/work/src/{name}\necho \"script exited with $?\"\n"
 
 
 def npm_driver() -> str:
