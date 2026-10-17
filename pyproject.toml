@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools>=68.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sandtrap"
+version = "0.1.0"
+description = "Sandtrap: an AI analyst agent that lures malicious code into revealing itself inside a CreateOS sandbox"
+requires-python = ">=3.13"
+dependencies = [
+    # CreateOS (hackathon-built parts)
+    "createos-sandbox>=0.1.3",
+    # API, middleware, guardrails, tracing, metrics
+    "fastapi>=0.121.0",
+    "uvicorn>=0.34.0",
+    "python-multipart>=0.0.20",
+    "pydantic[email]>=2.11.1",
+    "python-dotenv>=1.1.0",
+    "structlog>=25.2.0",
+    "tenacity>=9.1.2",
+    "slowapi>=0.1.9",
+    "prometheus-client>=0.19.0",
+    "asgiref>=3.8.1",
+    "httpx>=0.28.1",
+    "rich>=13.7.0",
+    "langchain>=1.4.0",
+    "langchain-core>=1.6.7",
+    "langchain-openai>=1.6.7",
+    "langgraph>=1.2.5,<1.3.0",
+    "mcp[cli]>=2.3.0",
+    # static analysis helpers (VirusTotal hash lookup)
+    "requests>=2.32.3",
+    # threat memory, resumable graph, enrichment
+    "sqlmodel>=0.0.48",
+    "aiosqlite>=0.20.0",
+    "langgraph-checkpoint-sqlite>=2.0.0",
+    "ddgs>=9.6.0",
+    "numpy>=2.0.0",
+    "langchain-community>=0.4.1",
+    # Langfuse tracing + Postgres checkpointer (Neon)
+    "langfuse>=4.17.0",
+    "langgraph-checkpoint-postgres>=3.1.0",
+    "psycopg[binary]>=3.3.2",
+]
+
+[project.optional-dependencies]
+dev = ["ruff"]
+guardrails-ml = ["transformers>=4.39.0", "torch>=2.0.0"]
+
+[dependency-groups]
+test = ["pytest>=8.3.5", "pytest-asyncio>=0.25.0"]
+
+[tool.pytest.ini_options]
+markers = ["slow: marks tests as slow (deselect with '-m \"not slow\"')"]
+python_files = ["test_*.py", "*_test.py"]
+asyncio_mode = "auto"
+
+[tool.ruff]
+line-length = 119
+exclude = [".venv", "out"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
