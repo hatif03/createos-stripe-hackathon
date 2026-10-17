@@ -159,9 +159,9 @@ class Settings:
         # Gemini on Vertex AI (OpenAI-compatible endpoint, gcloud token); preferred when LLM_PROVIDER=gemini
         self.LLM_PROVIDER = os.getenv("LLM_PROVIDER", "gemini").lower()
         self.GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash")
-        self.GEMINI_PROJECT = os.getenv("GEMINI_PROJECT", "project-f0b6b4ce-541f-43ff-9f7")
+        self.GEMINI_PROJECT = os.getenv("GEMINI_PROJECT", "")
         self.GEMINI_LOCATION = os.getenv("GEMINI_LOCATION", "global")
-        self.GCLOUD_ACCOUNT = os.getenv("GCLOUD_ACCOUNT", "mho150503@gmail.com")
+        self.GCLOUD_ACCOUNT = os.getenv("GCLOUD_ACCOUNT", "")
         self.GEMINI_REASONING_EFFORT = os.getenv("GEMINI_REASONING_EFFORT", "low")
         self.GEMINI_ACCESS_TOKEN = os.getenv("GEMINI_ACCESS_TOKEN", "")
         self.USE_GEMINI = self.LLM_PROVIDER == "gemini"
