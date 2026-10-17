@@ -172,9 +172,10 @@ class Lab:
     def _raw(self, path: str) -> dict:
         text = self.session.get_text(path)
         try:
-            return json.loads(text) if text else {}
+            data = json.loads(text) if text else {}
         except ValueError:
             return {}
+        return data if isinstance(data, dict) else {}  # an unexpected shape must not crash a scan (seen once as "'list' has no attribute 'get'")
 
     def _events(self, path: str, round_no: int) -> list[Event]:
         return [Event(round=round_no, **e) for e in self._raw(path).get("events", [])]

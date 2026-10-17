@@ -13,6 +13,7 @@ import sys
 import tarfile
 import tempfile
 import time
+import traceback
 import urllib.request
 from pathlib import Path
 
@@ -69,6 +70,7 @@ for slug in names:
         target = f"pypi:{spec}" if kind == "pypi" else fetch_npm(spec) if kind == "npm" else fetch_script(spec)
         r = scan(target, out_dir=str(ROOT / "out" / "real"), probe_budget=5, remediate=False, use_memory=False)
     except Exception as exc:
+        traceback.print_exc()
         index[slug] = {"slug": slug, "kind": kind, "spec": spec, "why": why, "verdict": "ERROR", "error": f"{type(exc).__name__}: {str(exc)[:200]}"}
         print(index[slug], flush=True)
         continue

@@ -42,7 +42,7 @@ legitimately uses the network or runs install scripts.
 {rw}
 
 Installer scripts and packages that download things by design will trigger network behaviour under the lure; see the
-[limitations](../README.md#limitations) and the per-target notes below.
+[limitations](../README.md#limitations).
 
 ## 2. Our 14 malicious/benign fixtures (the benchmark)
 
@@ -68,7 +68,16 @@ Unit tests ([proof/unit-tests.txt](proof/unit-tests.txt)): `{tests}`
 Stripe Projects state: [proof/stripe-projects-status.txt](proof/stripe-projects-status.txt) (three free services: `createos-project`, `neon-postgres`,
 `agentmail-api`; no paid plan).
 
-## 4. Reproduce
+## 4. Screenshots
+
+Rendered from the files above (full-page captures with headless Edge, `scripts/make_clips.py`).
+
+| | |
+| --- | --- |
+| [Benchmark: plain sandbox vs Sandtrap](proof/screenshots/benchmark.png) | [Real packages and installers](proof/screenshots/real-world.png) |
+| [Public report hosted by a CreateOS sandbox (live URL in the banner)](proof/screenshots/public-report-hosted.png) | [Compiled-binary report with capa](proof/screenshots/elf-report.png) |
+
+## 5. Reproduce
 
 ```
 uv run python scripts/bench.py                 # 14 fixtures, writes out/bench.json

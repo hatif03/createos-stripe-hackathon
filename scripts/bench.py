@@ -7,6 +7,7 @@ import json
 import logging
 import sys
 import time
+import traceback
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -44,6 +45,7 @@ for name in names:
             r = scan(target, out_dir="out/bench", probe_budget=5, remediate=False, use_memory=False)
             break
         except Exception as exc:
+            traceback.print_exc()
             error = f"{type(exc).__name__}: {str(exc)[:120]}"
             print(f"  attempt {attempt} failed: {error}", flush=True)
     if r is not None:
