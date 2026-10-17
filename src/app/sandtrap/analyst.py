@@ -188,11 +188,32 @@ def _read_file(ctx: AnalystContext, path: str, max_bytes: int) -> str:
     return text
 
 
+def _as_dict(x) -> dict:
+    """Models occasionally send a list where a tool argument object belongs; take the first object instead of crashing the scan."""
+    if isinstance(x, dict):
+        return x
+    return next((i for i in x if isinstance(i, dict)), {}) if isinstance(x, list) else {}
+
+
+def _env(x) -> dict[str, str]:
+    """Environment variables from {"K": "V"}, [{"name": "K", "value": "V"}] or ["K=V"]."""
+    if isinstance(x, dict):
+        return {str(k): str(v) for k, v in x.items()}
+    out: dict[str, str] = {}
+    for item in x if isinstance(x, list) else []:
+        if isinstance(item, dict) and ("name" in item or "key" in item):
+            out[str(item.get("name") or item.get("key"))] = str(item.get("value", ""))
+        elif isinstance(item, str) and "=" in item:
+            k, _, v = item.partition("=")
+            out[k] = v
+    return out
+
+
 def _probe_from_args(ctx: AnalystContext, args: dict, label: str, round_no: int) -> Probe:
     return Probe(
         round=round_no,
         label=label,
-        env={str(k): str(v) for k, v in (args.get("env") or {}).items()},
+        env=_env(args.get("env")),
         lure=bool(args.get("lure")),
         sink_reply=args.get("sink_reply") or '{"ok": true}',
         clock_offset_days=int(args.get("clock_offset_days") or 0),
@@ -229,9 +250,9 @@ def run_analyst(ctx: AnalystContext) -> AnalystContext:
             forced = True
             continue
         for call in ai.tool_calls:
-            name, args = call["name"], call["args"]
+            name, args = call["name"], _as_dict(call["args"])
             if name == "conclude":
-                ctx.hypotheses.extend(args.get("hypotheses", []))
+                ctx.hypotheses.extend(map(str, args.get("hypotheses") if isinstance(args.get("hypotheses"), list) else []))
                 ctx.summary = args.get("summary", "")
                 ctx.emit("conclude", {"summary": ctx.summary})
                 return ctx
@@ -246,16 +267,7 @@ def run_analyst(ctx: AnalystContext) -> AnalystContext:
                     result = "Probe budget exhausted. Call conclude now."
                 else:
                     probes_used += 1
-                    probe = Probe(
-                        round=len(ctx.rounds),
-                        label=f"probe-{probes_used}",
-                        env={str(k): str(v) for k, v in (args.get("env") or {}).items()},
-                        lure=bool(args.get("lure")),
-                        sink_reply=args.get("sink_reply") or '{"ok": true}',
-                        clock_offset_days=int(args.get("clock_offset_days") or 0),
-                        driver_code=args.get("driver_code") or ctx.default_driver_code or default_driver(ctx.modules),
-                        timeout_s=min(int(args.get("timeout_s") or 45), 90),
-                    )
+                    probe = _probe_from_args(ctx, args, f"probe-{probes_used}", len(ctx.rounds))
                     hypothesis = args.get("hypothesis", "")
                     ctx.hypotheses.append(hypothesis)
                     ctx.emit("hypothesis", {"text": hypothesis, "probe": probe.model_dump()})
@@ -265,7 +277,7 @@ def run_analyst(ctx: AnalystContext) -> AnalystContext:
                     result = digest(res)
                     ctx.emit("probe_result", {"digest": result, "round": probe.round})
             elif name == "run_probes_parallel":
-                experiments = (args.get("experiments") or [])[: max(0, ctx.probe_budget - probes_used)][:3]
+                experiments = [_as_dict(e) for e in (args.get("experiments") if isinstance(args.get("experiments"), list) else [])][: max(0, ctx.probe_budget - probes_used)][:3]
                 if not experiments:
                     result = "Probe budget exhausted. Call conclude now."
                 else:

@@ -129,3 +129,12 @@ def test_single_probe_does_not_fork():
     lab = FakeLab(session)
     results = race.run_parallel(lab, _probes(1), lambda k, d: None)
     assert len(results) == 1 and session.log == []
+
+
+def test_analyst_tolerates_malformed_tool_arguments():
+    from src.app.sandtrap.analyst import _as_dict, _env
+
+    assert _as_dict([{"lure": True}]) == {"lure": True} and _as_dict("x") == {} and _as_dict(None) == {}
+    assert _env({"CI": 1}) == {"CI": "1"}
+    assert _env([{"name": "CI", "value": "true"}, "A=b", 3]) == {"CI": "true", "A": "b"}
+    assert _env(None) == {}

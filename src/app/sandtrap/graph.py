@@ -202,6 +202,13 @@ def node_analyst(state: ScanState) -> ScanState:
     ctx = RUNS[state["job"]]
     ctx.emit("stage", {"name": "analyst", "detail": "agent reads the baseline and designs experiments"})
     run_analyst(ctx.analyst)
+    a = ctx.analyst
+    if not any(r.probe.lure and not r.error for r in a.rounds[1:]):
+        # a verdict without a lure experiment is a guess (the model sometimes reads files until it runs out of turns): run one ourselves
+        ctx.emit("stage", {"name": "auto-lure", "detail": "the agent ran no lure experiment, so one is run with the default driver"})
+        probe = Probe(round=len(a.rounds), label="auto-lure", lure=True, env={"CI": "true"},
+                      driver_code=a.default_driver_code or default_driver(ctx.modules))
+        a.rounds.append(ctx.lab.run_probe(probe))
     return {"stage": "analysis-done"}
 
 
