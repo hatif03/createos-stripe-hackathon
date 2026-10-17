@@ -12,6 +12,7 @@ Log: one JSON object per line (types: dns, http, tls, tcp). Nothing here ever ta
 import argparse
 import base64
 import json
+import re
 import signal
 import socket
 import socketserver
@@ -35,13 +36,28 @@ def log(record: dict) -> None:
         handle.write(json.dumps(record) + "\n")
 
 
+B64_RUN = re.compile(r"[A-Za-z0-9+/_-]{24,}={0,2}")
+
+
+def _decode(blob: str) -> str | None:
+    try:
+        return base64.b64decode(blob.replace("-", "+").replace("_", "/") + "=" * (-len(blob) % 4)).decode("latin-1")
+    except Exception:
+        return None
+
+
 def canaries_in(text: str) -> list[str]:
-    haystacks = [text, urllib.parse.unquote_plus(text)]
-    for blob in (text, text.strip()):
-        try:
-            haystacks.append(base64.b64decode(blob + "=" * (-len(blob) % 4), validate=False).decode("latin-1"))
-        except Exception:
-            pass
+    """Tokens in plain text, URL-encoded text, a whole base64 body, or base64 blobs embedded in URLs/JSON values."""
+    unquoted = urllib.parse.unquote_plus(text)
+    haystacks = [text, unquoted]
+    for source in (text.strip(), unquoted):
+        whole = _decode(source) if source else None
+        if whole:
+            haystacks.append(whole)
+        for run in B64_RUN.findall(source)[:50]:
+            decoded = _decode(run)
+            if decoded:
+                haystacks.append(decoded)
     found = [t for t in TOKENS if any(t in h for h in haystacks)]
     return sorted(set(found))
 
