@@ -98,3 +98,26 @@ def test_quiet_under_lure_is_clean_but_low_confidence():
 def test_gate_exit_without_any_lure_stays_inconclusive():
     base = ProbeResult(probe=Probe(round=0, label="baseline"), exit_code=0, events=[ev("gate_exit", reason="quick")])
     assert score([base]).verdict == "inconclusive"
+
+
+def test_driver_commands_and_tmp_files_under_lure_are_not_evasion():
+    # the analyst's own probes run different commands and create different temp files: that is not the sample's doing
+    base = run([ev("exec", argv=["npm", "run", "postinstall"]), ev("file_write", path="/root/.npm/_logs/a.log")])
+    lure = run([ev("exec", argv=["find", "."]), ev("file_write", path="/root/.npm/_logs/b.log")], rnd=1, label="probe-1", lure=True)
+    res = score([base, lure])
+    assert (res.verdict, res.lure_only) == ("clean", [])
+
+
+def test_installer_that_only_downloads_is_not_malicious():
+    base = run([ev("dns_query", name="github.com", answered=False)])
+    lure = run([ev("dns_query", name="github.com", answered=True), ev("sink_request", host="github.com", canaries=[])],
+               rnd=1, label="probe-1", lure=True)
+    res = score([base, lure])
+    assert res.verdict != "malicious" and "lure_only" not in {f.id for f in res.findings}
+    assert "outbound" in {f.id for f in res.findings}
+
+
+def test_credential_read_only_under_lure_is_evasion():
+    base = run([ev("gate_exit", reason="quick")])
+    lure = run([ev("file_read_sensitive", path="/root/.aws/credentials")], rnd=1, label="probe-1", lure=True)
+    assert score([base, lure]).verdict == "malicious"

@@ -135,6 +135,16 @@ def _scan_round(r: ProbeResult, fs: _Findings) -> None:
             fs.add("outbound", "Outbound network attempt to non-registry host", "medium", "signal", _ids("c2"), ev(i, e))
 
 
+def _relevant(e: Event) -> bool:
+    """Only behaviour that can be a sample's own doing counts when diffing baseline against lure. The analyst's driver commands
+    (`find`, `node -e ...`), temp-file names and log files differ between probes by construction and are not evasion."""
+    if e.kind in ("file_read_sensitive", "chmod_exec"):
+        return True
+    if e.kind == "file_write":
+        return bool(e.data.get("persistence"))
+    return e.kind in ("net_connect", "dns_query", "sink_request") and _outbound(e)
+
+
 def _compare(rounds: list[ProbeResult], fs: _Findings) -> tuple[list[str], list[str]]:
     """Return (lure_only, baseline_only) behaviour keys; adds the evasion finding."""
     ok = [r for r in rounds if not r.error]
@@ -144,11 +154,13 @@ def _compare(rounds: list[ProbeResult], fs: _Findings) -> tuple[list[str], list[
     lures = [r for r in ok if r is not base and _is_lure(r)]
     if base is None or not lures:
         return [], []
-    bkeys = {_key(e) for e in base.events if e.kind != 'gate_exit'}
-    lkeys = {_key(e) for r in lures for e in r.events if e.kind != 'gate_exit'}
+    bkeys = {_key(e) for e in base.events if _relevant(e)}
+    lkeys = {_key(e) for r in lures for e in r.events if _relevant(e)}
     lure_only, baseline_only = sorted(lkeys - bkeys), sorted(bkeys - lkeys)
-    hits = [(r, i, e) for r in lures for i, e in enumerate(r.events) if _key(e) in lure_only]
-    if hits:
+    hits = [(r, i, e) for r in lures for i, e in enumerate(r.events) if _relevant(e) and _key(e) in lure_only]
+    # a downloader that merely connects once DNS resolves (nvm, rustup) is already reported as "outbound"; evasion needs the sample to
+    # do something sensitive (read credentials, persist, drop and run a file) or to leak a canary only under the lure
+    if any(e.kind not in ("net_connect", "dns_query", "sink_request") or e.data.get("canaries") for _, _, e in hits):
         proof = "proof" if any(e.kind == "sink_request" and e.data.get("canaries") for _, _, e in hits) else "intent"
         for r, i, e in hits:
             fs.add("lure_only", "Behaviour only appears under lure (sandbox evasion)", "high", proof,
