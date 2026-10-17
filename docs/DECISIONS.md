@@ -92,3 +92,20 @@ Each entry: context, decision, **tradeoffs**. Evidence for every number is in [D
 ## 14. Free plan only, no spending
 - **Decision:** no paid plan or payment method was added. Sandbox lifecycle is defensive: names are capped at 22 characters, every session is
   destroyed in `finally`, forks are tracked, `gc --all` cleans after crashes.
+
+## 15. Canary environment variables and embedded-base64 detection (driven by real incidents)
+- **Context:** the Codecov and `ctx` incidents stole *environment variables* (the latter base64-encoded inside a URL). Our canaries were files only,
+  and the sink decoded base64 only when it was the whole body, so claiming those incidents as use cases would have been false.
+- **Decision:** every install and probe exports fake `AWS_SECRET_ACCESS_KEY`, `GITHUB_TOKEN` and `NPM_TOKEN` (the platform only accepts environment
+  keys declared at sandbox creation, so they are exported inside the script); the sink also decodes base64 blobs embedded in URLs and JSON values.
+  New fixtures `env-b64-exfil` and `script-ci-uploader` reproduce the two attacks.
+- **Tradeoffs:** + the documented use cases are backed by running code; - env canaries make some benign scripts look like they read credentials only
+  if they print or send them, which is exactly what we flag.
+
+## 16. Shell scripts as a target type
+- `scan script:<file>` uploads the script and runs it only inside probes, with CI-style fake credentials in the environment. The HTTP API and MCP keep
+  allow-listing `pypi:` and `fixture:` targets only (no arbitrary host paths).
+
+## 17. Tracing must never hide the real error
+- A Langfuse helper swallowed any exception raised inside its block and then failed with "generator didn't stop after throw()", which hid the real
+  cause of a one-off benchmark failure. The context managers now re-raise errors from the traced block unchanged.

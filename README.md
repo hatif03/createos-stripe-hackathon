@@ -32,6 +32,39 @@ And the problem is getting more urgent: **AI coding agents now install dependenc
 | **AI coding agents** | Call Sandtrap as an MCP tool before running `pip install` / `npm install`. |
 | **CI pipelines** | Gate dependency updates on a verdict through the HTTP API. |
 
+## Real-world situations where it makes sense
+
+| Situation | Today | With Sandtrap |
+| --- | --- | --- |
+| **Adding a dependency** | Skim the README and download counts, then install and hope. | `scan pypi:<name>`, or email the name to the agent's inbox: a verdict with the credential reads and connections it made, typically in one to two minutes. |
+| **Dependency-update pull requests** | Bots open dozens a week; a hijacked maintainer account turns a patch release into an attack. | A CI step calls the API for the new version and blocks the merge on `malicious` or `inconclusive`. |
+| **CI scripts, `curl \| bash` installers, third-party actions** | They run with the job's secrets in the environment and nobody reads them. | `scan script:<file>` runs the script in a sandbox whose environment holds fake CI credentials and proves whether they leave. |
+| **AI coding agents installing packages unattended** | The agent runs `pip install` / `npm install` on its owner's machine, sometimes for packages that do not exist. | The agent calls the MCP tool `scan_package` first. |
+| **Triage of a suspicious script, package or binary** | Detonate it on a laptop, or in a bare sandbox it may detect. | The baseline-versus-lure diff shows what only appears when the environment looks real; capa lists a binary's capabilities. |
+| **Registry moderation and internal mirrors** | Static checks on new uploads. | Install-time and import-time behaviour per version, machine-readable, through the API. |
+| **Incident response** | "What did it talk to?" is answered by reverse engineering. | Every hostname it resolves (including data encoded into DNS names), every request and the payload shape, without it ever reaching the internet. |
+| **Verifying a fix** | "We removed the malicious part" is assumed. | The same lure is re-run against the patched code. |
+
+## Real incidents this is aimed at
+
+Each row links to its source; [docs/USE-CASES.md](docs/USE-CASES.md) has the full write-up. These are **reasoned counterfactuals**, not claims
+that Sandtrap would have caught the original malware: those samples are long gone from the registries, so we built harmless fixtures that
+reproduce each reported behaviour and show the lab surfaces it.
+
+| Incident | What happened | What Sandtrap's lab observes | Reproduced by |
+| --- | --- | --- | --- |
+| **Codecov uploader**, Jan to Apr 2021 | A tampered CI script sent `git remote -v` and `env` to an attacker server for about two months, found when one customer noticed a checksum mismatch; customers had to rotate every secret in those CI jobs ([Codecov](https://about.codecov.io/security-update/)) | `curl` flagged, the lure sink captures the body carrying the planted CI credentials | `script-ci-uploader` |
+| **`ctx` on PyPI**, May 2022 | Hijacked package (20,000+ downloads a week) collected "all the environment variables, encode[d] them in Base64" and sent them to an attacker's web app ([BleepingComputer](https://www.bleepingcomputer.com/news/security/popular-pypi-and-php-libraries-hijacked-to-steal-aws-keys/), [The Hacker News](https://thehackernews.com/2022/05/pypi-package-ctx-and-php-library-phpass.html)) | Fake credentials are exported into every run; the sink decodes base64 inside URLs and JSON | `env-b64-exfil` |
+| **event-stream**, Sep to Nov 2018 | A payload decrypted only when the host application matched the target wallet; in the wild for about two and a half months, nearly 8 million downloads reported ([Snyk](https://snyk.io/blog/a-post-mortem-of-the-malicious-event-stream-backdoor/), [Black Duck](https://www.blackduck.com/blog/malicious-dependency-supply-chain.html)) | A plain install shows nothing; the agent reads the gate and builds the environment it expects | `hash-gated-stealer` |
+| **XZ Utils**, Mar 2024 | A backdoor active only when `TERM` is unset, `argv[0]` is `/usr/sbin/sshd`, `LD_DEBUG`/`LD_PROFILE` are absent and `LANG` is set, noticed through a CPU anomaly ([Freund](https://www.openwall.com/lists/oss-security/2024/03/29/4)) | Run the same code under varied environments and diff the behaviour: the baseline-versus-lure comparison | `gated-stealer`, `sibling-stealer` |
+| **SolarWinds SUNBURST**, 2020 | Dormant 12 to 14 days, DNS-based command channel, checks for analysis tools ([Deep Instinct](https://www.deepinstinct.com/blog/why-the-sunburst-malware-was-so-unique-and-what-weve-learnt-from-it), [Mandiant](https://cloud.google.com/blog/topics/threat-intelligence/sunburst-additional-technical-details/)) | The lab advances the system clock and answers and logs every DNS name | `date-gated-stealer`, `time-bomb` |
+| **ua-parser-js**, Oct 2021; **Nx**, Aug 2025; **Shai-Hulud**, Sep 2025 | Hijacked npm packages ran install-time scripts: a miner and password stealer (6M+ weekly downloads), then credential harvesting for GitHub, npm and cloud keys; Shai-Hulud "compromised over 500 packages" ([CERT-EU](https://www.cert.europa.eu/publications/security-advisories/2021-057/), [Wiz](https://wiz.io/blog/s1ngularity-supply-chain-attack), [CISA](https://www.cisa.gov/news-events/alerts/2025/09/23/widespread-supply-chain-compromise-impacting-npm-ecosystem)) | npm lifecycle scripts run under the lure; credential-file reads, process spawns and destinations are recorded | `npm-postinstall-beacon`, `naive-stealer` |
+| **Slopsquatting**, 2025 | A USENIX Security 2025 study found about 19.7% of code-model package recommendations did not exist, and fabricated names repeat, so attackers can register them ([CSA summary](https://labs.cloudsecurityalliance.org/research/csa-research-note-slopsquatting-ai-supply-chain-20260419/)) | The coding agent asks the MCP tool before installing a package that appeared from nowhere | MCP tool |
+
+**Where it would not have helped:** `tj-actions/changed-files` (March 2025) scraped secrets from runner memory and printed them to logs; Sandtrap
+detects network exfiltration, not credentials printed to output (a small next step). Samples that notice `strace` or validate DNS answers
+(as SUNBURST reportedly did) can stay quiet.
+
 ## What Sandtrap does
 
 Sandtrap does what a human malware analyst does when a sample plays dead: it **changes the environment until the sample shows itself**.
@@ -54,7 +87,7 @@ Sandtrap does what a human malware analyst does when a sample plays dead: it **c
 
 ```mermaid
 flowchart LR
-  T[package / pypi / npm / C source] --> S[setup: sandbox, canaries, traced install]
+  T[package / pypi / npm / script / C source] --> S[setup: sandbox, canaries, traced install]
   S --> L[firewall locked via set_egress]
   L --> B[baseline run]
   B --> A{analyst agent}
@@ -90,11 +123,11 @@ NAT run inside the sandbox, and the account has a concurrent-sandbox quota of 5 
 
 ## Results
 
-**On 12 fixtures (10 malicious, 2 clean) Sandtrap detected 10/10 malicious samples; the same run scored as a plain sandbox detected 4/10.**
-Both clean fixtures and a real PyPI package (`six`) came out clean. On a compiled binary that stays silent unless its C2 host resolves, the
-plain sandbox says *clean* while Sandtrap proves the exfiltration. The full table, with each fixture's gate and timings, is in
-[docs/BENCHMARK.md](docs/BENCHMARK.md). The fixtures are small samples written for this project, so this shows the mechanism works, not
-detection rates on real-world malware.
+**On 14 fixtures (12 malicious, 2 clean) Sandtrap detected 12/12 malicious samples; the same run scored as a plain sandbox
+detected 4/12.** Both clean fixtures and a real PyPI package (`six`) came out clean. On a compiled binary that stays silent unless its C2
+host resolves, the plain sandbox says *clean* while Sandtrap proves the exfiltration. The full table, with each fixture's gate and timings, is in
+[docs/BENCHMARK.md](docs/BENCHMARK.md). The fixtures are small samples written for this project (several model the incidents above), so this shows
+the mechanism works, not detection rates on real-world malware.
 
 ## Run it
 
@@ -115,6 +148,7 @@ uv run python -m src.cli.sandtrap doctor                                  # veri
 uv run python -m src.cli.sandtrap scan fixtures/gated-stealer             # the hero demo
 uv run python -m src.cli.sandtrap scan c:fixtures/c/gated_beacon.c        # compiled ELF: capa + lure
 uv run python -m src.cli.sandtrap scan npm:fixtures/npm-postinstall-beacon # npm lifecycle scripts under the lure
+uv run python -m src.cli.sandtrap scan script:fixtures/script-ci-uploader/uploader.sh  # a CI helper script
 uv run python -m src.cli.sandtrap scan pypi:six                           # a real PyPI package (comes out clean)
 uv run python -m src.cli.sandtrap scan fixtures/gated-stealer --publish   # host the report at a public URL
 uv run python scripts/bench.py                                            # plain sandbox vs Sandtrap on every fixture
@@ -159,7 +193,9 @@ signatures across tool-call turns). K2 and Groq work as drop-in alternatives via
 * Dynamic analysis is Linux only; HTTPS request bodies are not readable without interception, only the TLS server name is logged.
 * Evasion beyond our levers (tracer detection, long monotonic sleeps without a shim, hardware checks) can look quiet; such runs are
   `inconclusive`, or `clean` with **low confidence**, never "safe".
-* Canary proof covers the credential types we plant.
+* Canary proof covers the credential types we plant (SSH key, AWS, npm and `.env` files, and a few CI-style environment variables).
+* Credentials *printed to output* (as in the `tj-actions` incident) are not flagged yet; only network exfiltration is.
+* The lure answers every DNS name with a loopback address and traces with `strace`; samples that validate the answer or detect tracing can stay quiet.
 * The threat-memory skill library is a working mechanism, not yet a measured speed-up: on our simple fixtures the model reads the code and
   does not need the skills.
 * The Free plan page says one sandbox; the platform let us run several (quota 5). Fork-and-race falls back to sequential runs if forks are refused.

@@ -56,6 +56,18 @@ Times are PT, 2026-10-17. The build started at 12:44 PT; submissions lock at 17:
 - Final benchmark: 12 fixtures, Sandtrap 10/10 malicious detected against 4/10 for the plain sandbox, both clean fixtures clean, a real PyPI
   package clean. One transient failure in a full run (passed when re-run alone); the benchmark script now retries once.
 
+## 15:25-16:10 | use cases, incidents and the gaps they exposed
+- Researched real supply-chain incidents (event-stream, XZ, SUNBURST, Codecov, ua-parser-js, ctx, tj-actions, Shai-Hulud, Nx, dependency confusion,
+  slopsquatting) and verified each fact against its source before writing it down (`docs/USE-CASES.md`). Two claims could not be verified (the XZ
+  trigger conditions on the first search, and a "pulled within hours" statement about ua-parser-js): the first was confirmed from the original
+  oss-security post, the second was removed.
+- Matching the incidents to the product exposed real gaps: Codecov and `ctx` stole environment variables, but our canaries were files and the sink
+  decoded base64 only as a whole body. Added canary environment variables, embedded-base64 decoding (with tests), the `env-b64-exfil` fixture and a
+  `script:` target with the `script-ci-uploader` fixture (a tampered CI uploader). Both are proven in 33-38 s.
+- Bugs on the way: the platform rejects environment keys not declared at sandbox creation (export inside the script instead), and the tracing helper hid
+  the real exception behind a generator error (fixed).
+- Full benchmark re-run: **14 fixtures, 12 malicious: Sandtrap 12/12, plain-sandbox view 4/12**, both clean fixtures clean, no regressions.
+
 ## Verified and not verified
 - Verified: 78 unit tests; `doctor` all OK; API and SSE live; MCP live; email live; public report live; Langfuse traces visible in the Langfuse
   dashboard (confirmed by the author).
