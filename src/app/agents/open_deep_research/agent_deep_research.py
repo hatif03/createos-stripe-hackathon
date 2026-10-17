@@ -1,0 +1,238 @@
+"""Deep Research agent module.
+
+This module provides the DeepResearchAgent class that integrates the
+multi-subgraph deep research workflow with the project's checkpointing,
+Langfuse tracing, and session management infrastructure.
+"""
+
+import time
+from collections.abc import Sequence
+from typing import Any, AsyncGenerator, Optional
+
+from asgiref.sync import sync_to_async
+from langchain_core.messages import convert_to_openai_messages
+from langchain_core.tools import tool
+from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
+from langgraph.types import StateSnapshot
+
+from src.app.core.graph import END, GraphBuilder, START, StateGraphCompiled
+from src.app.core.middleware import (
+    AgentContext,
+    AgentMiddleware,
+    AgentPipeline,
+    build_invoke_config,
+)
+from src.app.core.fault_tolerance import (
+    create_deep_research_error_handler,
+    get_llm_retry_policy,
+    get_llm_timeout_policy,
+    get_tool_timeout_policy,
+)
+from src.app.agents.open_deep_research.config import RESEARCH_MODEL
+from src.app.agents.open_deep_research.deep_researcher import (
+    clarify_with_user,
+    final_report_generation,
+    write_research_brief,
+)
+from src.app.agents.open_deep_research.researcher_subgraph import ResearcherAgent
+from src.app.agents.open_deep_research.state import AgentState, AgentInputState, ConductResearch, ResearchComplete
+from src.app.agents.open_deep_research.supervisor_subgraph import SupervisorAgent
+from src.app.agents.open_deep_research.utils import get_all_tools
+from src.app.agents.open_deep_research.think_tool import think_tool
+from src.app.core.common.config import settings
+from src.app.core.common.graph_utils import process_messages
+from src.app.core.common.logging import logger
+from src.app.core.common.model.message import Message
+from src.app.core.llm.llm_utils import dump_messages, record_llm_error
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:  # long-term memory is optional and not used by Sandtrap
+    from src.app.core.memory.memory import MemoryService
+
+
+def build_deep_research_trace_metadata(ctx: AgentContext) -> dict[str, Any]:
+    return dict(ctx.metadata.get("trace_metadata", {}))
+
+
+def build_deep_research_trace_output(ctx: AgentContext, result: list[Message]) -> dict[str, Any]:
+    execution_time = time.time() - ctx.metadata.get("_trace_start_time", time.time())
+    answer = result[-1].content if result else ""
+    return {
+        "answer": answer,
+        "message_count": len(result),
+        "execution_time": execution_time,
+    }
+
+
+class DeepResearchAgent:
+    """Deep Research agent using supervisor-researcher multi-subgraph architecture.
+
+    This agent conducts multi-step research by:
+    1. Clarifying the user's research question
+    2. Writing a research brief
+    3. Delegating research to parallel sub-researchers via a supervisor
+    4. Generating a comprehensive final report
+
+    The deep researcher manages its own LLM models and tools internally
+    through hardcoded constants, so the built-in tools
+    are not used directly by the graph nodes.
+    """
+
+    def __init__(
+        self,
+        name: str,
+        checkpointer: AsyncPostgresSaver,
+        middlewares: Sequence[AgentMiddleware],
+        memory_service: "MemoryService | None" = None,
+    ):
+        self.name = name
+        self.checkpointer = checkpointer
+        self._memory_service = memory_service
+        self._graph: Optional[StateGraphCompiled] = None
+        self._last_trace_id: Optional[str] = None
+        self._pipeline = AgentPipeline(
+            middlewares=middlewares,
+            invoke_fn=self._core_invoke,
+        )
+
+        lead_researcher_tools = [tool(ConductResearch), tool(ResearchComplete), think_tool]
+        self.researcher_subagent = ResearcherAgent("Researcher", get_all_tools())
+        self.supervisor_subagent = SupervisorAgent("Supervisor", lead_researcher_tools)
+
+    @property
+    def last_trace_id(self) -> Optional[str]:
+        return self._last_trace_id
+
+    async def compile(self) -> StateGraphCompiled:
+        """Compile all subgraphs and the main deep research graph."""
+        try:
+            await self.researcher_subagent.compile()
+            self.supervisor_subagent.set_researcher_agent(self.researcher_subagent)
+            await self.supervisor_subagent.compile()
+
+            graph_builder = self._build_deep_research_graph()
+            self._graph = graph_builder.compile(checkpointer=self.checkpointer, name=self.name)
+
+            logger.info(
+                "graph_created",
+                graph_name=self.name,
+                environment=settings.ENVIRONMENT.value,
+                has_checkpointer=self.checkpointer is not None,
+            )
+            return self._graph
+        except Exception as e:
+            logger.error("deep_research_graph_creation_failed", error=str(e), environment=settings.ENVIRONMENT.value)
+            raise e
+
+    async def agent_invoke(
+        self,
+        messages: list[Message],
+        session_id: str,
+        user_id: Optional[int] = None,
+    ) -> list[Message] | list[Any]:
+        """Invoke the deep research agent through the middleware pipeline."""
+        query = messages[-1].content if messages else ""
+        ctx = AgentContext(
+            messages=messages,
+            session_id=session_id,
+            user_id=user_id,
+            config=build_invoke_config(session_id, user_id, self.name),
+            agent_name=self.name,
+            metadata={
+                "query": query,
+                "user_id": user_id,
+                "model_name": "deep_research",
+                "trace_metadata": {
+                    "service": "deep_research",
+                    "model": "deep_research",
+                },
+            },
+        )
+        result = await self._pipeline.run(ctx)
+        self._last_trace_id = ctx.metadata.get("trace_id")
+        return result
+
+    async def _core_invoke(self, ctx: AgentContext) -> list[Message]:
+        """Core graph invocation without cross-cutting concerns."""
+        response = await self._graph.ainvoke(
+            input={"messages": dump_messages(ctx.messages)},
+            config=ctx.config,
+        )
+        ctx.metadata["graph_result"] = response
+        return process_messages(response["messages"])
+
+    async def agent_invoke_stream(
+        self, messages: list[Message], session_id: str, user_id: Optional[int] = None
+    ) -> AsyncGenerator[str, None]:
+        """Stream the deep research agent response token by token.
+
+        Args:
+            messages: The messages to send to the agent.
+            session_id: The session ID for the conversation.
+            user_id: The user ID for the conversation.
+
+        Yields:
+            str: Tokens of the agent response.
+        """
+        config = build_invoke_config(session_id, user_id, self.name)
+
+        try:
+            async for token, _ in self._graph.astream(
+                {"messages": dump_messages(messages)},
+                config,
+                stream_mode="messages",
+            ):
+                try:
+                    yield token.content
+                except Exception as token_error:
+                    logger.error("error_processing_token", error=str(token_error), session_id=session_id)
+                    continue
+
+            state: StateSnapshot = await sync_to_async(self._graph.get_state)(config=config)
+            if self._memory_service is not None and state.values and "messages" in state.values:
+                self._memory_service.schedule_add(
+                    user_id, convert_to_openai_messages(state.values["messages"]), config["metadata"]
+                )
+
+        except Exception as stream_error:
+            record_llm_error("deep_research", self.name)
+            logger.error("deep_research_stream_failed", error=str(stream_error), session_id=session_id)
+            raise stream_error
+
+    def _build_deep_research_graph(self) -> GraphBuilder:
+        """Build the complete deep research workflow graph (uncompiled).
+
+        Returns:
+            GraphBuilder: The uncompiled deep research graph builder.
+        """
+        deep_researcher_builder = GraphBuilder(AgentState, input_schema=AgentInputState)
+
+        llm_error_handler = create_deep_research_error_handler(
+            agent_name=self.name,
+            model_name=RESEARCH_MODEL,
+            fallback_goto=END,
+        )
+        llm_fault_tolerance = {
+            "retry_policy": get_llm_retry_policy(),
+            "timeout": get_llm_timeout_policy(),
+            "error_handler": llm_error_handler,
+        }
+
+        # Main workflow nodes for the complete research process
+        deep_researcher_builder.add_node("clarify_with_user", clarify_with_user, **llm_fault_tolerance)
+        deep_researcher_builder.add_node("write_research_brief", write_research_brief, **llm_fault_tolerance)
+        deep_researcher_builder.add_node(
+            "research_supervisor",
+            self.supervisor_subagent.get_graph(),
+            retry_policy=get_llm_retry_policy(),
+            timeout=get_tool_timeout_policy(),
+            error_handler=llm_error_handler,
+        )
+        deep_researcher_builder.add_node("final_report_generation", final_report_generation, **llm_fault_tolerance)
+
+        # Workflow edges: research pipeline
+        deep_researcher_builder.add_edge(START, "clarify_with_user")
+        deep_researcher_builder.add_edge("research_supervisor", "final_report_generation")
+        deep_researcher_builder.add_edge("final_report_generation", END)
+
+        return deep_researcher_builder
