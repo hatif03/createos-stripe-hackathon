@@ -1,0 +1,904 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sandtrap report - script:<tmp>/sandtrap-real-8ottn_pf\1.27.1\rustup-init.sh</title><style>
+:root{--bg:#f6f7f9;--fg:#15181d;--muted:#5b6470;--card:#fff;--line:#d9dde3;--code:#eef0f3;
+--clean:#0f7b3f;--susp:#8a5a00;--mal:#b3261e;--inc:#4b5563;--add:#d9f4e0;--del:#fde0de;--accent:#1d4ed8;--lure:#fff1e6}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1216;--fg:#e8ebef;--muted:#9aa4b0;--card:#181c22;--line:#2b323b;--code:#222830;
+--clean:#4ade80;--susp:#fbbf24;--mal:#ff7b72;--inc:#a3acb8;--add:#12331f;--del:#43181a;--accent:#7aa2ff;--lure:#3a2412}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:16px}h1{font-size:1.4rem;margin:.2em 0}h2{display:inline;font-size:1.1rem}h4{margin:.8em 0 .2em}
+.muted{color:var(--muted);font-size:.85em}.empty{color:var(--muted);font-style:italic}
+code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.85em}
+pre{background:var(--code);padding:8px;border-radius:6px;overflow:auto;white-space:pre-wrap;word-break:break-word;max-height:360px;margin:4px 0}
+code{background:var(--code);padding:1px 4px;border-radius:4px;word-break:break-all}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:14px 0}
+.card>summary{cursor:pointer;margin-bottom:8px}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px 16px;margin:0}
+.meta dt{color:var(--muted);font-size:.8em;text-transform:uppercase}.meta dd{margin:0 0 6px;word-break:break-all}
+.hero{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+.badge{border:3px solid currentColor;border-radius:14px;padding:12px 22px;font-weight:800;font-size:2rem;letter-spacing:.04em;text-transform:uppercase}
+.badge small{display:block;font-size:.8rem;font-weight:600;letter-spacing:0;text-transform:none}
+.v-clean{color:var(--clean)}.v-suspicious{color:var(--susp)}.v-malicious{color:var(--mal)}.v-inconclusive{color:var(--inc)}
+.gauge{flex:1;min-width:200px}.bar{height:14px;border-radius:7px;background:var(--code);overflow:hidden;border:1px solid var(--line)}
+.bar i{display:block;height:100%;background:currentColor}
+.chip{display:inline-block;padding:1px 8px;border-radius:999px;font-size:.78em;font-weight:700;border:1px solid currentColor;margin:1px}
+.sev-high,.proof-proof{color:var(--mal)}.sev-medium,.proof-intent{color:var(--susp)}.sev-low,.proof-signal{color:var(--inc)}
+.kind{color:var(--accent);font-weight:500}.lure{color:var(--susp)}
+a.attack{color:var(--accent);font-weight:600;margin-right:6px}
+.timeline,.stepper{list-style:none;padding:0;margin:0}.timeline li{display:flex;gap:10px;padding:6px 0;border-left:2px solid var(--line);margin-left:6px;padding-left:12px;position:relative}
+.timeline .dot{position:absolute;left:-7px;top:12px;width:12px;height:12px;border-radius:50%;background:var(--accent)}
+.timeline .hyp .dot{background:var(--susp)}.timeline .sum .dot{background:var(--clean)}.timeline p{margin:2px 0}
+.diffwrap{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.col{border:2px solid var(--line);border-radius:10px;padding:10px}.col.lure{border-color:var(--mal);background:var(--lure)}
+.col h3{margin:0 0 6px;font-size:1rem}.col ul{margin:0;padding-left:18px}
+.caption{font-weight:700;margin:10px 0 0;color:var(--mal)}
+.stepper li{display:flex;gap:12px;padding:8px 0;border-bottom:1px dashed var(--line)}
+.step{flex:none;width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--card);display:grid;place-items:center;font-weight:700}
+.rules{margin:4px 0;padding-left:18px}
+table.grid{width:100%;border-collapse:collapse}.grid th,.grid td{text-align:left;vertical-align:top;padding:6px 8px;border-bottom:1px solid var(--line)}
+.grid th{font-size:.8em;text-transform:uppercase;color:var(--muted)}
+.diff .dl{display:block}.diff .add{background:var(--add)}.diff .del{background:var(--del)}.diff .hunk{color:var(--accent)}
+.tools{text-align:right}button{font:inherit;padding:4px 10px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
+footer{color:var(--muted);font-size:.85em;margin:20px 0}
+@media(max-width:700px){.diffwrap{grid-template-columns:1fr}.badge{font-size:1.5rem}
+table.grid thead{display:none}.grid tr{display:block;border-bottom:2px solid var(--line);padding:6px 0}
+.grid td{display:block;border:0;padding:2px 0}.grid td::before{content:attr(data-l) ": ";color:var(--muted);font-size:.8em}}
+</style></head><body><main><h1>Sandtrap report</h1><div class="tools"><button id="ex" type="button">Expand all</button> <button id="co" type="button">Collapse all</button></div><section class="card"><dl class="meta"><dt>Target</dt><dd>script:<tmp>/sandtrap-real-8ottn_pf\1.27.1\rustup-init.sh (package)</dd><dt>Job</dt><dd>fdc898a536</dd><dt>Created</dt><dd>2026-10-17T23:16:35+00:00</dd><dt>SHA-256</dt><dd>32a680a84cf76014915b3f8aa44e3e40731f3af92cd45eb0fcc6264fd257c428</dd><dt>Model</dt><dd>gemini-3.5-flash (11 calls)</dd><dt>Capture method</dt><dd>strace</dd></dl></section><section class="card"><div class="hero"><div class="badge v-suspicious" role="status">! suspicious<small>Risky behaviour, not conclusively malicious<br>proof level: signal &middot; confidence: low</small></div><div class="gauge v-suspicious"><b>Risk score 24/100</b><div class="bar" role="meter" aria-valuenow="24" aria-valuemin="0" aria-valuemax="100"><i style="width:24%"></i></div></div></div></section><details class="card" open><summary><h2>What the agent did</h2></summary><ol class="timeline"><li><span class="dot"></span><div><b>Round 0: baseline</b> <span class="muted">exit 0</span><p>default import driver</p></div></li><li><span class="dot"></span><div><b>Round 1: probe-1</b> <span class="muted">exit 1</span><p>Running rustup-init.sh with lure=True allows it to resolve DNS and proceed with downloading/execution.</p></div></li><li><span class="dot"></span><div><b>Round 2: probe-2</b> <span class="muted">exit 0</span><p>Inspect the contents of rustup-init.sh to see if it is truncated or contains malicious code.</p></div></li><li><span class="dot"></span><div><b>Round 3: probe-3</b> <span class="muted">exit 0</span><p>Search for the source of the dns query in rustup-init.sh</p></div></li><li><span class="dot"></span><div><b>Round 4: probe-4</b> <span class="muted">exit 0</span><p>Check if the hostname of the sandbox matches the dns query.</p></div></li><li><span class="dot"></span><div><b>Round 5: probe-5</b> <span class="muted">exit 0</span><p>Check for other files and get the md5sum of rustup-init.sh</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>Running rustup-init.sh with lure=True allows it to resolve DNS and proceed with downloading/execution.</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>Inspect the contents of rustup-init.sh to see if it is truncated or contains malicious code.</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>Search for the source of the dns query in rustup-init.sh</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>Check if the hostname of the sandbox matches the dns query.</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>Check for other files and get the md5sum of rustup-init.sh</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>The package is a standard rustup-init.sh installer script.</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>The DNS query to sandtrap-fdc898-89fb14 is a local hostname lookup.</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>The script does not contain any malicious code or exfiltrate credentials.</p></div></li><li class="sum"><span class="dot"></span><div><b>Summary</b><p>The package consists of a standard, unmodified &#x27;rustup-init.sh&#x27; shell script (version 1.27.1) used to install Rust. It performs platform detection and attempts to download the official rustup-init binary from static.rust-lang.org. The DNS query to &#x27;sandtrap-fdc898-89fb14&#x27; observed in the baseline is a standard local lookup of the sandbox&#x27;s own hostname. No malicious behavior or credential exfiltration was detected.</p></div></li></ol></details><details class="card" open><summary><h2>Baseline vs Lure diff</h2></summary><div class="diffwrap"><div class="col"><h3>Baseline only</h3><ul><li class="empty">nothing unique to baseline</li></ul></div><div class="col lure"><h3>Lure only</h3><ul><li><code>sink_request:static.rust-lang.org</code></li></ul></div></div><p class="caption">behaviour that appeared only after the agent changed the environment = evidence of sandbox evasion</p></details><details class="card" open><summary><h2>Findings</h2></summary><table class="grid"><thead><tr><th>Finding</th><th>Severity</th><th>Proof</th><th>ATT&amp;CK</th><th>Evidence</th></tr></thead><tbody><tr><td data-l="Finding"><b>Suspicious process spawned</b><div class="muted">suspicious_exec</div></td><td data-l="Severity"><span class="chip sev-medium">medium</span></td><td data-l="Proof"><span class="chip proof-signal">signal</span></td><td data-l="ATT&amp;CK"><a class="attack" href="https://attack.mitre.org/techniques/T1059/004/" target="_blank" rel="noopener noreferrer" title="Unix Shell">T1059.004</a></td><td data-l="Evidence"><pre class="ev">round 0 / event 8
+exec:curl --help</pre><pre class="ev">round 0 / event 10
+exec:curl --help all</pre><pre class="ev">round 0 / event 12
+exec:curl --retry 3 -C - --proto =https --tlsv1.2 --ciphers TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_</pre><pre class="ev">round 1 / event 7
+exec:curl --help</pre><pre class="ev">round 1 / event 8
+exec:curl --help all</pre><pre class="ev">round 1 / event 10
+exec:curl --help all</pre><pre class="ev">round 1 / event 13
+exec:curl --retry 3 -C - --proto =https --tlsv1.2 --ciphers TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_</pre><pre class="ev">round 3 / event 1
+exec:grep -i -n -E http|curl|wget|eval|sh|bash /root/work/src/rustup-init.sh</pre></td></tr><tr><td data-l="Finding"><b>Outbound network attempt to non-registry host</b><div class="muted">outbound</div></td><td data-l="Severity"><span class="chip sev-medium">medium</span></td><td data-l="Proof"><span class="chip proof-signal">signal</span></td><td data-l="ATT&amp;CK"><a class="attack" href="https://attack.mitre.org/techniques/T1071/001/" target="_blank" rel="noopener noreferrer" title="Web Protocols">T1071.001</a></td><td data-l="Evidence"><pre class="ev">round 0 / event 13
+dns_query:sandtrap-fdc898-89fb14</pre><pre class="ev">round 0 / event 14
+dns_query:sandtrap-fdc898-89fb14</pre><pre class="ev">round 0 / event 15
+dns_query:static.rust-lang.org</pre><pre class="ev">round 0 / event 16
+dns_query:static.rust-lang.org</pre><pre class="ev">round 0 / event 17
+dns_query:static.rust-lang.org</pre><pre class="ev">round 0 / event 18
+dns_query:static.rust-lang.org</pre><pre class="ev">round 0 / event 19
+dns_query:static.rust-lang.org</pre><pre class="ev">round 0 / event 20
+dns_query:static.rust-lang.org</pre><pre class="ev">round 0 / event 22
+dns_query:static.rust-lang.org</pre><pre class="ev">round 0 / event 23
+dns_query:static.rust-lang.org</pre><pre class="ev">round 1 / event 11
+dns_query:sandtrap-fdc898-89fb14</pre><pre class="ev">round 1 / event 12
+dns_query:sandtrap-fdc898-89fb14</pre><pre class="ev">round 1 / event 14
+dns_query:static.rust-lang.org</pre><pre class="ev">round 1 / event 15
+dns_query:static.rust-lang.org</pre><pre class="ev">round 1 / event 16
+sink_request:static.rust-lang.org</pre></td></tr></tbody></table></details><details class="card" ><summary><h2>Static findings</h2></summary><p class="empty">No static findings.</p></details><details class="card" open><summary><h2>Egress firewall timeline</h2></summary><ol class="stepper"><li><span class="step">1</span><div><b>create</b><ul class="rules"><li><code>pypi.org:443</code></li><li><code>files.pythonhosted.org:443</code></li><li><code>registry.npmjs.org:443</code></li></ul><p class=muted>sandbox sb-01m562ce6hr9j3df0gy0p0tq4y</p></div></li><li><span class="step">2</span><div><b>analysis</b><ul class="rules"><li><code>192.0.2.1:9</code></li></ul><p class=muted>registry access closed; lure runs on loopback only</p></div></li></ol></details><details class="card" ><summary><h2>Probe rounds</h2></summary><table class="grid"><thead><tr><th>Round</th><th>Label</th><th>Exit</th><th>Duration</th><th>Events</th><th>Raw</th></tr></thead><tbody><tr><td data-l="Round">-1</td><td data-l="Label">install</td><td data-l="Exit">0</td><td data-l="Duration">0 ms</td><td data-l="Events">-</td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[]</pre><h4>stdout</h4><pre></pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">0</td><td data-l="Label">baseline</td><td data-l="Exit">0</td><td data-l="Duration">8493 ms</td><td data-l="Events"><span class="chip kind">dns_query ×10</span> <span class="chip kind">exec ×14</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.01,
+  &quot;pid&quot;: 637,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;bash&quot;,
+    &quot;/root/work/src/rustup-init.sh&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 0
+ },
+ {
+  &quot;t&quot;: 0.025,
+  &quot;pid&quot;: 638,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;uname&quot;,
+    &quot;-s&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 0
+ },
+ {
+  &quot;t&quot;: 0.028,
+  &quot;pid&quot;: 639,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;uname&quot;,
+    &quot;-m&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 0
+ },
+ {
+  &quot;t&quot;: 0.031,
+  &quot;pid&quot;: 640,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;uname&quot;,
+    &quot;-o&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 0
+ },
+ {
+  &quot;t&quot;: 0.035,
+  &quot;pid&quot;: 641,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;ldd&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 0
+ },
+ {
+  &quot;t&quot;: 0.044,
+  &quot;pid&quot;: 644,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;head&quot;,
+    &quot;-c&quot;,
+    &quot;5&quot;,
+    &quot;/proc/self/exe&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 0
+ },
+ {
+  &quot;t&quot;: 0.05,
+  &quot;pid&quot;: 648,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;mktemp&quot;,
+    &quot;-d&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 0
+ },
+ {
+  &quot;t&quot;: 0.053,
+  &quot;pid&quot;: 649,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;mkdir&quot;,
+    &quot;-p&quot;,
+    &quot;/tmp/tmp.779fFObpqg&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 0
+ },
+ {
+  &quot;t&quot;: 0.156,
+  &quot;pid&quot;: 662,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;curl&quot;,
+    &quot;--help&quot;
+   ],
+   &quot;suspicious&quot;: true
+  },
+  &quot;round&quot;: 0
+ },
+ {
+  &quot;t&quot;: 0.156,
+  &quot;pid&quot;: 663,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;grep&quot;,
+    &quot;-q&quot;,
+    &quot;For all options use the manual or \\\&quot;--help all\\\&quot;.&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 0
+ },
+ {
+  &quot;t&quot;: 0.182,
+  &quot;pid&quot;: 666,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;curl&quot;,
+    &quot;--help&quot;,
+    &quot;all&quot;
+   ],
+   &quot;suspicious&quot;: true
+  },
+  &quot;round&quot;: 0
+ },
+ {
+  &quot;t&quot;: 0.182,
+  &quot;pid&quot;: 667,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;grep&quot;,
+    &quot;-q&quot;,
+    &quot;--&quot;,
+    &quot;--ciphers&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 0
+ },
+ {
+  &quot;t&quot;: 0.208,
+  &quot;pid&quot;: 672,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;curl&quot;,
+    &quot;--retry&quot;,
+    &quot;3&quot;,
+    &quot;-C&quot;,
+    &quot;-&quot;,
+    &quot;--proto&quot;,
+    &quot;=https&quot;,
+    &quot;--tlsv1.2&quot;,
+    &quot;--ciphers&quot;,
+    &quot;TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_256_GCM_SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384&quot;,
+    &quot;--silent&quot;,
+    &quot;--show-error&quot;
+   ],
+   &quot;suspicious&quot;: true
+  },
+  &quot;round&quot;: 0
+ },
+ {
+  &quot;t&quot;: 0.213,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;dns_query&quot;,
+  &quot;data&quot;: {
+   &quot;name&quot;: &quot;sandtrap-fdc898-89fb14&quot;,
+   &quot;answered&quot;: false
+  },
+  &quot;round&quot;: 0
+ },
+ {
+  &quot;t&quot;: 0.213,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;dns_query&quot;,
+  &quot;data&quot;: {
+   &quot;name&quot;: &quot;sandtrap-fdc898-89fb14&quot;,
+   &quot;answered&quot;: false
+  },
+  &quot;round&quot;: 0
+ },
+ {
+  &quot;t&quot;: 0.281,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;dns_query&quot;,
+  &quot;data&quot;: {
+   &quot;name&quot;: &quot;static.rust-lang.org&quot;,
+   &quot;answered&quot;: false
+  },
+  &quot;round&quot;: 0
+ },
+ {
+  &quot;t&quot;: 0.282,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;dns_query&quot;,
+  &quot;data&quot;: {
+   &quot;name&quot;: &quot;static.rust-lang.org&quot;,
+   &quot;answered&quot;: false
+  },
+  &quot;round&quot;: 0
+ },
+ {
+  &quot;t&quot;: 1.285,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;dns_query&quot;,
+  &quot;data&quot;: {
+   &quot;name&quot;: &quot;static.rust-lang.org&quot;,
+   &quot;answered&quot;: false
+  },
+  &quot;round&quot;: 0
+ },
+ {
+  &quot;t&quot;: 1.286,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;dns_query&quot;,
+  &quot;data&quot;: {
+   &quot;name&quot;: &quot;static.rust-lang.org&quot;,
+   &quot;answered&quot;: false
+  },
+  &quot;round&quot;: 0
+ },
+ {
+  &quot;t&quot;: 3.295,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;dns_query&quot;,
+  &quot;data&quot;: {
+   &quot;name&quot;: &quot;static.rust-lang.org&quot;,
+   &quot;answered&quot;: false
+  },
+  &quot;round&quot;: 0
+ },
+ {
+  &quot;t&quot;: 3.296,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;dns_query&quot;,
+  &quot;data&quot;: {
+   &quot;name&quot;: &quot;static.rust-lang.org&quot;,
+   &quot;answered&quot;: false
+  },
+  &quot;round&quot;: 0
+ },
+ {
+  &quot;t&quot;: 7.253,
+  &quot;pid&quot;: 686,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;grep&quot;,
+    &quot;-q&quot;,
+    &quot;404$&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 0
+ },
+ {
+  &quot;t&quot;: 7.303,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;dns_query&quot;,
+  &quot;data&quot;: {
+   &quot;name&quot;: &quot;static.rust-lang.org&quot;,
+   &quot;answered&quot;: false
+  },
+  &quot;round&quot;: 0
+ },
+ {
+  &quot;t&quot;: 7.304,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;dns_query&quot;,
+  &quot;data&quot;: {
+   &quot;name&quot;
+… [truncated, 69 more characters]</pre><h4>stdout</h4><pre>script exited with 1
+</pre><h4>stderr</h4><pre>info: downloading installer
+curl: (6) Could not resolve host: static.rust-lang.org
+curl: (6) Could not resolve host: static.rust-lang.org
+curl: (6) Could not resolve host: static.rust-lang.org
+curl: (6) Could not resolve host: static.rust-lang.org
+rustup: command failed: downloader https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init /tmp/tmp.779fFObpqg/rustup-init x86_64-unknown-linux-gnu
+</pre></details></td></tr><tr><td data-l="Round">1</td><td data-l="Label">probe-1 <span class="chip lure">lure</span></td><td data-l="Exit">1</td><td data-l="Duration">1302 ms</td><td data-l="Events"><span class="chip kind">dns_query ×4</span> <span class="chip kind">exec ×13</span> <span class="chip kind">sink_request ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.009,
+  &quot;pid&quot;: 725,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;bash&quot;,
+    &quot;/root/work/src/rustup-init.sh&quot;,
+    &quot;-y&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 1
+ },
+ {
+  &quot;t&quot;: 0.024,
+  &quot;pid&quot;: 726,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;uname&quot;,
+    &quot;-s&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 1
+ },
+ {
+  &quot;t&quot;: 0.028,
+  &quot;pid&quot;: 727,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;uname&quot;,
+    &quot;-m&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 1
+ },
+ {
+  &quot;t&quot;: 0.031,
+  &quot;pid&quot;: 728,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;uname&quot;,
+    &quot;-o&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 1
+ },
+ {
+  &quot;t&quot;: 0.044,
+  &quot;pid&quot;: 732,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;head&quot;,
+    &quot;-c&quot;,
+    &quot;5&quot;,
+    &quot;/proc/self/exe&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 1
+ },
+ {
+  &quot;t&quot;: 0.05,
+  &quot;pid&quot;: 736,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;mktemp&quot;,
+    &quot;-d&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 1
+ },
+ {
+  &quot;t&quot;: 0.053,
+  &quot;pid&quot;: 737,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;mkdir&quot;,
+    &quot;-p&quot;,
+    &quot;/tmp/tmp.foRhNtJxAJ&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 1
+ },
+ {
+  &quot;t&quot;: 0.057,
+  &quot;pid&quot;: 738,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;curl&quot;,
+    &quot;--help&quot;
+   ],
+   &quot;suspicious&quot;: true
+  },
+  &quot;round&quot;: 1
+ },
+ {
+  &quot;t&quot;: 0.073,
+  &quot;pid&quot;: 740,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;curl&quot;,
+    &quot;--help&quot;,
+    &quot;all&quot;
+   ],
+   &quot;suspicious&quot;: true
+  },
+  &quot;round&quot;: 1
+ },
+ {
+  &quot;t&quot;: 0.073,
+  &quot;pid&quot;: 741,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;grep&quot;,
+    &quot;-q&quot;,
+    &quot;--&quot;,
+    &quot;--retry&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 1
+ },
+ {
+  &quot;t&quot;: 0.1,
+  &quot;pid&quot;: 744,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;curl&quot;,
+    &quot;--help&quot;,
+    &quot;all&quot;
+   ],
+   &quot;suspicious&quot;: true
+  },
+  &quot;round&quot;: 1
+ },
+ {
+  &quot;t&quot;: 0.157,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;dns_query&quot;,
+  &quot;data&quot;: {
+   &quot;name&quot;: &quot;sandtrap-fdc898-89fb14&quot;,
+   &quot;answered&quot;: true
+  },
+  &quot;round&quot;: 1
+ },
+ {
+  &quot;t&quot;: 0.158,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;dns_query&quot;,
+  &quot;data&quot;: {
+   &quot;name&quot;: &quot;sandtrap-fdc898-89fb14&quot;,
+   &quot;answered&quot;: false
+  },
+  &quot;round&quot;: 1
+ },
+ {
+  &quot;t&quot;: 0.18,
+  &quot;pid&quot;: 760,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;curl&quot;,
+    &quot;--retry&quot;,
+    &quot;3&quot;,
+    &quot;-C&quot;,
+    &quot;-&quot;,
+    &quot;--proto&quot;,
+    &quot;=https&quot;,
+    &quot;--tlsv1.2&quot;,
+    &quot;--ciphers&quot;,
+    &quot;TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_256_GCM_SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384&quot;,
+    &quot;--silent&quot;,
+    &quot;--show-error&quot;
+   ],
+   &quot;suspicious&quot;: true
+  },
+  &quot;round&quot;: 1
+ },
+ {
+  &quot;t&quot;: 0.222,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;dns_query&quot;,
+  &quot;data&quot;: {
+   &quot;name&quot;: &quot;static.rust-lang.org&quot;,
+   &quot;answered&quot;: true
+  },
+  &quot;round&quot;: 1
+ },
+ {
+  &quot;t&quot;: 0.222,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;dns_query&quot;,
+  &quot;data&quot;: {
+   &quot;name&quot;: &quot;static.rust-lang.org&quot;,
+   &quot;answered&quot;: false
+  },
+  &quot;round&quot;: 1
+ },
+ {
+  &quot;t&quot;: 0.227,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;sink_request&quot;,
+  &quot;data&quot;: {
+   &quot;host&quot;: &quot;static.rust-lang.org&quot;,
+   &quot;method&quot;: &quot;TLS&quot;,
+   &quot;path&quot;: &quot;&quot;,
+   &quot;body&quot;: &quot;&quot;,
+   &quot;canaries&quot;: [],
+   &quot;orig_dst&quot;: &quot;&quot;
+  },
+  &quot;round&quot;: 1
+ },
+ {
+  &quot;t&quot;: 0.228,
+  &quot;pid&quot;: 766,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;grep&quot;,
+    &quot;-q&quot;,
+    &quot;404$&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 1
+ }
+]</pre><h4>stdout</h4><pre></pre><h4>stderr</h4><pre>info: downloading installer
+curl: (35) OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to static.rust-lang.org:443 
+rustup: command failed: downloader https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init /tmp/tmp.foRhNtJxAJ/rustup-init x86_64-unknown-linux-gnu
+</pre></details></td></tr><tr><td data-l="Round">2</td><td data-l="Label">probe-2</td><td data-l="Exit">0</td><td data-l="Duration">1116 ms</td><td data-l="Events"><span class="chip kind">exec ×4</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.008,
+  &quot;pid&quot;: 790,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;ls&quot;,
+    &quot;-la&quot;,
+    &quot;/root/work/src/rustup-init.sh&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 2
+ },
+ {
+  &quot;t&quot;: 0.016,
+  &quot;pid&quot;: 791,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;wc&quot;,
+    &quot;-l&quot;,
+    &quot;/root/work/src/rustup-init.sh&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 2
+ },
+ {
+  &quot;t&quot;: 0.021,
+  &quot;pid&quot;: 792,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;grep&quot;,
+    &quot;-n&quot;,
+    &quot;sandtrap&quot;,
+    &quot;/root/work/src/rustup-init.sh&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 2
+ },
+ {
+  &quot;t&quot;: 0.027,
+  &quot;pid&quot;: 793,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;tail&quot;,
+    &quot;-n&quot;,
+    &quot;50&quot;,
+    &quot;/root/work/src/rustup-init.sh&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 2
+ }
+]</pre><h4>stdout</h4><pre>-rw-r--r-- 1 root root 26495 Oct 17 23:15 /root/work/src/rustup-init.sh
+811 /root/work/src/rustup-init.sh
+No sandtrap found
+            _cs=$(get_strong_ciphersuites_for &quot;gnutls&quot;)
+        fi
+    fi
+
+    RETVAL=&quot;$_cs&quot;
+}
+
+# Return cipher suite string specified by user, otherwise return strong TLS 1.2-1.3 cipher suites
+# if support by local tools is detected. Detection currently supports these wget backends:
+# GnuTLS and OpenSSL (possibly also LibreSSL and BoringSSL). Return value can be empty.
+get_ciphersuites_for_wget() {
+    if [ -n &quot;${RUSTUP_TLS_CIPHERSUITES-}&quot; ]; then
+        # user specified custom cipher suites, assume they know what they&#x27;re doing
+        RETVAL=&quot;$RUSTUP_TLS_CIPHERSUITES&quot;
+        return
+    fi
+
+    local _cs=&quot;&quot;
+    if wget -V | grep -q &#x27;\-DHAVE_LIBSSL&#x27;; then
+        # &quot;unspecified&quot; is for arch, allows for possibility old OS using macports, homebrew, etc.
+        if check_help_for &quot;notspecified&quot; &quot;wget&quot; &quot;TLSv1_2&quot; &quot;--ciphers&quot; &quot;--https-only&quot; &quot;--secure-protocol&quot;; then
+            _cs=$(get_strong_ciphersuites_for &quot;openssl&quot;)
+        fi
+    elif wget -V | grep -q &#x27;\-DHAVE_LIBGNUTLS&#x27;; then
+        # &quot;unspecified&quot; is for arch, allows for possibility old OS using macports, homebrew, etc.
+        if check_help_for &quot;notspecified&quot; &quot;wget&quot; &quot;TLSv1_2&quot; &quot;--ciphers&quot; &quot;--https-only&quot; &quot;--secure-protocol&quot;; then
+            _cs=$(get_strong_ciphersuites_for &quot;gnutls&quot;)
+        fi
+    fi
+
+    RETVAL=&quot;$_cs&quot;
+}
+
+# Return strong TLS 1.2-1.3 cipher suites in OpenSSL or GnuTLS syntax. TLS 1.2
+# excludes non-ECDHE and non-AEAD cipher suites. DHE is excluded due to bad
+# DH params often found on servers (see RFC 7919). Sequence matches or is
+# similar to Firefox 68 ESR with weak cipher suites disabled via about:config.
+# $1 must be openssl or gnutls.
+get_strong_ciphersuites_for() {
+    if [ &quot;$1&quot; = &quot;openssl&quot; ]; then
+        # OpenSSL is forgiving of unknown values, no problems with TLS 1.3 values on versions that don&#x27;t support it yet.
+        echo &quot;TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_256_GCM_SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384&quot;
+    elif [ &quot;$1&quot; = &quot;gnutls&quot; ]; then
+        # GnuTLS isn&#x27;t forgiving of unknown values, so this may require a GnuTLS version that supports TLS 1.3 even if wget doesn&#x27;t.
+        # Begin with SECURE128 (and higher) then remove/add to build cipher suites. Produces same 9 cipher suites as OpenSSL but in slightly different order.
+        echo &quot;SECURE128:-VERS-SSL3.0:-VERS-TLS1.0:-VERS-TLS1.1:-VERS-DTLS-ALL:-CIPHER-ALL:-MAC-ALL:-KX-ALL:+AEAD:+ECDHE-ECDSA:+ECDHE-RSA:+AES-128-GCM:+CHACHA20-POLY1305:+AES-256-GCM&quot;
+    fi
+}
+
+main &quot;$@&quot; || exit 1
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">3</td><td data-l="Label">probe-3</td><td data-l="Exit">0</td><td data-l="Duration">1078 ms</td><td data-l="Events"><span class="chip kind">exec ×2</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.006,
+  &quot;pid&quot;: 817,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;grep&quot;,
+    &quot;-i&quot;,
+    &quot;-n&quot;,
+    &quot;-E&quot;,
+    &quot;sandtrap|fdc898|89fb14&quot;,
+    &quot;/root/work/src/rustup-init.sh&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 3
+ },
+ {
+  &quot;t&quot;: 0.009,
+  &quot;pid&quot;: 818,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;grep&quot;,
+    &quot;-i&quot;,
+    &quot;-n&quot;,
+    &quot;-E&quot;,
+    &quot;http|curl|wget|eval|sh|bash&quot;,
+    &quot;/root/work/src/rustup-init.sh&quot;
+   ],
+   &quot;suspicious&quot;: true
+  },
+  &quot;round&quot;: 3
+ }
+]</pre><h4>stdout</h4><pre> only supports octal
+254:    # See https://gist.github.com/xen0n/5ee04aaa6cecc5c7794b9a0c3b65fc7f for
+315:        # Darwin `uname -m` can lie due to Rosetta shenanigans. If you manage to
+316:        # invoke a native shell binary and then a native uname binary, you can
+323:            # See: &lt;https://support.apple.com/en-us/HT208436&gt;
+524:    # See https://github.com/rust-lang/rustup.rs/issues/587.
+560:# Run a command that should never fail. If the command fails execution
+561:# will immediately terminate with an error showing the failing
+574:# This wraps curl or wget. Try curl first, if not installed,
+575:# use wget instead.
+577:    # zsh does not split words by default, Required for curl retry arguments below.
+578:    is_zsh &amp;&amp; setopt local_options shwordsplit
+585:    if check_cmd curl; then
+586:        _dld=curl
+587:    elif check_cmd wget; then
+588:        _dld=wget
+590:        _dld=&#x27;curl or wget&#x27; # to be used in error message of need_cmd
+595:    elif [ &quot;$_dld&quot; = curl ]; then
+596:        check_curl_for_retry_support
+598:        get_ciphersuites_for_curl
+601:            _err=$(curl $_retry --proto &#x27;=https&#x27; --tlsv1.2 --ciphers &quot;$_ciphersuites&quot; --silent --show-error --fail --location &quot;$1&quot; --output &quot;$2&quot; 2&gt;&amp;1)
+605:            if ! check_help_for &quot;$3&quot; curl --proto --tlsv1.2; then
+607:                _err=$(curl $_retry --silent --show-error --fail --location &quot;$1&quot; --output &quot;$2&quot; 2&gt;&amp;1)
+610:                _err=$(curl $_retry --proto &#x27;=https&#x27; --tlsv1.2 --silent --show-error --fail --location &quot;$1&quot; --output &quot;$2&quot; 2&gt;&amp;1)
+621:    elif [ &quot;$_dld&quot; = wget ]; then
+622:        if [ &quot;$(wget -V 2&gt;&amp;1|head -2|tail -1|cut -f1 -d&quot; &quot;)&quot; = &quot;BusyBox&quot; ]; then
+623:            echo &quot;Warning: using the BusyBox version of wget.  Not enforcing strong cipher suites for TLS or TLS v1.2, this is potentially less secure&quot;
+624:            _err=$(wget &quot;$1&quot; -O &quot;$2&quot; 2&gt;&amp;1)
+627:            get_ciphersuites_for_wget
+630:                _err=$(wget --https-only --secure-protocol=TLSv1_2 --ciphers &quot;$_ciphersuites&quot; &quot;$1&quot; -O &quot;$2&quot; 2&gt;&amp;1)
+634:                if ! check_help_for &quot;$3&quot; wget --https-only --secure-protocol; then
+636:                    _err=$(wget &quot;$1&quot; -O &quot;$2&quot; 2&gt;&amp;1)
+639:                    _err=$(wget --https-only --secure-protocol=TLSv1_2 &quot;$1&quot; -O &quot;$2&quot; 2&gt;&amp;1)
+652:        err &quot;Unknown downloader&quot;   # should not reach here
+661:    shift
+663:    shift
+709:# Check if curl supports the --retry flag, then pass it to the curl invocation.
+710:check_curl_for_retry_support() {
+713:    if check_help_for &quot;notspecified&quot; &quot;curl&quot; &quot;--retry&quot;; then
+715:        if check_help_for &quot;notspecified&quot; &quot;curl&quot; &quot;--continue-at&quot;; then
+716:            # &quot;-C -&quot; tells curl to automatically find where to resume the download when retrying.
+725:# if support by local tools is detected. Detection currently supports these curl backends:
+727:get_ciphersuites_for_curl() {
+737:    if curl -V | grep -q &#x27; OpenSSL/&#x27;; then
+739:    elif curl -V | grep -iq &#x27; LibreSSL/&#x27;; then
+741:    elif curl -V | grep -iq &#x27; BoringSSL/&#x27;; then
+743:    elif curl -V | grep -iq &#x27; GnuTLS/&#x27;; then
+752:        if check_help_for &quot;notspecified&quot; &quot;curl&quot; &quot;--tlsv1.2&quot; &quot;--ciphers&quot; &quot;--proto&quot;; then
+770:# if support by local tools is detected. Detection currently supports these wget backends:
+772:get_ciphersuites_for_wget() {
+780:    if wget -V | grep -q &#x27;\-DHAVE_LIBSSL&#x27;; then
+782:        if check_help_for &quot;notspecified&quot; &quot;wget&quot; &quot;TLSv1_2&quot; &quot;--ciphers&quot; &quot;--https-only&quot; &quot;--secure-protocol&quot;; then
+785:    elif wget -V | grep -q &#x27;\-DHAVE_LIBGNUTLS&#x27;; then
+787:        if check_help_for &quot;notspecified&quot; &quot;wget&quot; &quot;TLSv1_2&quot; &quot;--ciphers&quot; &quot;--https-only&quot; &quot;--secure-protocol&quot;; then
+803:        echo &quot;TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_256_GCM_SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384&quot;
+805:        # GnuTLS isn&#x27;t forgiving of unknown values, so this may require a GnuTLS version that supports TLS 1.3 even if wget doesn&#x27;t.
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">4</td><td data-l="Label">probe-4</td><td data-l="Exit">0</td><td data-l="Duration">1083 ms</td><td data-l="Events"><span class="chip kind">exec ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.006,
+  &quot;pid&quot;: 843,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;hostname&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 4
+ }
+]</pre><h4>stdout</h4><pre>sandtrap-fdc898-89fb14
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">5</td><td data-l="Label">probe-5</td><td data-l="Exit">0</td><td data-l="Duration">1108 ms</td><td data-l="Events"><span class="chip kind">exec ×3</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.007,
+  &quot;pid&quot;: 867,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;ls&quot;,
+    &quot;-la&quot;,
+    &quot;/root/work&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 5
+ },
+ {
+  &quot;t&quot;: 0.012,
+  &quot;pid&quot;: 868,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;ls&quot;,
+    &quot;-la&quot;,
+    &quot;/root&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 5
+ },
+ {
+  &quot;t&quot;: 0.021,
+  &quot;pid&quot;: 869,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;md5sum&quot;,
+    &quot;/root/work/src/rustup-init.sh&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 5
+ }
+]</pre><h4>stdout</h4><pre>total 28
+drwxr-xr-x 4 root root 4096 Oct 17 23:15 .
+drwx------ 1 root root 4096 Oct 17 23:15 ..
+-rw-r--r-- 1 root root   46 Oct 17 23:15 .env
+-rw-r--r-- 1 root root   99 Oct 17 23:15 canary_tokens.txt
+drwxr-xr-x 8 root root 4096 Oct 17 23:16 out
+drwxr-xr-x 2 root root 4096 Oct 17 23:15 src
+total 80
+drwx------ 1 root root 4096 Oct 17 23:15 .
+drwxr-xr-x 1 root root 4096 Oct 17 23:15 ..
+drwxr-xr-x 3 root root 4096 Oct  6 08:10 .agents
+drwxr-xr-x 7 root root 4096 Oct  6 08:02 .asdf
+drwxr-xr-x 2 root root 4096 Oct 17 23:15 .aws
+-rw-r--r-- 1 root root 3106 Apr 22  2024 .bashrc
+drwxr-xr-x 4 root root 4096 Oct  6 08:10 .cache
+drwxr-xr-x 3 root root 4096 Oct  6 08:10 .claude
+drwxr-xr-x 4 root root 4096 Oct  6 08:10 .codex
+drwxr-xr-x 5 root root 4096 Oct  6 08:09 .config
+drwxr-xr-x 3 root root 4096 Oct  6 08:10 .cursor
+drwxr-xr-x 5 root root 4096 Oct  6 08:09 .local
+drwxr-xr-x 4 root root 4096 Oct  6 08:08 .npm
+-rw-r--r-- 1 root root   57 Oct 17 23:15 .npmrc
+-rw-r--r-- 1 root root  161 Apr 22  2024 .profile
+drwx------ 1 root root 4096 Oct 17 23:15 .ssh
+-rw-r--r-- 1 root root   62 Oct  6 08:08 .tool-versions
+-rw-r--r-- 1 root root  165 Oct  6 08:02 .wget-hsts
+drwxr-xr-x 4 root root 4096 Oct 17 23:15 work
+803438f3247334c786f7ad7efebf662e  /root/work/src/rustup-init.sh
+</pre><h4>stderr</h4><pre></pre></details></td></tr></tbody></table></details><details class="card" open><summary><h2>Limitations</h2></summary><ul><li>Dynamic analysis runs on Linux only; Windows executables are not executed.</li><li>HTTPS request bodies cannot be read without interception: TLS destinations are recorded by SNI only.</li><li>Evasive code that detects tracing or waits longer than the probe timeout may look quiet; such runs are reported as inconclusive, never clean.</li><li>Canary proof covers the credential types we plant (ssh key, aws, npm, .env).</li></ul></details><footer>Sandboxes: sb-01m562ce6hr9j3df0gy0p0tq4y &middot; sandbox destroyed: yes</footer></main><script>function t(o){document.querySelectorAll('details.card').forEach(function(d){d.open=o})}document.getElementById('ex').onclick=function(){t(true)};document.getElementById('co').onclick=function(){t(false)};</script></body></html>

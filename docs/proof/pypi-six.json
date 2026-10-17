@@ -1,0 +1,365 @@
+{
+  "job": "cc7ed2d0cc",
+  "target": "pypi:six",
+  "target_kind": "pypi",
+  "sha256": "",
+  "created_at": "2026-10-17T23:04:38+00:00",
+  "verdict": "clean",
+  "score": 0,
+  "confidence": "low",
+  "findings": [],
+  "static_findings": [],
+  "rounds": [
+    {
+      "probe": {
+        "round": -1,
+        "label": "install",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "Collecting six\n  Downloading six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)\nDownloading six-1.17.0-py2.py3-none-any.whl (11 kB)\nInstalling collected packages: six\nSuccessfully installed six-1.17.0\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.378,
+          "pid": 649,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.38,
+          "pid": 649,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "bash",
+              "/usr/local/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.384,
+          "pid": 649,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "asdf",
+              "exec",
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.396,
+          "pid": 655,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "env",
+              "-0"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.406,
+          "pid": 649,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/.asdf/installs/rust/1.83.0/toolchains/1.83.0-x86_64-unknown-linux-gnu/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        }
+      ],
+      "duration_ms": 0,
+      "sandbox_id": "sb-01m561pj3gm9gbjakgg7zkwvre",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 0,
+        "label": "baseline",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import importlib, sys, traceback\nfor name in ['six']:\n    try:\n        importlib.import_module(name)\n        print('imported', name)\n    except Exception:\n        print('import-error', name); traceback.print_exc()\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "imported six\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.061,
+          "pid": 0,
+          "kind": "gate_exit",
+          "data": {
+            "reason": "exited 0 after 0.1s with no observable behaviour"
+          },
+          "round": 0
+        }
+      ],
+      "duration_ms": 1324,
+      "sandbox_id": "sb-01m561pj3gm9gbjakgg7zkwvre",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 1,
+        "label": "probe-1",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "with open('/root/work/venv/lib/python3.13/site-packages/six.py', 'r') as f:\n    content = f.read()\nprint(f\"Total length: {len(content)}\")\nprint(\"Last 1000 chars:\")\nprint(content[-1000:])\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "Total length: 34703\nLast 1000 chars:\n02 and PEP 451\n__package__ = __name__  # see PEP 366 @ReservedAssignment\nif globals().get(\"__spec__\") is not None:\n    __spec__.submodule_search_locations = []  # PEP 451 @UndefinedVariable\n# Remove other six meta path importers, since they cause problems. This can\n# happen if six is removed from sys.modules and then reloaded. (Setuptools does\n# this for some reason.)\nif sys.meta_path:\n    for i, importer in enumerate(sys.meta_path):\n        # Here's some real nastiness: Another \"instance\" of the six module might\n        # be floating around. Therefore, we can't use isinstance() to check for\n        # the six meta path importer, since the other six instance will have\n        # inserted an importer with different class.\n        if (type(importer).__name__ == \"_SixMetaPathImporter\" and\n                importer.name == __name__):\n            del sys.meta_path[i]\n            break\n    del i, importer\n# Finally, add the importer to the meta path import hook.\nsys.meta_path.append(_importer)\n\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.032,
+          "pid": 0,
+          "kind": "gate_exit",
+          "data": {
+            "reason": "exited 0 after 0.0s with no observable behaviour"
+          },
+          "round": 1
+        }
+      ],
+      "duration_ms": 1261,
+      "sandbox_id": "sb-01m561pj3gm9gbjakgg7zkwvre",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 2,
+        "label": "probe-2",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import re\n\nwith open('/root/work/venv/lib/python3.13/site-packages/six.py', 'r') as f:\n    content = f.read()\n\nsuspicious = ['eval', 'exec', 'base64', 'requests', 'urllib', 'socket', 'subprocess', 'os.system', 'sh', 'bash', 'curl', 'wget', 'http', 'dns', 'token', 'key', 'secret', 'password', 'credential', 'env', 'environ']\nfor word in suspicious:\n    matches = list(re.finditer(re.escape(word), content, re.IGNORECASE))\n    if matches:\n        print(f\"Found '{word}' {len(matches)} times\")\n        # print context around first match\n        idx = matches[0].start()\n        print(f\"Context: {content[max(0, idx-50):min(len(content), idx+50)]!r}\")\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "Found 'exec' 9 times\nContext: '      return self.load_module(spec.name)\\n\\n    def exec_module(self, module):\\n        pass\\n\\n_importer'\nFound 'urllib' 197 times\nContext: '        \"tkinter.simpledialog\"),\\n    MovedModule(\"urllib_parse\", __name__ + \".moves.urllib_parse\", \"'\nFound 'socket' 2 times\nContext: ' MovedModule(\"reprlib\", \"repr\"),\\n    MovedModule(\"socketserver\", \"SocketServer\"),\\n    MovedModule(\"_'\nFound 'subprocess' 1 times\nContext: 'b\"),\\n    MovedAttribute(\"getoutput\", \"commands\", \"subprocess\"),\\n    MovedAttribute(\"range\", \"__built'\nFound 'sh' 15 times\nContext: 'on the rights\\n# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\\n# copies o'\nFound 'http' 28 times\nContext: 'n_info < (3, 9) else \"_thread\"),\\n    MovedModule(\"http_cookiejar\", \"cookielib\", \"http.cookiejar\"),\\n '\nFound 'key' 16 times\nContext: 'eturn self.known_modules[fullname]\\n        except KeyError:\\n            raise ImportError(\"This load'\nFound 'password' 2 times\nContext: 'lib2\", \"urllib.request\"),\\n    MovedAttribute(\"HTTPPasswordMgr\", \"urllib2\", \"urllib.request\"),\\n    Mo'\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.055,
+          "pid": 0,
+          "kind": "gate_exit",
+          "data": {
+            "reason": "exited 0 after 0.1s with no observable behaviour"
+          },
+          "round": 2
+        }
+      ],
+      "duration_ms": 1276,
+      "sandbox_id": "sb-01m561pj3gm9gbjakgg7zkwvre",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 3,
+        "label": "probe-3",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import os\nfor root, dirs, files in os.walk('/root/work/venv/lib/python3.13/site-packages'):\n    for file in files:\n        path = os.path.join(root, file)\n        if 'pip' not in path:\n            print(path)\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "/root/work/venv/lib/python3.13/site-packages/six.py\n/root/work/venv/lib/python3.13/site-packages/six-1.17.0.dist-info/INSTALLER\n/root/work/venv/lib/python3.13/site-packages/six-1.17.0.dist-info/LICENSE\n/root/work/venv/lib/python3.13/site-packages/six-1.17.0.dist-info/METADATA\n/root/work/venv/lib/python3.13/site-packages/six-1.17.0.dist-info/WHEEL\n/root/work/venv/lib/python3.13/site-packages/six-1.17.0.dist-info/RECORD\n/root/work/venv/lib/python3.13/site-packages/six-1.17.0.dist-info/top_level.txt\n/root/work/venv/lib/python3.13/site-packages/six-1.17.0.dist-info/REQUESTED\n/root/work/venv/lib/python3.13/site-packages/__pycache__/six.cpython-313.pyc\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.038,
+          "pid": 0,
+          "kind": "gate_exit",
+          "data": {
+            "reason": "exited 0 after 0.0s with no observable behaviour"
+          },
+          "round": 3
+        }
+      ],
+      "duration_ms": 1274,
+      "sandbox_id": "sb-01m561pj3gm9gbjakgg7zkwvre",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 4,
+        "label": "probe-4",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import hashlib\nwith open('/root/work/venv/lib/python3.13/site-packages/six.py', 'rb') as f:\n    print(hashlib.sha256(f.read()).hexdigest())\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "c51c91f703d3d4b3696c923cb5fec213e05e75d9215393befac7f2fa6a3904df\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.036,
+          "pid": 0,
+          "kind": "gate_exit",
+          "data": {
+            "reason": "exited 0 after 0.0s with no observable behaviour"
+          },
+          "round": 4
+        }
+      ],
+      "duration_ms": 1272,
+      "sandbox_id": "sb-01m561pj3gm9gbjakgg7zkwvre",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 5,
+        "label": "probe-5",
+        "env": {},
+        "lure": true,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import six\nprint(six.__version__)\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "1.17.0\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.046,
+          "pid": 0,
+          "kind": "gate_exit",
+          "data": {
+            "reason": "exited 0 after 0.0s with no observable behaviour"
+          },
+          "round": 5
+        }
+      ],
+      "duration_ms": 1296,
+      "sandbox_id": "sb-01m561pj3gm9gbjakgg7zkwvre",
+      "error": ""
+    }
+  ],
+  "baseline_only": [],
+  "lure_only": [],
+  "hypotheses": [
+    "Check the end of six.py to see if there is any appended malicious code",
+    "Search for suspicious keywords in six.py",
+    "List all non-pip files in site-packages",
+    "Check actual sha256 of six.py",
+    "Run with lure=True to satisfy rule 2 and verify six imports correctly",
+    "The package 'six' might contain malicious code appended to six.py or hidden in other files. Checked file list, file hashes, and searched for suspicious keywords. found nothing.",
+    "The package 'six' might perform malicious network requests or exfiltration when imported with lure=True. Ran a probe with lure=True and found no network activity or suspicious behavior."
+  ],
+  "summary": "The installed package 'six' is the legitimate Python 2 and 3 compatibility library (version 1.17.0). Its file contents, structure, and SHA256 hash match the official release. No suspicious code, hidden files, or network activity were found during static analysis or dynamic execution with fake internet enabled.",
+  "attempts": [
+    {
+      "round": 0,
+      "label": "baseline",
+      "exit_code": 0,
+      "note": "default import driver"
+    },
+    {
+      "round": 1,
+      "label": "probe-1",
+      "exit_code": 0,
+      "note": "Check the end of six.py to see if there is any appended malicious code"
+    },
+    {
+      "round": 2,
+      "label": "probe-2",
+      "exit_code": 0,
+      "note": "Search for suspicious keywords in six.py"
+    },
+    {
+      "round": 3,
+      "label": "probe-3",
+      "exit_code": 0,
+      "note": "List all non-pip files in site-packages"
+    },
+    {
+      "round": 4,
+      "label": "probe-4",
+      "exit_code": 0,
+      "note": "Check actual sha256 of six.py"
+    },
+    {
+      "round": 5,
+      "label": "probe-5",
+      "exit_code": 0,
+      "note": "Run with lure=True to satisfy rule 2 and verify six imports correctly"
+    }
+  ],
+  "egress_timeline": [
+    {
+      "phase": "create",
+      "rules": [
+        "pypi.org:443",
+        "files.pythonhosted.org:443",
+        "registry.npmjs.org:443"
+      ],
+      "note": "sandbox sb-01m561pj3gm9gbjakgg7zkwvre"
+    },
+    {
+      "phase": "analysis",
+      "rules": [
+        "192.0.2.1:9"
+      ],
+      "note": "registry access closed; lure runs on loopback only"
+    }
+  ],
+  "patch_diff": "",
+  "remediation": "",
+  "capture_method": "strace",
+  "model": "gemini-3.5-flash",
+  "llm_calls": 13,
+  "sandbox_ids": [
+    "sb-01m561pj3gm9gbjakgg7zkwvre"
+  ],
+  "destroyed": true,
+  "limitations": [
+    "Dynamic analysis runs on Linux only; Windows executables are not executed.",
+    "HTTPS request bodies cannot be read without interception: TLS destinations are recorded by SNI only.",
+    "Evasive code that detects tracing or waits longer than the probe timeout may look quiet; such runs are reported as inconclusive, never clean.",
+    "Canary proof covers the credential types we plant (ssh key, aws, npm, .env)."
+  ],
+  "report_url": "",
+  "intel": [],
+  "used_skills": [],
+  "learned_skills": [],
+  "threat_brief": "",
+  "from_cache": false
+}

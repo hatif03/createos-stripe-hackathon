@@ -1,0 +1,22 @@
+○ Updating status...
+ │  createos-stripe-hackathon
+ │  Project        project_61VawFiIkprx38p8C16PjKM6bNGLB8dodUrGeOM9AGee
+ │  Account        acct_1MfcCTSIDE0yiWfk
+ │  Email          <email redacted> OK Verified
+ │  Created        Oct 17, 2026
+Providers (3)
+Name       Status    Linked     
+AgentMail  OK Linked  1 hour ago 
+createos   OK Linked  7 hours ago
+Neon       OK Linked  2 hours ago
+Services (3)
+Name              Provider    Service    Pricing
+agentmail-api     AgentMail   api        Free   
+createos-project  createos    project    Free   
+neon-postgres     Neon        postgres   Free   
+Plans (3)
+Name            Provider    Plan    Pricing
+agentmail-plan  AgentMail   free    Free   
+createos-plan   createos    free    Free   
+neon-plan       Neon        free    Free   
+Next: stripe projects env

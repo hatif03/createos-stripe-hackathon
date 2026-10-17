@@ -1,0 +1,566 @@
+{
+  "job": "ba8b10eb0c",
+  "target": "D:\\createos-stripe-hackathon\\fixtures\\date-gated-stealer",
+  "target_kind": "package",
+  "sha256": "5c9e8eea46ccac00ffc24f231f939bc1a7ee7426e5e50742af0a486de142943b",
+  "created_at": "2026-10-17T22:54:15+00:00",
+  "verdict": "malicious",
+  "score": 100,
+  "confidence": "high",
+  "findings": [
+    {
+      "id": "gate_exit",
+      "title": "Exited quickly without behaviour; may be gated",
+      "severity": "low",
+      "proof": "signal",
+      "attack": [
+        {
+          "id": "T1497",
+          "name": "Virtualization/Sandbox Evasion",
+          "url": "https://attack.mitre.org/techniques/T1497/"
+        }
+      ],
+      "evidence": [
+        {
+          "round": 0,
+          "event_index": 0,
+          "excerpt": "gate_exit"
+        }
+      ]
+    },
+    {
+      "id": "canary_exfil",
+      "title": "Canary credentials exfiltrated",
+      "severity": "high",
+      "proof": "proof",
+      "attack": [
+        {
+          "id": "T1041",
+          "name": "Exfiltration Over C2 Channel",
+          "url": "https://attack.mitre.org/techniques/T1041/"
+        },
+        {
+          "id": "T1552.001",
+          "name": "Credentials In Files",
+          "url": "https://attack.mitre.org/techniques/T1552/001/"
+        }
+      ],
+      "evidence": [
+        {
+          "round": 1,
+          "event_index": 4,
+          "excerpt": "sink_request:sync.pkg-cdn.example canaries=SNDTRP-7e455321-ENV"
+        }
+      ]
+    },
+    {
+      "id": "cred_read_outbound",
+      "title": "Credential file read followed by outbound attempt",
+      "severity": "high",
+      "proof": "intent",
+      "attack": [
+        {
+          "id": "T1041",
+          "name": "Exfiltration Over C2 Channel",
+          "url": "https://attack.mitre.org/techniques/T1041/"
+        },
+        {
+          "id": "T1552.001",
+          "name": "Credentials In Files",
+          "url": "https://attack.mitre.org/techniques/T1552/001/"
+        }
+      ],
+      "evidence": [
+        {
+          "round": 1,
+          "event_index": 0,
+          "excerpt": "file_read_sensitive:/root/work/.env"
+        },
+        {
+          "round": 1,
+          "event_index": 1,
+          "excerpt": "dns_query:sync.pkg-cdn.example"
+        },
+        {
+          "round": 1,
+          "event_index": 2,
+          "excerpt": "dns_query:sync.pkg-cdn.example"
+        },
+        {
+          "round": 1,
+          "event_index": 3,
+          "excerpt": "dns_query:sync.pkg-cdn.example"
+        },
+        {
+          "round": 1,
+          "event_index": 4,
+          "excerpt": "sink_request:sync.pkg-cdn.example canaries=SNDTRP-7e455321-ENV"
+        }
+      ]
+    },
+    {
+      "id": "lure_only",
+      "title": "Behaviour only appears under lure (sandbox evasion)",
+      "severity": "high",
+      "proof": "proof",
+      "attack": [
+        {
+          "id": "T1497",
+          "name": "Virtualization/Sandbox Evasion",
+          "url": "https://attack.mitre.org/techniques/T1497/"
+        }
+      ],
+      "evidence": [
+        {
+          "round": 1,
+          "event_index": 0,
+          "excerpt": "file_read_sensitive:/root/work/.env"
+        },
+        {
+          "round": 1,
+          "event_index": 1,
+          "excerpt": "dns_query:sync.pkg-cdn.example"
+        },
+        {
+          "round": 1,
+          "event_index": 2,
+          "excerpt": "dns_query:sync.pkg-cdn.example"
+        },
+        {
+          "round": 1,
+          "event_index": 3,
+          "excerpt": "dns_query:sync.pkg-cdn.example"
+        },
+        {
+          "round": 1,
+          "event_index": 4,
+          "excerpt": "sink_request:sync.pkg-cdn.example canaries=SNDTRP-7e455321-ENV"
+        }
+      ]
+    }
+  ],
+  "static_findings": [],
+  "rounds": [
+    {
+      "probe": {
+        "round": -1,
+        "label": "install",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "Processing ./root/work/pkg\n  Installing build dependencies: started\n  Installing build dependencies: finished with status 'done'\n  Getting requirements to build wheel: started\n  Getting requirements to build wheel: finished with status 'done'\n  Preparing metadata (pyproject.toml): started\n  Preparing metadata (pyproject.toml): finished with status 'done'\nBuilding wheels for collected packages: date-gated-stealer\n  Building wheel for date-gated-stealer (pyproject.toml): started\n  Building wheel for date-gated-stealer (pyproject.toml): finished with status 'done'\n  Created wheel for date-gated-stealer: filename=date_gated_stealer-0.1.0-py3-none-any.whl size=1808 sha256=e33472fe42234aa141e1b1353bf2a599c239249f0f48b69cedaebf7730fb61e3\n  Stored in directory: /tmp/pip-ephem-wheel-cache-yw57l2t8/wheels/13/25/4d/8bd974f2a5e81e37fcc7c028cb3bf8fa1d4ca10e8b1484c5b0\nSuccessfully built date-gated-stealer\nInstalling collected packages: date-gated-stealer\nSuccessfully installed date-gated-stealer-0.1.0\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.378,
+          "pid": 654,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.38,
+          "pid": 654,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "bash",
+              "/usr/local/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.383,
+          "pid": 654,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "asdf",
+              "exec",
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.396,
+          "pid": 660,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "env",
+              "-0"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.398,
+          "pid": 654,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/.asdf/installs/rust/1.83.0/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.406,
+          "pid": 654,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/.asdf/installs/rust/1.83.0/toolchains/1.83.0-x86_64-unknown-linux-gnu/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.449,
+          "pid": 663,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/work/venv/bin/python3",
+              "/root/work/venv/lib/python3.13/site-packages/pip/__pip-runner__.py",
+              "install",
+              "--ignore-installed",
+              "--no-user",
+              "--prefix",
+              "/tmp/pip-build-env-rfvg8pij/overlay",
+              "--no-warn-script-location",
+              "--disable-pip-version-check",
+              "--no-compile",
+              "--target",
+              ""
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.821,
+          "pid": 665,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "uname",
+              "-rs"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.829,
+          "pid": 666,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.831,
+          "pid": 666,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "bash",
+              "/usr/local/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.834,
+          "pid": 666,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "asdf",
+              "exec",
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.847,
+          "pid": 672,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "env",
+              "-0"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.856,
+          "pid": 666,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/.asdf/installs/rust/1.83.0/toolchains/1.83.0-x86_64-unknown-linux-gnu/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 1.33,
+          "pid": 676,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/work/venv/bin/python3",
+              "/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py",
+              "get_requires_for_build_wheel",
+              "/tmp/tmp0xwwit5h"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 1.741,
+          "pid": 677,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/work/venv/bin/python3",
+              "/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py",
+              "prepare_metadata_for_build_wheel",
+              "/tmp/tmp5aezeiyk"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 2.0,
+          "pid": 678,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/work/venv/bin/python3",
+              "/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py",
+              "build_wheel",
+              "/tmp/tmpltewtbu4"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        }
+      ],
+      "duration_ms": 0,
+      "sandbox_id": "sb-01m5614fdx6kk14pt06jbmaynx",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 0,
+        "label": "baseline",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import importlib, sys, traceback\nfor name in ['dategated']:\n    try:\n        importlib.import_module(name)\n        print('imported', name)\n    except Exception:\n        print('import-error', name); traceback.print_exc()\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "imported dategated\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.103,
+          "pid": 0,
+          "kind": "gate_exit",
+          "data": {
+            "reason": "exited 0 after 0.1s with no observable behaviour"
+          },
+          "round": 0
+        }
+      ],
+      "duration_ms": 1336,
+      "sandbox_id": "sb-01m5614fdx6kk14pt06jbmaynx",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 1,
+        "label": "probe-1",
+        "env": {},
+        "lure": true,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 1000,
+        "driver_code": "import importlib, sys, traceback\nfor name in ['dategated']:\n    try:\n        importlib.import_module(name)\n        print('imported', name)\n    except Exception:\n        print('import-error', name); traceback.print_exc()\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "imported dategated\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.088,
+          "pid": 731,
+          "kind": "file_read_sensitive",
+          "data": {
+            "path": "/root/work/.env",
+            "canary": "ENV"
+          },
+          "round": 1
+        },
+        {
+          "t": 86400000.158,
+          "pid": 0,
+          "kind": "dns_query",
+          "data": {
+            "name": "sync.pkg-cdn.example",
+            "answered": true
+          },
+          "round": 1
+        },
+        {
+          "t": 86400000.175,
+          "pid": 0,
+          "kind": "dns_query",
+          "data": {
+            "name": "sync.pkg-cdn.example",
+            "answered": true
+          },
+          "round": 1
+        },
+        {
+          "t": 86400000.175,
+          "pid": 0,
+          "kind": "dns_query",
+          "data": {
+            "name": "sync.pkg-cdn.example",
+            "answered": false
+          },
+          "round": 1
+        },
+        {
+          "t": 86400000.176,
+          "pid": 0,
+          "kind": "sink_request",
+          "data": {
+            "host": "sync.pkg-cdn.example",
+            "method": "POST",
+            "path": "/p",
+            "body": "{\"env\": \"STRIPE_SECRET_KEY=sk_test_SNDTRP-7e455321-ENV\\n\"}",
+            "canaries": [
+              "SNDTRP-7e455321-ENV"
+            ],
+            "orig_dst": ""
+          },
+          "round": 1
+        }
+      ],
+      "duration_ms": 1343,
+      "sandbox_id": "sb-01m5614fdx6kk14pt06jbmaynx",
+      "error": ""
+    }
+  ],
+  "baseline_only": [],
+  "lure_only": [
+    "dns_query:sync.pkg-cdn.example",
+    "file_read_sensitive:/root/work/.env",
+    "sink_request:sync.pkg-cdn.example"
+  ],
+  "hypotheses": [
+    "The package triggers exfiltration of /root/work/.env to sync.pkg-cdn.example when the date is >= 2026-11-01 and DNS resolves (lure=True).",
+    "The package is date-gated and only triggers after 2026-11-01.",
+    "The package requires DNS resolution of sync.pkg-cdn.example (lure=True) to proceed with exfiltration.",
+    "When both conditions are met, the package reads /root/work/.env and exfiltrates its contents to http://sync.pkg-cdn.example/p."
+  ],
+  "summary": "The 'dategated' package is a simulated malicious package designed to exfiltrate sensitive credentials. It remains dormant until the system clock reaches November 1, 2026 (tested via a 1000-day clock offset) and the host 'sync.pkg-cdn.example' is resolvable via DNS. Once these conditions are met, it reads the sensitive environment file '/root/work/.env' and POSTs its contents to 'http://sync.pkg-cdn.example/p'.",
+  "attempts": [
+    {
+      "round": 0,
+      "label": "baseline",
+      "exit_code": 0,
+      "note": "default import driver"
+    },
+    {
+      "round": 1,
+      "label": "probe-1",
+      "exit_code": 0,
+      "note": "The package triggers exfiltration of /root/work/.env to sync.pkg-cdn.example when the date is >= 2026-11-01 and DNS resolves (lure=True)."
+    }
+  ],
+  "egress_timeline": [
+    {
+      "phase": "create",
+      "rules": [
+        "pypi.org:443",
+        "files.pythonhosted.org:443",
+        "registry.npmjs.org:443"
+      ],
+      "note": "sandbox sb-01m5614fdx6kk14pt06jbmaynx"
+    },
+    {
+      "phase": "analysis",
+      "rules": [
+        "192.0.2.1:9"
+      ],
+      "note": "registry access closed; lure runs on loopback only"
+    }
+  ],
+  "patch_diff": "",
+  "remediation": "",
+  "capture_method": "strace",
+  "model": "gemini-3.5-flash",
+  "llm_calls": 4,
+  "sandbox_ids": [
+    "sb-01m5614fdx6kk14pt06jbmaynx"
+  ],
+  "destroyed": true,
+  "limitations": [
+    "Dynamic analysis runs on Linux only; Windows executables are not executed.",
+    "HTTPS request bodies cannot be read without interception: TLS destinations are recorded by SNI only.",
+    "Evasive code that detects tracing or waits longer than the probe timeout may look quiet; such runs are reported as inconclusive, never clean.",
+    "Canary proof covers the credential types we plant (ssh key, aws, npm, .env)."
+  ],
+  "report_url": "",
+  "intel": [],
+  "used_skills": [],
+  "learned_skills": [],
+  "threat_brief": "",
+  "from_cache": false
+}

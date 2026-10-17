@@ -1,0 +1,7 @@
+  OK   stripe projects        project createos-stripe-hackathon; providers: AgentMail, Neon, createos; resources: agentmail-api, 
+  OK   createos sandbox api   https://api-eu.sb.createos.sh account ok (plan n/a)
+  OK   llm                    gemini:gemini-3.5-flash answered
+  OK   neon postgres          PostgreSQL 18.6 (653b019) on aarch64-unknown-linux-gnu (LangGraph checkpoints)
+  OK   langfuse               authenticated
+  OK   capa (static layer)    capa-linux.zip 47 MB
+  OK   leftover sandboxes     0 live sandbox(es)

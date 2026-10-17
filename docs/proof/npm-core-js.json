@@ -1,0 +1,706 @@
+{
+  "job": "7179bd7108",
+  "target": "npm:<tmp>/sandtrap-real-8ottn_pf\\core-js_3.38.1\\package",
+  "target_kind": "package",
+  "sha256": "d453f2307a813158dbd27baffa0e84ed4fa16a2cda00011a9acf51c0c27b52da",
+  "created_at": "2026-10-17T23:12:10+00:00",
+  "verdict": "clean",
+  "score": 0,
+  "confidence": "low",
+  "findings": [],
+  "static_findings": [],
+  "rounds": [
+    {
+      "probe": {
+        "round": -1,
+        "label": "install",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "\nup to date in 443ms\n",
+      "stderr": "",
+      "events": [],
+      "duration_ms": 0,
+      "sandbox_id": "sb-01m5621nr5yyy76qvap311j70g",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 0,
+        "label": "baseline",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "#!/bin/bash\ncd /root/work/pkg && npm run --if-present preinstall && npm run --if-present install && npm run --if-present postinstall\necho \"lifecycle exited with $?\"\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "\n> core-js@3.38.1 postinstall\n> node -e \"try{require('./postinstall')}catch(e){}\"\n\nThank you for using core-js ( https://github.com/zloirock/core-js ) for polyfilling JavaScript standard library!\n\nThe project needs your help! Please consider supporting core-js:\n> https://opencollective.com/core-js \n> https://patreon.com/zloirock \n> https://boosty.to/zloirock \n> bitcoin: bc1qlea7544qtsmj2rayg0lthvza9fau63ux0fstcz \n\nI highly recommend reading this: https://github.com/zloirock/core-js/blob/master/docs/2023-02-14-so-whats-next.md \n\nlifecycle exited with 0\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.005,
+          "pid": 653,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "npm",
+              "run",
+              "--if-present",
+              "preinstall"
+            ],
+            "suspicious": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.007,
+          "pid": 653,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "node",
+              "/usr/local/bin/npm",
+              "run",
+              "--if-present",
+              "preinstall"
+            ],
+            "suspicious": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.11,
+          "pid": 663,
+          "kind": "file_read_sensitive",
+          "data": {
+            "path": "/root/.npmrc",
+            "canary": "NPM"
+          },
+          "round": 0
+        },
+        {
+          "t": 0.126,
+          "pid": 653,
+          "kind": "file_write",
+          "data": {
+            "path": "/root/.npm/_logs/2026-10-17T23_11_28_082Z-debug-0.log",
+            "persistence": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.162,
+          "pid": 664,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "npm",
+              "run",
+              "--if-present",
+              "install"
+            ],
+            "suspicious": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.163,
+          "pid": 664,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "node",
+              "/usr/local/bin/npm",
+              "run",
+              "--if-present",
+              "install"
+            ],
+            "suspicious": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.261,
+          "pid": 674,
+          "kind": "file_read_sensitive",
+          "data": {
+            "path": "/root/.npmrc",
+            "canary": "NPM"
+          },
+          "round": 0
+        },
+        {
+          "t": 0.278,
+          "pid": 664,
+          "kind": "file_write",
+          "data": {
+            "path": "/root/.npm/_logs/2026-10-17T23_11_28_234Z-debug-0.log",
+            "persistence": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.31,
+          "pid": 675,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "npm",
+              "run",
+              "--if-present",
+              "postinstall"
+            ],
+            "suspicious": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.311,
+          "pid": 675,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "node",
+              "/usr/local/bin/npm",
+              "run",
+              "--if-present",
+              "postinstall"
+            ],
+            "suspicious": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.412,
+          "pid": 685,
+          "kind": "file_read_sensitive",
+          "data": {
+            "path": "/root/.npmrc",
+            "canary": "NPM"
+          },
+          "round": 0
+        },
+        {
+          "t": 0.428,
+          "pid": 675,
+          "kind": "file_write",
+          "data": {
+            "path": "/root/.npm/_logs/2026-10-17T23_11_28_384Z-debug-0.log",
+            "persistence": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.458,
+          "pid": 686,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "sh",
+              "-c",
+              "node -e \\\"try{require('./postinstall')}catch(e){}\\\""
+            ],
+            "suspicious": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.46,
+          "pid": 687,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "node",
+              "-e",
+              "try{require('./postinstall')}catch(e){}"
+            ],
+            "suspicious": false
+          },
+          "round": 0
+        }
+      ],
+      "duration_ms": 1790,
+      "sandbox_id": "sb-01m5621nr5yyy76qvap311j70g",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 1,
+        "label": "probe-1",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "#!/bin/bash\nfind /root/work/pkg -maxdepth 2 -not -path '*/.*'\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "k/pkg/modules/es.symbol.to-primitive.js\n/root/work/pkg/modules/esnext.object.group-by.js\n/root/work/pkg/modules/es.string.code-point-at.js\n/root/work/pkg/modules/es.string.repeat.js\n/root/work/pkg/modules/esnext.string.is-well-formed.js\n/root/work/pkg/modules/esnext.string.at.js\n/root/work/pkg/modules/esnext.async-iterator.constructor.js\n/root/work/pkg/modules/web.url.js\n/root/work/pkg/modules/web.set-interval.js\n/root/work/pkg/modules/es.symbol.iterator.js\n/root/work/pkg/modules/es.symbol.is-concat-spreadable.js\n/root/work/pkg/modules/es.number.to-fixed.js\n/root/work/pkg/modules/esnext.async-iterator.take.js\n/root/work/pkg/modules/es.string.fixed.js\n/root/work/pkg/modules/esnext.typed-array.filter-reject.js\n/root/work/pkg/modules/es.string.includes.js\n/root/work/pkg/modules/es.string.replace.js\n/root/work/pkg/modules/esnext.array.find-last-index.js\n/root/work/pkg/modules/web.timers.js\n/root/work/pkg/modules/es.object.define-property.js\n/root/work/pkg/modules/es.string.match-all.js\n/root/work/pkg/modules/esnext.async-iterator.some.js\n/root/work/pkg/modules/esnext.iterator.to-async.js\n/root/work/pkg/modules/es.set.is-disjoint-from.v2.js\n/root/work/pkg/modules/esnext.map.every.js\n/root/work/pkg/modules/esnext.string.cooked.js\n/root/work/pkg/modules/es.unescape.js\n/root/work/pkg/modules/esnext.math.radians.js\n/root/work/pkg/modules/es.number.is-nan.js\n/root/work/pkg/modules/es.string.at-alternative.js\n/root/work/pkg/modules/esnext.weak-map.emplace.js\n/root/work/pkg/modules/esnext.observable.from.js\n/root/work/pkg/modules/esnext.math.fscale.js\n/root/work/pkg/modules/esnext.map.find-key.js\n/root/work/pkg/modules/esnext.map.map-keys.js\n/root/work/pkg/modules/es.array.unscopables.flat.js\n/root/work/pkg/modules/esnext.observable.of.js\n/root/work/pkg/modules/es.map.constructor.js\n/root/work/pkg/modules/esnext.array-buffer.transfer-to-fixed-length.js\n/root/work/pkg/modules/esnext.typed-array.find-last-index.js\n/root/work/pkg/modules/es.object.proto.js\n/root/work/pkg/modules/es.promise.all-settled.js\n/root/work/pkg/modules/es.object.group-by.js\n/root/work/pkg/modules/es.string.link.js\n/root/work/pkg/modules/esnext.string.at-alternative.js\n/root/work/pkg/modules/esnext.json.is-raw-json.js\n/root/work/pkg/modules/es.math.cosh.js\n/root/work/pkg/modules/esnext.array-buffer.transfer.js\n/root/work/pkg/modules/es.map.js\n/root/work/pkg/modules/es.string.trim-end.js\n/root/work/pkg/modules/esnext.disposable-stack.constructor.js\n/root/work/pkg/modules/esnext.map.merge.js\n/root/work/pkg/modules/esnext.map.update.js\n/root/work/pkg/modules/es.aggregate-error.js\n/root/work/pkg/modules/es.typed-array.uint32-array.js\n/root/work/pkg/modules/es.number.parse-float.js\n/root/work/pkg/modules/es.regexp.exec.js\n/root/work/pkg/modules/es.number.parse-int.js\n/root/work/pkg/modules/es.string.big.js\n/root/work/pkg/modules/es.array.fill.js\n/root/work/pkg/modules/esnext.reflect.metadata.js\n/root/work/pkg/modules/es.array.push.js\n/root/work/pkg/modules/esnext.async-iterator.async-dispose.js\n/root/work/pkg/modules/es.math.clz32.js\n/root/work/pkg/modules/web.clear-immediate.js\n/root/work/pkg/modules/es.string.trim-start.js\n/root/work/pkg/modules/es.parse-float.js\n/root/work/pkg/modules/es.number.min-safe-integer.js\n/root/work/pkg/modules/esnext.weak-set.from.js\n/root/work/pkg/modules/esnext.array.to-spliced.js\n/root/work/pkg/modules/esnext.suppressed-error.constructor.js\n/root/work/pkg/modules/es.symbol.async-iterator.js\n/root/work/pkg/modules/es.regexp.flags.js\n/root/work/pkg/modules/esnext.iterator.drop.js\n/root/work/pkg/modules/esnext.array-buffer.detached.js\n/root/work/pkg/modules/es.math.trunc.js\n/root/work/pkg/modules/es.typed-array.slice.js\n/root/work/pkg/modules/es.promise.finally.js\n/root/work/pkg/modules/es.escape.js\n/root/work/pkg/modules/esnext.set.every.js\n/root/work/pkg/modules/esnext.reflect.get-own-metadata-keys.js\n/root/work/pkg/modules/esnext.weak-map.from.js\n/root/work/pkg/modules/web.dom-collections.iterator.js\n/root/work/pkg/modules/es.math.asinh.js\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.012,
+          "pid": 733,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "find",
+              "/root/work/pkg",
+              "-maxdepth",
+              "2",
+              "-not",
+              "-path",
+              "*/.*"
+            ],
+            "suspicious": false
+          },
+          "round": 1
+        }
+      ],
+      "duration_ms": 1600,
+      "sandbox_id": "sb-01m5621nr5yyy76qvap311j70g",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 2,
+        "label": "probe-2",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "#!/bin/bash\nfind /root/work/pkg -maxdepth 1\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "/root/work/pkg\n/root/work/pkg/full\n/root/work/pkg/stage\n/root/work/pkg/stable\n/root/work/pkg/postinstall.js\n/root/work/pkg/web\n/root/work/pkg/package-lock.json\n/root/work/pkg/features\n/root/work/pkg/proposals\n/root/work/pkg/package.json\n/root/work/pkg/es\n/root/work/pkg/actual\n/root/work/pkg/LICENSE\n/root/work/pkg/configurator.js\n/root/work/pkg/README.md\n/root/work/pkg/internals\n/root/work/pkg/index.js\n/root/work/pkg/modules\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.012,
+          "pid": 757,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "find",
+              "/root/work/pkg",
+              "-maxdepth",
+              "1"
+            ],
+            "suspicious": false
+          },
+          "round": 2
+        }
+      ],
+      "duration_ms": 1272,
+      "sandbox_id": "sb-01m5621nr5yyy76qvap311j70g",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 3,
+        "label": "probe-3",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "#!/bin/bash\ngrep -rnwl \"child_process\\|exec\\|eval\\|id_rsa\\|aws\\|npmrc\\|env\\|dns\\|socket\\|http\" /root/work/pkg/internals/ /root/work/pkg/*.js\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "/root/work/pkg/internals/is-constructor.js\n/root/work/pkg/internals/reflect-metadata.js\n/root/work/pkg/internals/number-parse-int.js\n/root/work/pkg/internals/regexp-exec-abstract.js\n/root/work/pkg/internals/fails.js\n/root/work/pkg/internals/regexp-unsupported-ncg.js\n/root/work/pkg/internals/check-correctness-of-iteration.js\n/root/work/pkg/internals/regexp-sticky-helpers.js\n/root/work/pkg/internals/composite-key.js\n/root/work/pkg/internals/string-punycode-to-ascii.js\n/root/work/pkg/internals/perform.js\n/root/work/pkg/internals/regexp-exec.js\n/root/work/pkg/internals/promise-constructor-detection.js\n/root/work/pkg/internals/fix-regexp-well-known-symbol-logic.js\n/root/work/pkg/internals/parse-json-string.js\n/root/work/pkg/internals/uint8-from-hex.js\n/root/work/pkg/postinstall.js\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.012,
+          "pid": 783,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "grep",
+              "-rnwl",
+              "child_process\\\\|exec\\\\|eval\\\\|id_rsa\\\\|aws\\\\|npmrc\\\\|env\\\\|dns\\\\|socket\\\\|http",
+              "/root/work/pkg/internals/",
+              "/root/work/pkg/configurator.js",
+              "/root/work/pkg/index.js",
+              "/root/work/pkg/postinstall.js"
+            ],
+            "suspicious": false
+          },
+          "round": 3
+        }
+      ],
+      "duration_ms": 1317,
+      "sandbox_id": "sb-01m5621nr5yyy76qvap311j70g",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 4,
+        "label": "probe-4",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "#!/bin/bash\ngrep -rn \"id_rsa\\|aws\\|npmrc\\|\\.env\" /root/work/pkg/\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "/root/work/pkg/postinstall.js:8:var env = process.env;\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.012,
+          "pid": 807,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "grep",
+              "-rn",
+              "id_rsa\\\\|aws\\\\|npmrc\\\\|\\\\.env",
+              "/root/work/pkg/"
+            ],
+            "suspicious": false
+          },
+          "round": 4
+        }
+      ],
+      "duration_ms": 1652,
+      "sandbox_id": "sb-01m5621nr5yyy76qvap311j70g",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 5,
+        "label": "probe-5",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "#!/bin/bash\ngrep -rn \"http\" /root/work/pkg/\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "posal-json-parse-with-source/#sec-json.israwjson\n/root/work/pkg/modules/esnext.json.is-raw-json.js:8:// https://github.com/tc39/proposal-json-parse-with-source\n/root/work/pkg/modules/es.math.cosh.js:13:// https://tc39.es/ecma262/#sec-math.cosh\n/root/work/pkg/modules/es.string.trim-end.js:8:// https://tc39.es/ecma262/#sec-string.prototype.trimend\n/root/work/pkg/modules/esnext.disposable-stack.constructor.js:2:// https://github.com/tc39/proposal-explicit-resource-management\n/root/work/pkg/modules/esnext.map.merge.js:8:// https://github.com/tc39/proposal-collection-methods\n/root/work/pkg/modules/esnext.map.update.js:13:// https://github.com/tc39/proposal-collection-methods\n/root/work/pkg/modules/es.typed-array.uint32-array.js:5:// https://tc39.es/ecma262/#sec-typedarray-objects\n/root/work/pkg/modules/es.number.parse-float.js:6:// https://tc39.es/ecma262/#sec-number.parseFloat\n/root/work/pkg/modules/es.regexp.exec.js:6:// https://tc39.es/ecma262/#sec-regexp.prototype.exec\n/root/work/pkg/modules/es.number.parse-int.js:6:// https://tc39.es/ecma262/#sec-number.parseint\n/root/work/pkg/modules/es.string.big.js:7:// https://tc39.es/ecma262/#sec-string.prototype.big\n/root/work/pkg/modules/es.array.fill.js:7:// https://tc39.es/ecma262/#sec-array.prototype.fill\n/root/work/pkg/modules/es.array.fill.js:12:// https://tc39.es/ecma262/#sec-array.prototype-@@unscopables\n/root/work/pkg/modules/esnext.reflect.metadata.js:10:// https://github.com/rbuckton/reflect-metadata\n/root/work/pkg/modules/es.array.push.js:14:// https://bugs.chromium.org/p/v8/issues/detail?id=12681\n/root/work/pkg/modules/es.array.push.js:27:// https://tc39.es/ecma262/#sec-array.prototype.push\n/root/work/pkg/modules/esnext.async-iterator.async-dispose.js:2:// https://github.com/tc39/proposal-async-explicit-resource-management\n/root/work/pkg/modules/es.math.clz32.js:9:// https://tc39.es/ecma262/#sec-math.clz32\n/root/work/pkg/modules/web.clear-immediate.js:7:// http://w3c.github.io/setImmediate/#si-clearImmediate\n/root/work/pkg/modules/es.string.trim-start.js:8:// https://tc39.es/ecma262/#sec-string.prototype.trimstart\n/root/work/pkg/modules/es.parse-float.js:6:// https://tc39.es/ecma262/#sec-parsefloat-string\n/root/work/pkg/modules/es.number.min-safe-integer.js:5:// https://tc39.es/ecma262/#sec-number.min_safe_integer\n/root/work/pkg/modules/esnext.weak-set.from.js:7:// https://tc39.github.io/proposal-setmap-offrom/#sec-weakset.from\n/root/work/pkg/modules/esnext.suppressed-error.constructor.js:21:// https://github.com/oven-sh/bun/issues/9282\n/root/work/pkg/modules/esnext.suppressed-error.constructor.js:24:// https://github.com/oven-sh/bun/issues/9283\n/root/work/pkg/modules/esnext.suppressed-error.constructor.js:61:// https://github.com/tc39/proposal-explicit-resource-management\n/root/work/pkg/modules/es.symbol.async-iterator.js:5:// https://tc39.es/ecma262/#sec-symbol.asynciterator\n/root/work/pkg/modules/es.regexp.flags.js:52:// https://tc39.es/ecma262/#sec-get-regexp.prototype.flags\n/root/work/pkg/modules/esnext.iterator.drop.js:27:// https://github.com/tc39/proposal-iterator-helpers\n/root/work/pkg/modules/es.math.trunc.js:6:// https://tc39.es/ecma262/#sec-math.trunc\n/root/work/pkg/modules/es.typed-array.slice.js:16:// https://tc39.es/ecma262/#sec-%typedarray%.prototype.slice\n/root/work/pkg/modules/es.promise.finally.js:14:// Safari bug https://bugs.webkit.org/show_bug.cgi?id=200829\n/root/work/pkg/modules/es.promise.finally.js:21:// https://tc39.es/ecma262/#sec-promise.prototype.finally\n/root/work/pkg/modules/es.escape.js:21:// https://tc39.es/ecma262/#sec-escape-string\n/root/work/pkg/modules/esnext.set.every.js:8:// https://github.com/tc39/proposal-collection-methods\n/root/work/pkg/modules/esnext.reflect.get-own-metadata-keys.js:11:// https://github.com/rbuckton/reflect-metadata\n/root/work/pkg/modules/esnext.weak-map.from.js:7:// https://tc39.github.io/proposal-setmap-offrom/#sec-weakmap.from\n/root/work/pkg/modules/es.math.asinh.js:17:// https://tc39.es/ecma262/#sec-math.asinh\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.012,
+          "pid": 831,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "grep",
+              "-rn",
+              "http",
+              "/root/work/pkg/"
+            ],
+            "suspicious": false
+          },
+          "round": 5
+        }
+      ],
+      "duration_ms": 1998,
+      "sandbox_id": "sb-01m5621nr5yyy76qvap311j70g",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 6,
+        "label": "auto-lure",
+        "env": {
+          "CI": "true"
+        },
+        "lure": true,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "#!/bin/bash\ncd /root/work/pkg && npm run --if-present preinstall && npm run --if-present install && npm run --if-present postinstall\necho \"lifecycle exited with $?\"\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "\n> core-js@3.38.1 postinstall\n> node -e \"try{require('./postinstall')}catch(e){}\"\n\nlifecycle exited with 0\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.012,
+          "pid": 859,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "npm",
+              "run",
+              "--if-present",
+              "preinstall"
+            ],
+            "suspicious": false
+          },
+          "round": 6
+        },
+        {
+          "t": 0.014,
+          "pid": 859,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "node",
+              "/usr/local/bin/npm",
+              "run",
+              "--if-present",
+              "preinstall"
+            ],
+            "suspicious": false
+          },
+          "round": 6
+        },
+        {
+          "t": 0.12,
+          "pid": 869,
+          "kind": "file_read_sensitive",
+          "data": {
+            "path": "/root/.npmrc",
+            "canary": "NPM"
+          },
+          "round": 6
+        },
+        {
+          "t": 0.137,
+          "pid": 859,
+          "kind": "file_write",
+          "data": {
+            "path": "/root/.npm/_logs/2026-10-17T23_12_10_498Z-debug-0.log",
+            "persistence": false
+          },
+          "round": 6
+        },
+        {
+          "t": 0.171,
+          "pid": 870,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "npm",
+              "run",
+              "--if-present",
+              "install"
+            ],
+            "suspicious": false
+          },
+          "round": 6
+        },
+        {
+          "t": 0.172,
+          "pid": 870,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "node",
+              "/usr/local/bin/npm",
+              "run",
+              "--if-present",
+              "install"
+            ],
+            "suspicious": false
+          },
+          "round": 6
+        },
+        {
+          "t": 0.272,
+          "pid": 880,
+          "kind": "file_read_sensitive",
+          "data": {
+            "path": "/root/.npmrc",
+            "canary": "NPM"
+          },
+          "round": 6
+        },
+        {
+          "t": 0.288,
+          "pid": 870,
+          "kind": "file_write",
+          "data": {
+            "path": "/root/.npm/_logs/2026-10-17T23_12_10_650Z-debug-0.log",
+            "persistence": false
+          },
+          "round": 6
+        },
+        {
+          "t": 0.32,
+          "pid": 881,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "npm",
+              "run",
+              "--if-present",
+              "postinstall"
+            ],
+            "suspicious": false
+          },
+          "round": 6
+        },
+        {
+          "t": 0.321,
+          "pid": 881,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "node",
+              "/usr/local/bin/npm",
+              "run",
+              "--if-present",
+              "postinstall"
+            ],
+            "suspicious": false
+          },
+          "round": 6
+        },
+        {
+          "t": 0.418,
+          "pid": 891,
+          "kind": "file_read_sensitive",
+          "data": {
+            "path": "/root/.npmrc",
+            "canary": "NPM"
+          },
+          "round": 6
+        },
+        {
+          "t": 0.434,
+          "pid": 881,
+          "kind": "file_write",
+          "data": {
+            "path": "/root/.npm/_logs/2026-10-17T23_12_10_796Z-debug-0.log",
+            "persistence": false
+          },
+          "round": 6
+        },
+        {
+          "t": 0.463,
+          "pid": 892,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "sh",
+              "-c",
+              "node -e \\\"try{require('./postinstall')}catch(e){}\\\""
+            ],
+            "suspicious": false
+          },
+          "round": 6
+        },
+        {
+          "t": 0.465,
+          "pid": 893,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "node",
+              "-e",
+              "try{require('./postinstall')}catch(e){}"
+            ],
+            "suspicious": false
+          },
+          "round": 6
+        }
+      ],
+      "duration_ms": 1777,
+      "sandbox_id": "sb-01m5621nr5yyy76qvap311j70g",
+      "error": ""
+    }
+  ],
+  "baseline_only": [],
+  "lure_only": [],
+  "hypotheses": [
+    "List top-level files in the package to find any entry points or suspicious scripts.",
+    "List files directly in the root of the package.",
+    "Search for suspicious keywords in internals and root JS files.",
+    "Search for credential-related strings in the entire package.",
+    "Search for http URLs in the entire package.",
+    "The package is a standard, non-malicious version of core-js."
+  ],
+  "summary": "The package is the standard 'core-js' library (version 3.38.1), which provides polyfills for the JavaScript standard library. Analysis of the package files, including package.json, postinstall.js, and index.js, as well as keyword searches for suspicious patterns (such as credential access, obfuscation, or unexpected network requests), revealed no malicious behavior. The postinstall script displays a standard banner requesting support for the project, which is typical for core-js.",
+  "attempts": [
+    {
+      "round": 0,
+      "label": "baseline",
+      "exit_code": 0,
+      "note": "default import driver"
+    },
+    {
+      "round": 1,
+      "label": "probe-1",
+      "exit_code": 0,
+      "note": "List top-level files in the package to find any entry points or suspicious scripts."
+    },
+    {
+      "round": 2,
+      "label": "probe-2",
+      "exit_code": 0,
+      "note": "List files directly in the root of the package."
+    },
+    {
+      "round": 3,
+      "label": "probe-3",
+      "exit_code": 0,
+      "note": "Search for suspicious keywords in internals and root JS files."
+    },
+    {
+      "round": 4,
+      "label": "probe-4",
+      "exit_code": 0,
+      "note": "Search for credential-related strings in the entire package."
+    },
+    {
+      "round": 5,
+      "label": "probe-5",
+      "exit_code": 0,
+      "note": "Search for http URLs in the entire package."
+    }
+  ],
+  "egress_timeline": [
+    {
+      "phase": "create",
+      "rules": [
+        "pypi.org:443",
+        "files.pythonhosted.org:443",
+        "registry.npmjs.org:443"
+      ],
+      "note": "sandbox sb-01m5621nr5yyy76qvap311j70g"
+    },
+    {
+      "phase": "analysis",
+      "rules": [
+        "192.0.2.1:9"
+      ],
+      "note": "registry access closed; lure runs on loopback only"
+    }
+  ],
+  "patch_diff": "",
+  "remediation": "",
+  "capture_method": "strace",
+  "model": "gemini-3.5-flash",
+  "llm_calls": 14,
+  "sandbox_ids": [
+    "sb-01m5621nr5yyy76qvap311j70g"
+  ],
+  "destroyed": true,
+  "limitations": [
+    "Dynamic analysis runs on Linux only; Windows executables are not executed.",
+    "HTTPS request bodies cannot be read without interception: TLS destinations are recorded by SNI only.",
+    "Evasive code that detects tracing or waits longer than the probe timeout may look quiet; such runs are reported as inconclusive, never clean.",
+    "Canary proof covers the credential types we plant (ssh key, aws, npm, .env)."
+  ],
+  "report_url": "",
+  "intel": [],
+  "used_skills": [],
+  "learned_skills": [],
+  "threat_brief": "",
+  "from_cache": false
+}

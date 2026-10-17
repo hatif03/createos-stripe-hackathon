@@ -1,0 +1,156 @@
+[
+  {
+    "fixture": "date-gated-stealer",
+    "expected": "malicious",
+    "plain": "inconclusive",
+    "sandtrap": "malicious",
+    "proof": "high",
+    "probes": 1,
+    "seconds": 37,
+    "job": "ba8b10eb0c",
+    "ok": true
+  },
+  {
+    "fixture": "env-b64-exfil",
+    "expected": "malicious",
+    "plain": "inconclusive",
+    "sandtrap": "malicious",
+    "proof": "high",
+    "probes": 1,
+    "seconds": 32,
+    "job": "f4e0ab3ba1",
+    "ok": true
+  },
+  {
+    "fixture": "gated-stealer",
+    "expected": "malicious",
+    "plain": "inconclusive",
+    "sandtrap": "malicious",
+    "proof": "high",
+    "probes": 2,
+    "seconds": 34,
+    "job": "e8978b5755",
+    "ok": true
+  },
+  {
+    "fixture": "hash-gated-stealer",
+    "expected": "malicious",
+    "plain": "inconclusive",
+    "sandtrap": "malicious",
+    "proof": "high",
+    "probes": 1,
+    "seconds": 31,
+    "job": "80c0e58014",
+    "ok": true
+  },
+  {
+    "fixture": "injection",
+    "expected": "malicious",
+    "plain": "malicious",
+    "sandtrap": "malicious",
+    "proof": "high",
+    "probes": 1,
+    "seconds": 37,
+    "job": "c5492cefcc",
+    "ok": true
+  },
+  {
+    "fixture": "naive-stealer",
+    "expected": "malicious",
+    "plain": "malicious",
+    "sandtrap": "malicious",
+    "proof": "high",
+    "probes": 1,
+    "seconds": 50,
+    "job": "9e9fa38de5",
+    "ok": true
+  },
+  {
+    "fixture": "needs-config",
+    "expected": "clean",
+    "plain": "inconclusive",
+    "sandtrap": "clean",
+    "proof": "low",
+    "probes": 1,
+    "seconds": 43,
+    "job": "ed6efcfe06",
+    "ok": true
+  },
+  {
+    "fixture": "persist-bashrc",
+    "expected": "malicious",
+    "plain": "malicious",
+    "sandtrap": "malicious",
+    "proof": "medium",
+    "probes": 1,
+    "seconds": 44,
+    "job": "127a94fc06",
+    "ok": true
+  },
+  {
+    "fixture": "sibling-stealer",
+    "expected": "malicious",
+    "plain": "inconclusive",
+    "sandtrap": "malicious",
+    "proof": "high",
+    "probes": 1,
+    "seconds": 31,
+    "job": "08bfcb1046",
+    "ok": true
+  },
+  {
+    "fixture": "time-bomb",
+    "expected": "malicious",
+    "plain": "inconclusive",
+    "sandtrap": "malicious",
+    "proof": "high",
+    "probes": 1,
+    "seconds": 78,
+    "job": "2f438e7731",
+    "ok": true
+  },
+  {
+    "fixture": "tinycalc",
+    "expected": "clean",
+    "plain": "inconclusive",
+    "sandtrap": "clean",
+    "proof": "low",
+    "probes": 1,
+    "seconds": 44,
+    "job": "478ad80187",
+    "ok": true
+  },
+  {
+    "fixture": "elf-gated-beacon",
+    "expected": "malicious",
+    "plain": "clean",
+    "sandtrap": "malicious",
+    "proof": "high",
+    "probes": 1,
+    "seconds": 37,
+    "job": "32dfffd0d8",
+    "ok": true
+  },
+  {
+    "fixture": "npm-postinstall-beacon",
+    "expected": "malicious",
+    "plain": "malicious",
+    "sandtrap": "malicious",
+    "proof": "high",
+    "probes": 1,
+    "seconds": 60,
+    "job": "655ac960af",
+    "ok": true
+  },
+  {
+    "fixture": "script-ci-uploader",
+    "expected": "malicious",
+    "plain": "suspicious",
+    "sandtrap": "malicious",
+    "proof": "high",
+    "probes": 1,
+    "seconds": 27,
+    "job": "f06f51fb85",
+    "ok": true
+  }
+]

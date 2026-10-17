@@ -1,0 +1,239 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sandtrap report - pypi:pyyaml</title><style>
+:root{--bg:#f6f7f9;--fg:#15181d;--muted:#5b6470;--card:#fff;--line:#d9dde3;--code:#eef0f3;
+--clean:#0f7b3f;--susp:#8a5a00;--mal:#b3261e;--inc:#4b5563;--add:#d9f4e0;--del:#fde0de;--accent:#1d4ed8;--lure:#fff1e6}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1216;--fg:#e8ebef;--muted:#9aa4b0;--card:#181c22;--line:#2b323b;--code:#222830;
+--clean:#4ade80;--susp:#fbbf24;--mal:#ff7b72;--inc:#a3acb8;--add:#12331f;--del:#43181a;--accent:#7aa2ff;--lure:#3a2412}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:16px}h1{font-size:1.4rem;margin:.2em 0}h2{display:inline;font-size:1.1rem}h4{margin:.8em 0 .2em}
+.muted{color:var(--muted);font-size:.85em}.empty{color:var(--muted);font-style:italic}
+code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.85em}
+pre{background:var(--code);padding:8px;border-radius:6px;overflow:auto;white-space:pre-wrap;word-break:break-word;max-height:360px;margin:4px 0}
+code{background:var(--code);padding:1px 4px;border-radius:4px;word-break:break-all}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:14px 0}
+.card>summary{cursor:pointer;margin-bottom:8px}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px 16px;margin:0}
+.meta dt{color:var(--muted);font-size:.8em;text-transform:uppercase}.meta dd{margin:0 0 6px;word-break:break-all}
+.hero{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+.badge{border:3px solid currentColor;border-radius:14px;padding:12px 22px;font-weight:800;font-size:2rem;letter-spacing:.04em;text-transform:uppercase}
+.badge small{display:block;font-size:.8rem;font-weight:600;letter-spacing:0;text-transform:none}
+.v-clean{color:var(--clean)}.v-suspicious{color:var(--susp)}.v-malicious{color:var(--mal)}.v-inconclusive{color:var(--inc)}
+.gauge{flex:1;min-width:200px}.bar{height:14px;border-radius:7px;background:var(--code);overflow:hidden;border:1px solid var(--line)}
+.bar i{display:block;height:100%;background:currentColor}
+.chip{display:inline-block;padding:1px 8px;border-radius:999px;font-size:.78em;font-weight:700;border:1px solid currentColor;margin:1px}
+.sev-high,.proof-proof{color:var(--mal)}.sev-medium,.proof-intent{color:var(--susp)}.sev-low,.proof-signal{color:var(--inc)}
+.kind{color:var(--accent);font-weight:500}.lure{color:var(--susp)}
+a.attack{color:var(--accent);font-weight:600;margin-right:6px}
+.timeline,.stepper{list-style:none;padding:0;margin:0}.timeline li{display:flex;gap:10px;padding:6px 0;border-left:2px solid var(--line);margin-left:6px;padding-left:12px;position:relative}
+.timeline .dot{position:absolute;left:-7px;top:12px;width:12px;height:12px;border-radius:50%;background:var(--accent)}
+.timeline .hyp .dot{background:var(--susp)}.timeline .sum .dot{background:var(--clean)}.timeline p{margin:2px 0}
+.diffwrap{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.col{border:2px solid var(--line);border-radius:10px;padding:10px}.col.lure{border-color:var(--mal);background:var(--lure)}
+.col h3{margin:0 0 6px;font-size:1rem}.col ul{margin:0;padding-left:18px}
+.caption{font-weight:700;margin:10px 0 0;color:var(--mal)}
+.stepper li{display:flex;gap:12px;padding:8px 0;border-bottom:1px dashed var(--line)}
+.step{flex:none;width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--card);display:grid;place-items:center;font-weight:700}
+.rules{margin:4px 0;padding-left:18px}
+table.grid{width:100%;border-collapse:collapse}.grid th,.grid td{text-align:left;vertical-align:top;padding:6px 8px;border-bottom:1px solid var(--line)}
+.grid th{font-size:.8em;text-transform:uppercase;color:var(--muted)}
+.diff .dl{display:block}.diff .add{background:var(--add)}.diff .del{background:var(--del)}.diff .hunk{color:var(--accent)}
+.tools{text-align:right}button{font:inherit;padding:4px 10px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
+footer{color:var(--muted);font-size:.85em;margin:20px 0}
+@media(max-width:700px){.diffwrap{grid-template-columns:1fr}.badge{font-size:1.5rem}
+table.grid thead{display:none}.grid tr{display:block;border-bottom:2px solid var(--line);padding:6px 0}
+.grid td{display:block;border:0;padding:2px 0}.grid td::before{content:attr(data-l) ": ";color:var(--muted);font-size:.8em}}
+</style></head><body><main><h1>Sandtrap report</h1><div class="tools"><button id="ex" type="button">Expand all</button> <button id="co" type="button">Collapse all</button></div><section class="card"><dl class="meta"><dt>Target</dt><dd>pypi:pyyaml (pypi)</dd><dt>Job</dt><dd>8e418d803d</dd><dt>Created</dt><dd>2026-10-17T23:09:34+00:00</dd><dt>SHA-256</dt><dd>-</dd><dt>Model</dt><dd>gemini-3.5-flash (13 calls)</dd><dt>Capture method</dt><dd>strace</dd></dl></section><section class="card"><div class="hero"><div class="badge v-clean" role="status">✓ clean<small>No malicious behaviour observed<br>proof level: none &middot; confidence: low</small></div><div class="gauge v-clean"><b>Risk score 0/100</b><div class="bar" role="meter" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"><i style="width:0%"></i></div></div></div></section><details class="card" open><summary><h2>What the agent did</h2></summary><ol class="timeline"><li><span class="dot"></span><div><b>Round 0: baseline</b> <span class="muted">exit 0</span><p>default import driver</p></div></li><li><span class="dot"></span><div><b>Round 1: probe-1</b> <span class="muted">exit 0</span><p>Importing and using yaml works and does not trigger any malicious behavior under default conditions</p></div></li><li><span class="dot"></span><div><b>Round 2: probe-2</b> <span class="muted">exit 0</span><p>Find any files not belonging to pip or yaml in site-packages</p></div></li><li><span class="dot"></span><div><b>Round 3: probe-3</b> <span class="muted">exit 0</span><p>List all files in site-packages</p></div></li><li><span class="dot"></span><div><b>Round 4: probe-4</b> <span class="muted">exit 0</span><p>List all installed packages via importlib.metadata</p></div></li><li><span class="dot"></span><div><b>Round 5: probe-5</b> <span class="muted">exit 0</span><p>Check if there are other files in /root/work</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>Importing and using yaml works and does not trigger any malicious behavior under default conditions</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>Find any files not belonging to pip or yaml in site-packages</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>List all files in site-packages</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>List all installed packages via importlib.metadata</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>Check if there are other files in /root/work</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>The baseline failed because it attempted to import &#x27;pyyaml&#x27; instead of &#x27;yaml&#x27;.</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>Importing and using &#x27;yaml&#x27; with lure=True does not trigger any network requests, file access, or malicious behavior.</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>The package is a standard, benign installation of PyYAML 6.0.3.</p></div></li><li class="sum"><span class="dot"></span><div><b>Summary</b><p>The package &#x27;pyyaml&#x27; is a standard, benign installation of PyYAML (version 6.0.3). The baseline run failed because it attempted to import &#x27;pyyaml&#x27; directly, whereas the correct module name is &#x27;yaml&#x27;. Importing and using the &#x27;yaml&#x27; module with fake internet enabled (lure=True) results in normal YAML parsing behavior with no network requests, credential exfiltration, or other suspicious activities.</p></div></li></ol></details><details class="card" open><summary><h2>Baseline vs Lure diff</h2></summary><div class="diffwrap"><div class="col"><h3>Baseline only</h3><ul><li class="empty">nothing unique to baseline</li></ul></div><div class="col lure"><h3>Lure only</h3><ul><li class="empty">nothing unique to lure</li></ul></div></div><p class="caption">behaviour that appeared only after the agent changed the environment = evidence of sandbox evasion</p></details><details class="card" open><summary><h2>Findings</h2></summary><p class="empty">No dynamic findings.</p></details><details class="card" ><summary><h2>Static findings</h2></summary><p class="empty">No static findings.</p></details><details class="card" open><summary><h2>Egress firewall timeline</h2></summary><ol class="stepper"><li><span class="step">1</span><div><b>create</b><ul class="rules"><li><code>pypi.org:443</code></li><li><code>files.pythonhosted.org:443</code></li><li><code>registry.npmjs.org:443</code></li></ul><p class=muted>sandbox sb-01m561zwhr7kfgmx80xk5pxaba</p></div></li><li><span class="step">2</span><div><b>analysis</b><ul class="rules"><li><code>192.0.2.1:9</code></li></ul><p class=muted>registry access closed; lure runs on loopback only</p></div></li></ol></details><details class="card" ><summary><h2>Probe rounds</h2></summary><table class="grid"><thead><tr><th>Round</th><th>Label</th><th>Exit</th><th>Duration</th><th>Events</th><th>Raw</th></tr></thead><tbody><tr><td data-l="Round">-1</td><td data-l="Label">install</td><td data-l="Exit">0</td><td data-l="Duration">0 ms</td><td data-l="Events"><span class="chip kind">exec ×5</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.378,
+  &quot;pid&quot;: 649,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.38,
+  &quot;pid&quot;: 649,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;bash&quot;,
+    &quot;/usr/local/bin/rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.383,
+  &quot;pid&quot;: 649,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;asdf&quot;,
+    &quot;exec&quot;,
+    &quot;rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.396,
+  &quot;pid&quot;: 654,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;env&quot;,
+    &quot;-0&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.405,
+  &quot;pid&quot;: 649,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;/root/.asdf/installs/rust/1.83.0/toolchains/1.83.0-x86_64-unknown-linux-gnu/bin/rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ }
+]</pre><h4>stdout</h4><pre>Collecting pyyaml
+  Downloading pyyaml-6.0.3-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.4 kB)
+Downloading pyyaml-6.0.3-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (801 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 801.6/801.6 kB 33.1 MB/s  0:00:00
+Installing collected packages: pyyaml
+Successfully installed pyyaml-6.0.3
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">0</td><td data-l="Label">baseline</td><td data-l="Exit">0</td><td data-l="Duration">1276 ms</td><td data-l="Events"><span class="chip kind">gate_exit ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.058,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;gate_exit&quot;,
+  &quot;data&quot;: {
+   &quot;reason&quot;: &quot;exited 0 after 0.1s with no observable behaviour&quot;
+  },
+  &quot;round&quot;: 0
+ }
+]</pre><h4>stdout</h4><pre>import-error pyyaml
+</pre><h4>stderr</h4><pre>Traceback (most recent call last):
+  File &quot;/root/work/out/r0/driver.py&quot;, line 4, in &lt;module&gt;
+    importlib.import_module(name)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File &quot;/root/.asdf/installs/python/3.13.14/lib/python3.13/importlib/__init__.py&quot;, line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;&lt;frozen importlib._bootstrap&gt;&quot;, line 1395, in _gcd_import
+  File &quot;&lt;frozen importlib._bootstrap&gt;&quot;, line 1360, in _find_and_load
+  File &quot;&lt;frozen importlib._bootstrap&gt;&quot;, line 1324, in _find_and_load_unlocked
+ModuleNotFoundError: No module named &#x27;pyyaml&#x27;
+</pre></details></td></tr><tr><td data-l="Round">1</td><td data-l="Label">probe-1 <span class="chip lure">lure</span></td><td data-l="Exit">0</td><td data-l="Duration">1286 ms</td><td data-l="Events"><span class="chip kind">gate_exit ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.068,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;gate_exit&quot;,
+  &quot;data&quot;: {
+   &quot;reason&quot;: &quot;exited 0 after 0.1s with no observable behaviour&quot;
+  },
+  &quot;round&quot;: 1
+ }
+]</pre><h4>stdout</h4><pre>6.0.3
+{&#x27;a&#x27;: 1}
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">2</td><td data-l="Label">probe-2 <span class="chip lure">lure</span></td><td data-l="Exit">0</td><td data-l="Duration">1284 ms</td><td data-l="Events"><span class="chip kind">gate_exit ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.056,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;gate_exit&quot;,
+  &quot;data&quot;: {
+   &quot;reason&quot;: &quot;exited 0 after 0.1s with no observable behaviour&quot;
+  },
+  &quot;round&quot;: 2
+ }
+]</pre><h4>stdout</h4><pre></pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">3</td><td data-l="Label">probe-3 <span class="chip lure">lure</span></td><td data-l="Exit">0</td><td data-l="Duration">1586 ms</td><td data-l="Events"><span class="chip kind">gate_exit ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.059,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;gate_exit&quot;,
+  &quot;data&quot;: {
+   &quot;reason&quot;: &quot;exited 0 after 0.1s with no observable behaviour&quot;
+  },
+  &quot;round&quot;: 3
+ }
+]</pre><h4>stdout</h4><pre>_/dumper.cpython-313.pyc
+/root/work/venv/lib/python3.13/site-packages/yaml/__pycache__/emitter.cpython-313.pyc
+/root/work/venv/lib/python3.13/site-packages/yaml/__pycache__/loader.cpython-313.pyc
+/root/work/venv/lib/python3.13/site-packages/yaml/__pycache__/nodes.cpython-313.pyc
+/root/work/venv/lib/python3.13/site-packages/yaml/__pycache__/cyaml.cpython-313.pyc
+/root/work/venv/lib/python3.13/site-packages/yaml/__pycache__/representer.cpython-313.pyc
+/root/work/venv/lib/python3.13/site-packages/yaml/__pycache__/__init__.cpython-313.pyc
+/root/work/venv/lib/python3.13/site-packages/yaml/__pycache__/scanner.cpython-313.pyc
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/METADATA
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/WHEEL
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/INSTALLER
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/entry_points.txt
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/REQUESTED
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/RECORD
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/AUTHORS.txt
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/LICENSE.txt
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/pyproject_hooks/LICENSE
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/urllib3/LICENSE.txt
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/certifi/LICENSE
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/tomli_w/LICENSE
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/distro/LICENSE
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/distlib/LICENSE.txt
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/resolvelib/LICENSE
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/packaging/LICENSE.APACHE
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/packaging/LICENSE
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/packaging/LICENSE.BSD
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/idna/LICENSE.md
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/msgpack/COPYING
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/requests/LICENSE
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/pygments/LICENSE
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/cachecontrol/LICENSE.txt
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/rich/LICENSE
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/tomli/LICENSE
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/platformdirs/LICENSE
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/pkg_resources/LICENSE
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/truststore/LICENSE
+/root/work/venv/lib/python3.13/site-packages/pyyaml-6.0.3.dist-info/top_level.txt
+/root/work/venv/lib/python3.13/site-packages/pyyaml-6.0.3.dist-info/METADATA
+/root/work/venv/lib/python3.13/site-packages/pyyaml-6.0.3.dist-info/WHEEL
+/root/work/venv/lib/python3.13/site-packages/pyyaml-6.0.3.dist-info/INSTALLER
+/root/work/venv/lib/python3.13/site-packages/pyyaml-6.0.3.dist-info/REQUESTED
+/root/work/venv/lib/python3.13/site-packages/pyyaml-6.0.3.dist-info/RECORD
+/root/work/venv/lib/python3.13/site-packages/pyyaml-6.0.3.dist-info/licenses/LICENSE
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">4</td><td data-l="Label">probe-4 <span class="chip lure">lure</span></td><td data-l="Exit">0</td><td data-l="Duration">1335 ms</td><td data-l="Events"><span class="chip kind">gate_exit ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.115,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;gate_exit&quot;,
+  &quot;data&quot;: {
+   &quot;reason&quot;: &quot;exited 0 after 0.1s with no observable behaviour&quot;
+  },
+  &quot;round&quot;: 4
+ }
+]</pre><h4>stdout</h4><pre>pip==26.1.2
+PyYAML==6.0.3
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">5</td><td data-l="Label">probe-5 <span class="chip lure">lure</span></td><td data-l="Exit">0</td><td data-l="Duration">1250 ms</td><td data-l="Events"><span class="chip kind">gate_exit ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.032,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;gate_exit&quot;,
+  &quot;data&quot;: {
+   &quot;reason&quot;: &quot;exited 0 after 0.0s with no observable behaviour&quot;
+  },
+  &quot;round&quot;: 5
+ }
+]</pre><h4>stdout</h4><pre>[&#x27;out&#x27;, &#x27;canary_tokens.txt&#x27;, &#x27;.env&#x27;, &#x27;venv&#x27;]
+</pre><h4>stderr</h4><pre></pre></details></td></tr></tbody></table></details><details class="card" open><summary><h2>Limitations</h2></summary><ul><li>Dynamic analysis runs on Linux only; Windows executables are not executed.</li><li>HTTPS request bodies cannot be read without interception: TLS destinations are recorded by SNI only.</li><li>Evasive code that detects tracing or waits longer than the probe timeout may look quiet; such runs are reported as inconclusive, never clean.</li><li>Canary proof covers the credential types we plant (ssh key, aws, npm, .env).</li></ul></details><footer>Sandboxes: sb-01m561zwhr7kfgmx80xk5pxaba &middot; sandbox destroyed: yes</footer></main><script>function t(o){document.querySelectorAll('details.card').forEach(function(d){d.open=o})}document.getElementById('ex').onclick=function(){t(true)};document.getElementById('co').onclick=function(){t(false)};</script></body></html>

@@ -1,0 +1,381 @@
+{
+  "job": "478ad80187",
+  "target": "D:\\createos-stripe-hackathon\\fixtures\\tinycalc",
+  "target_kind": "package",
+  "sha256": "8533dfeb4805f66c3d145303e8500bdc4db75c9d0f67a919270359f069d322ab",
+  "created_at": "2026-10-17T23:01:20+00:00",
+  "verdict": "clean",
+  "score": 0,
+  "confidence": "low",
+  "findings": [],
+  "static_findings": [],
+  "rounds": [
+    {
+      "probe": {
+        "round": -1,
+        "label": "install",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "Processing ./root/work/pkg\n  Installing build dependencies: started\n  Installing build dependencies: finished with status 'done'\n  Getting requirements to build wheel: started\n  Getting requirements to build wheel: finished with status 'done'\n  Preparing metadata (pyproject.toml): started\n  Preparing metadata (pyproject.toml): finished with status 'done'\nBuilding wheels for collected packages: tinycalc\n  Building wheel for tinycalc (pyproject.toml): started\n  Building wheel for tinycalc (pyproject.toml): finished with status 'done'\n  Created wheel for tinycalc: filename=tinycalc-0.1.0-py3-none-any.whl size=1461 sha256=eb9ec3f7b1d5e64cc7b8e3eaa9685696f9645ec56f3c52268831390afc19354b\n  Stored in directory: /tmp/pip-ephem-wheel-cache-qjufulmn/wheels/13/25/4d/8bd974f2a5e81e37fcc7c028cb3bf8fa1d4ca10e8b1484c5b0\nSuccessfully built tinycalc\nInstalling collected packages: tinycalc\nSuccessfully installed tinycalc-0.1.0\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.379,
+          "pid": 654,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.38,
+          "pid": 654,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "bash",
+              "/usr/local/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.384,
+          "pid": 654,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "asdf",
+              "exec",
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.397,
+          "pid": 660,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "env",
+              "-0"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.406,
+          "pid": 654,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/.asdf/installs/rust/1.83.0/toolchains/1.83.0-x86_64-unknown-linux-gnu/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.449,
+          "pid": 663,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/work/venv/bin/python3",
+              "/root/work/venv/lib/python3.13/site-packages/pip/__pip-runner__.py",
+              "install",
+              "--ignore-installed",
+              "--no-user",
+              "--prefix",
+              "/tmp/pip-build-env-ijhlkzr5/overlay",
+              "--no-warn-script-location",
+              "--disable-pip-version-check",
+              "--no-compile",
+              "--target",
+              ""
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.82,
+          "pid": 665,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "uname",
+              "-rs"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.829,
+          "pid": 666,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.83,
+          "pid": 666,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "bash",
+              "/usr/local/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.834,
+          "pid": 666,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "asdf",
+              "exec",
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.846,
+          "pid": 672,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "env",
+              "-0"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.849,
+          "pid": 666,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/.asdf/installs/rust/1.83.0/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.856,
+          "pid": 666,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/.asdf/installs/rust/1.83.0/toolchains/1.83.0-x86_64-unknown-linux-gnu/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 1.328,
+          "pid": 676,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/work/venv/bin/python3",
+              "/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py",
+              "get_requires_for_build_wheel",
+              "/tmp/tmpbh4xvi79"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 1.74,
+          "pid": 677,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/work/venv/bin/python3",
+              "/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py",
+              "prepare_metadata_for_build_wheel",
+              "/tmp/tmpxe3uk50r"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 2.001,
+          "pid": 678,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/work/venv/bin/python3",
+              "/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py",
+              "build_wheel",
+              "/tmp/tmpg4b_fn9w"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        }
+      ],
+      "duration_ms": 0,
+      "sandbox_id": "sb-01m561h38vxe2kyhjwqkkq8pzg",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 0,
+        "label": "baseline",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import importlib, sys, traceback\nfor name in ['tinycalc']:\n    try:\n        importlib.import_module(name)\n        print('imported', name)\n    except Exception:\n        print('import-error', name); traceback.print_exc()\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "imported tinycalc\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.06,
+          "pid": 0,
+          "kind": "gate_exit",
+          "data": {
+            "reason": "exited 0 after 0.1s with no observable behaviour"
+          },
+          "round": 0
+        }
+      ],
+      "duration_ms": 1258,
+      "sandbox_id": "sb-01m561h38vxe2kyhjwqkkq8pzg",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 1,
+        "label": "probe-1",
+        "env": {},
+        "lure": true,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import tinycalc\ntinycalc.demo()\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "tinycalc self-check OK\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.042,
+          "pid": 0,
+          "kind": "gate_exit",
+          "data": {
+            "reason": "exited 0 after 0.0s with no observable behaviour"
+          },
+          "round": 1
+        }
+      ],
+      "duration_ms": 1248,
+      "sandbox_id": "sb-01m561h38vxe2kyhjwqkkq8pzg",
+      "error": ""
+    }
+  ],
+  "baseline_only": [],
+  "lure_only": [],
+  "hypotheses": [
+    "The package is clean and contains only pure arithmetic functions. Running with lure=True and exercising the functions will show no network or malicious activity."
+  ],
+  "summary": "The tinycalc package is a harmless library containing pure arithmetic helper functions (add, mul, fact) with no import-time or call-time side effects, no network activity, and no credential exfiltration.",
+  "attempts": [
+    {
+      "round": 0,
+      "label": "baseline",
+      "exit_code": 0,
+      "note": "default import driver"
+    },
+    {
+      "round": 1,
+      "label": "probe-1",
+      "exit_code": 0,
+      "note": "The package is clean and contains only pure arithmetic functions. Running with lure=True and exercising the functions will show no network or malicious activity."
+    }
+  ],
+  "egress_timeline": [
+    {
+      "phase": "create",
+      "rules": [
+        "pypi.org:443",
+        "files.pythonhosted.org:443",
+        "registry.npmjs.org:443"
+      ],
+      "note": "sandbox sb-01m561h38vxe2kyhjwqkkq8pzg"
+    },
+    {
+      "phase": "analysis",
+      "rules": [
+        "192.0.2.1:9"
+      ],
+      "note": "registry access closed; lure runs on loopback only"
+    }
+  ],
+  "patch_diff": "",
+  "remediation": "",
+  "capture_method": "strace",
+  "model": "gemini-3.5-flash",
+  "llm_calls": 6,
+  "sandbox_ids": [
+    "sb-01m561h38vxe2kyhjwqkkq8pzg"
+  ],
+  "destroyed": true,
+  "limitations": [
+    "Dynamic analysis runs on Linux only; Windows executables are not executed.",
+    "HTTPS request bodies cannot be read without interception: TLS destinations are recorded by SNI only.",
+    "Evasive code that detects tracing or waits longer than the probe timeout may look quiet; such runs are reported as inconclusive, never clean.",
+    "Canary proof covers the credential types we plant (ssh key, aws, npm, .env)."
+  ],
+  "report_url": "",
+  "intel": [],
+  "used_skills": [],
+  "learned_skills": [],
+  "threat_brief": "",
+  "from_cache": false
+}

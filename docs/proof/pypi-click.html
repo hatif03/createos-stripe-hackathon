@@ -1,0 +1,274 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sandtrap report - pypi:click</title><style>
+:root{--bg:#f6f7f9;--fg:#15181d;--muted:#5b6470;--card:#fff;--line:#d9dde3;--code:#eef0f3;
+--clean:#0f7b3f;--susp:#8a5a00;--mal:#b3261e;--inc:#4b5563;--add:#d9f4e0;--del:#fde0de;--accent:#1d4ed8;--lure:#fff1e6}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1216;--fg:#e8ebef;--muted:#9aa4b0;--card:#181c22;--line:#2b323b;--code:#222830;
+--clean:#4ade80;--susp:#fbbf24;--mal:#ff7b72;--inc:#a3acb8;--add:#12331f;--del:#43181a;--accent:#7aa2ff;--lure:#3a2412}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:16px}h1{font-size:1.4rem;margin:.2em 0}h2{display:inline;font-size:1.1rem}h4{margin:.8em 0 .2em}
+.muted{color:var(--muted);font-size:.85em}.empty{color:var(--muted);font-style:italic}
+code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.85em}
+pre{background:var(--code);padding:8px;border-radius:6px;overflow:auto;white-space:pre-wrap;word-break:break-word;max-height:360px;margin:4px 0}
+code{background:var(--code);padding:1px 4px;border-radius:4px;word-break:break-all}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:14px 0}
+.card>summary{cursor:pointer;margin-bottom:8px}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px 16px;margin:0}
+.meta dt{color:var(--muted);font-size:.8em;text-transform:uppercase}.meta dd{margin:0 0 6px;word-break:break-all}
+.hero{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+.badge{border:3px solid currentColor;border-radius:14px;padding:12px 22px;font-weight:800;font-size:2rem;letter-spacing:.04em;text-transform:uppercase}
+.badge small{display:block;font-size:.8rem;font-weight:600;letter-spacing:0;text-transform:none}
+.v-clean{color:var(--clean)}.v-suspicious{color:var(--susp)}.v-malicious{color:var(--mal)}.v-inconclusive{color:var(--inc)}
+.gauge{flex:1;min-width:200px}.bar{height:14px;border-radius:7px;background:var(--code);overflow:hidden;border:1px solid var(--line)}
+.bar i{display:block;height:100%;background:currentColor}
+.chip{display:inline-block;padding:1px 8px;border-radius:999px;font-size:.78em;font-weight:700;border:1px solid currentColor;margin:1px}
+.sev-high,.proof-proof{color:var(--mal)}.sev-medium,.proof-intent{color:var(--susp)}.sev-low,.proof-signal{color:var(--inc)}
+.kind{color:var(--accent);font-weight:500}.lure{color:var(--susp)}
+a.attack{color:var(--accent);font-weight:600;margin-right:6px}
+.timeline,.stepper{list-style:none;padding:0;margin:0}.timeline li{display:flex;gap:10px;padding:6px 0;border-left:2px solid var(--line);margin-left:6px;padding-left:12px;position:relative}
+.timeline .dot{position:absolute;left:-7px;top:12px;width:12px;height:12px;border-radius:50%;background:var(--accent)}
+.timeline .hyp .dot{background:var(--susp)}.timeline .sum .dot{background:var(--clean)}.timeline p{margin:2px 0}
+.diffwrap{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.col{border:2px solid var(--line);border-radius:10px;padding:10px}.col.lure{border-color:var(--mal);background:var(--lure)}
+.col h3{margin:0 0 6px;font-size:1rem}.col ul{margin:0;padding-left:18px}
+.caption{font-weight:700;margin:10px 0 0;color:var(--mal)}
+.stepper li{display:flex;gap:12px;padding:8px 0;border-bottom:1px dashed var(--line)}
+.step{flex:none;width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--card);display:grid;place-items:center;font-weight:700}
+.rules{margin:4px 0;padding-left:18px}
+table.grid{width:100%;border-collapse:collapse}.grid th,.grid td{text-align:left;vertical-align:top;padding:6px 8px;border-bottom:1px solid var(--line)}
+.grid th{font-size:.8em;text-transform:uppercase;color:var(--muted)}
+.diff .dl{display:block}.diff .add{background:var(--add)}.diff .del{background:var(--del)}.diff .hunk{color:var(--accent)}
+.tools{text-align:right}button{font:inherit;padding:4px 10px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
+footer{color:var(--muted);font-size:.85em;margin:20px 0}
+@media(max-width:700px){.diffwrap{grid-template-columns:1fr}.badge{font-size:1.5rem}
+table.grid thead{display:none}.grid tr{display:block;border-bottom:2px solid var(--line);padding:6px 0}
+.grid td{display:block;border:0;padding:2px 0}.grid td::before{content:attr(data-l) ": ";color:var(--muted);font-size:.8em}}
+</style></head><body><main><h1>Sandtrap report</h1><div class="tools"><button id="ex" type="button">Expand all</button> <button id="co" type="button">Collapse all</button></div><section class="card"><dl class="meta"><dt>Target</dt><dd>pypi:click (pypi)</dd><dt>Job</dt><dd>f6f61a84b5</dd><dt>Created</dt><dd>2026-10-17T23:08:40+00:00</dd><dt>SHA-256</dt><dd>-</dd><dt>Model</dt><dd>gemini-3.5-flash (16 calls)</dd><dt>Capture method</dt><dd>strace</dd></dl></section><section class="card"><div class="hero"><div class="badge v-clean" role="status">✓ clean<small>No malicious behaviour observed<br>proof level: none &middot; confidence: low</small></div><div class="gauge v-clean"><b>Risk score 0/100</b><div class="bar" role="meter" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"><i style="width:0%"></i></div></div></div></section><details class="card" open><summary><h2>What the agent did</h2></summary><ol class="timeline"><li><span class="dot"></span><div><b>Round 0: baseline</b> <span class="muted">exit 0</span><p>default import driver</p></div></li><li><span class="dot"></span><div><b>Round 1: probe-1</b> <span class="muted">exit 0</span><p>Search for suspicious patterns in click package files</p></div></li><li><span class="dot"></span><div><b>Round 2: probe-2</b> <span class="muted">exit 0</span><p>Find lines containing requests or urllib in core.py and _termui_impl.py</p></div></li><li><span class="dot"></span><div><b>Round 3: probe-3</b> <span class="muted">exit 0</span><p>Search for URLs, IPs, and env vars in click package files</p></div></li><li><span class="dot"></span><div><b>Round 4: probe-4</b> <span class="muted">exit 0</span><p>List all directories/files in site-packages</p></div></li><li><span class="dot"></span><div><b>Round 5: probe-5</b> <span class="muted">exit 0</span><p>List all files in /root/work</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>Search for suspicious patterns in click package files</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>Find lines containing requests or urllib in core.py and _termui_impl.py</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>Search for URLs, IPs, and env vars in click package files</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>List all directories/files in site-packages</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>List all files in /root/work</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>The click package contains malicious code or backdoors. (Result: False. Code inspection showed only standard, benign click implementation files with no suspicious patterns, external connections, or credential harvesting.)</p></div></li><li class="sum"><span class="dot"></span><div><b>Summary</b><p>The installed package &#x27;click&#x27; (version 8.5.0) is a benign, standard command-line interface toolkit. Thorough static analysis of the package files, including searches for suspicious imports, network activity, and credential harvesting patterns, revealed no malicious behavior or anomalies.</p></div></li></ol></details><details class="card" open><summary><h2>Baseline vs Lure diff</h2></summary><div class="diffwrap"><div class="col"><h3>Baseline only</h3><ul><li class="empty">nothing unique to baseline</li></ul></div><div class="col lure"><h3>Lure only</h3><ul><li class="empty">nothing unique to lure</li></ul></div></div><p class="caption">behaviour that appeared only after the agent changed the environment = evidence of sandbox evasion</p></details><details class="card" open><summary><h2>Findings</h2></summary><p class="empty">No dynamic findings.</p></details><details class="card" ><summary><h2>Static findings</h2></summary><p class="empty">No static findings.</p></details><details class="card" open><summary><h2>Egress firewall timeline</h2></summary><ol class="stepper"><li><span class="step">1</span><div><b>create</b><ul class="rules"><li><code>pypi.org:443</code></li><li><code>files.pythonhosted.org:443</code></li><li><code>registry.npmjs.org:443</code></li></ul><p class=muted>sandbox sb-01m561thctk2y7ymp2z73pbtm5</p></div></li><li><span class="step">2</span><div><b>analysis</b><ul class="rules"><li><code>192.0.2.1:9</code></li></ul><p class=muted>registry access closed; lure runs on loopback only</p></div></li></ol></details><details class="card" ><summary><h2>Probe rounds</h2></summary><table class="grid"><thead><tr><th>Round</th><th>Label</th><th>Exit</th><th>Duration</th><th>Events</th><th>Raw</th></tr></thead><tbody><tr><td data-l="Round">-1</td><td data-l="Label">install</td><td data-l="Exit">0</td><td data-l="Duration">0 ms</td><td data-l="Events"><span class="chip kind">exec ×5</span> <span class="chip kind">sleep ×2</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.379,
+  &quot;pid&quot;: 649,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.38,
+  &quot;pid&quot;: 649,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;bash&quot;,
+    &quot;/usr/local/bin/rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.384,
+  &quot;pid&quot;: 649,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;asdf&quot;,
+    &quot;exec&quot;,
+    &quot;rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.397,
+  &quot;pid&quot;: 655,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;env&quot;,
+    &quot;-0&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.406,
+  &quot;pid&quot;: 649,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;/root/.asdf/installs/rust/1.83.0/toolchains/1.83.0-x86_64-unknown-linux-gnu/bin/rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.421,
+  &quot;pid&quot;: 646,
+  &quot;kind&quot;: &quot;sleep&quot;,
+  &quot;data&quot;: {
+   &quot;seconds&quot;: 121.0
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.421,
+  &quot;pid&quot;: 646,
+  &quot;kind&quot;: &quot;sleep&quot;,
+  &quot;data&quot;: {
+   &quot;seconds&quot;: 121.0
+  },
+  &quot;round&quot;: -1
+ }
+]</pre><h4>stdout</h4><pre>Collecting click
+  Downloading click-8.5.0-py3-none-any.whl.metadata (2.6 kB)
+Downloading click-8.5.0-py3-none-any.whl (125 kB)
+Installing collected packages: click
+Successfully installed click-8.5.0
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">0</td><td data-l="Label">baseline</td><td data-l="Exit">0</td><td data-l="Duration">1328 ms</td><td data-l="Events"><span class="chip kind">gate_exit ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.087,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;gate_exit&quot;,
+  &quot;data&quot;: {
+   &quot;reason&quot;: &quot;exited 0 after 0.1s with no observable behaviour&quot;
+  },
+  &quot;round&quot;: 0
+ }
+]</pre><h4>stdout</h4><pre>imported click
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">1</td><td data-l="Label">probe-1</td><td data-l="Exit">0</td><td data-l="Duration">1254 ms</td><td data-l="Events"><span class="chip kind">gate_exit ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.04,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;gate_exit&quot;,
+  &quot;data&quot;: {
+   &quot;reason&quot;: &quot;exited 0 after 0.0s with no observable behaviour&quot;
+  },
+  &quot;round&quot;: 1
+ }
+]</pre><h4>stdout</h4><pre>Found import\s+os in _compat.py
+Found import\s+sys in _compat.py
+Found subprocess in shell_completion.py
+Found import\s+os in shell_completion.py
+Found requests in core.py
+Found import\s+os in core.py
+Found import\s+sys in core.py
+Found subprocess in _termui_impl.py
+Found popen in _termui_impl.py
+Found requests in _termui_impl.py
+Found urllib in _termui_impl.py
+Found import\s+os in _termui_impl.py
+Found import\s+sys in _termui_impl.py
+Found subprocess in testing.py
+Found system\( in testing.py
+Found import\s+os in testing.py
+Found import\s+sys in testing.py
+Found import\s+sys in _winconsole.py
+Found import\s+os in types.py
+Found import\s+sys in types.py
+Found import\s+os in utils.py
+Found import\s+sys in utils.py
+Found import\s+os in termui.py
+Found import\s+sys in termui.py
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">2</td><td data-l="Label">probe-2</td><td data-l="Exit">0</td><td data-l="Duration">1288 ms</td><td data-l="Events"><span class="chip kind">gate_exit ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.046,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;gate_exit&quot;,
+  &quot;data&quot;: {
+   &quot;reason&quot;: &quot;exited 0 after 0.0s with no observable behaviour&quot;
+  },
+  &quot;round&quot;: 2
+ }
+]</pre><h4>stdout</h4><pre>core.py:1546: # Process shell completion requests and exit early.
+_termui_impl.py:566: # them: either the invocation already requests raw control characters, or
+_termui_impl.py:803: from urllib.parse import unquote
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">3</td><td data-l="Label">probe-3</td><td data-l="Exit">0</td><td data-l="Duration">1438 ms</td><td data-l="Events"><span class="chip kind">gate_exit ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.063,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;gate_exit&quot;,
+  &quot;data&quot;: {
+   &quot;reason&quot;: &quot;exited 0 after 0.1s with no observable behaviour&quot;
+  },
+  &quot;round&quot;: 3
+ }
+]</pre><h4>stdout</h4><pre>_compat.py URLs: [&#x27;https://bitbucket.org/pypy/pypy/issue/1803&#x27;]
+shell_completion.py URLs: [&#x27;https://fishshell.com/docs/current/cmds/complete.html&#x27;]
+shell_completion.py Envs: [&#x27;os.environ[&quot;COMP_WORDS&quot;]&#x27;, &#x27;os.environ[&quot;COMP_CWORD&quot;]&#x27;, &#x27;os.environ[&quot;COMP_WORDS&quot;]&#x27;, &#x27;os.environ[&quot;COMP_CWORD&quot;]&#x27;, &#x27;os.environ[&quot;COMP_WORDS&quot;]&#x27;]
+core.py URLs: [&#x27;https://click.palletsprojects.com/en/stable/advanced/#callback-evaluation-order&#x27;, &#x27;https://github.com/pallets/click/issues/3403&#x27;, &#x27;https://github.com/pallets/click/issues/3066&#x27;, &#x27;https://github.com/pallets/click/issues/3065&#x27;, &#x27;https://github.com/pallets/click/pull/3068&#x27;]
+core.py Envs: [&#x27;os.environ.get(complete_var)&#x27;, &#x27;os.environ.get(self.envvar)&#x27;, &#x27;os.environ.get(envvar)&#x27;, &#x27;os.environ.get(envvar)&#x27;]
+_termui_impl.py URLs: [&#x27;https://docs.python.org/3/library/subprocess.html#popen-constructor&#x27;, &#x27;https://github.com/pallets/click/issues/2943&#x27;, &#x27;https://github.com/pallets/click/pull/2944&#x27;]
+_termui_impl.py Envs: [&#x27;os.environ.get(&quot;PAGER&quot;, &quot;&quot;)&#x27;, &#x27;os.environ.get(&quot;TERM&quot;)&#x27;, &#x27;os.environ.get(&quot;LESS&quot;, &quot;&quot;)&#x27;, &#x27;os.environ.get(key)&#x27;]
+_utils.py URLs: [&#x27;https://peps.python.org/pep-0661/&gt;`_.&#x27;]
+decorators.py URLs: [&#x27;https://github.com/pallets/click/discussions/3527&gt;`_.&#x27;, &#x27;https://docs.python.org/3/library/inspect.html#the-interpreter-stack&#x27;]
+testing.py Envs: [&#x27;os.environ.get(key)&#x27;, &#x27;os.environ[key]&#x27;, &#x27;os.environ[key]&#x27;, &#x27;os.environ[key]&#x27;, &#x27;os.environ[key]&#x27;]
+_textwrap.py URLs: [&#x27;https://docs.python.org/3/library/textwrap.html#textwrap.TextWrapper&#x27;, &#x27;https://github.com/python/cpython/blob/main/Lib/textwrap.py&#x27;]
+utils.py Envs: [&#x27;os.environ.get(key)&#x27;, &#x27;os.environ.get(&quot;XDG_CONFIG_HOME&quot;, os.path.expanduser(&quot;~/.config&quot;)&#x27;]
+termui.py URLs: [&#x27;https://bugs.python.org/issue24711&#x27;, &#x27;https://en.wikipedia.org/wiki/ANSI_color&#x27;, &#x27;https://gist.github.com/XVilka/8346728&#x27;, &#x27;https://click.palletsprojects.com/&#x27;]
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">4</td><td data-l="Label">probe-4</td><td data-l="Exit">0</td><td data-l="Duration">1275 ms</td><td data-l="Events"><span class="chip kind">gate_exit ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.042,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;gate_exit&quot;,
+  &quot;data&quot;: {
+   &quot;reason&quot;: &quot;exited 0 after 0.0s with no observable behaviour&quot;
+  },
+  &quot;round&quot;: 4
+ }
+]</pre><h4>stdout</h4><pre>pip-26.1.2.dist-info
+click-8.5.0.dist-info
+pip
+click
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">5</td><td data-l="Label">probe-5</td><td data-l="Exit">0</td><td data-l="Duration">1417 ms</td><td data-l="Events"><span class="chip kind">gate_exit ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.045,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;gate_exit&quot;,
+  &quot;data&quot;: {
+   &quot;reason&quot;: &quot;exited 0 after 0.0s with no observable behaviour&quot;
+  },
+  &quot;round&quot;: 5
+ }
+]</pre><h4>stdout</h4><pre>/lib/python3.13/site-packages/pip/_vendor/pygments [&#x27;formatters&#x27;, &#x27;filters&#x27;, &#x27;__pycache__&#x27;, &#x27;lexers&#x27;, &#x27;styles&#x27;] [&#x27;modeline.py&#x27;, &#x27;LICENSE&#x27;, &#x27;console.py&#x27;, &#x27;scanner.py&#x27;, &#x27;regexopt.py&#x27;, &#x27;sphinxext.py&#x27;, &#x27;lexer.py&#x27;, &#x27;plugin.py&#x27;, &#x27;style.py&#x27;, &#x27;filter.py&#x27;, &#x27;unistring.py&#x27;, &#x27;util.py&#x27;, &#x27;formatter.py&#x27;, &#x27;__init__.py&#x27;, &#x27;token.py&#x27;, &#x27;__main__.py&#x27;]
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pygments/formatters [&#x27;__pycache__&#x27;] [&#x27;_mapping.py&#x27;, &#x27;__init__.py&#x27;]
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pygments/formatters/__pycache__ [] [&#x27;_mapping.cpython-313.pyc&#x27;, &#x27;__init__.cpython-313.pyc&#x27;]
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pygments/filters [&#x27;__pycache__&#x27;] [&#x27;__init__.py&#x27;]
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pygments/filters/__pycache__ [] [&#x27;__init__.cpython-313.pyc&#x27;]
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pygments/__pycache__ [] [&#x27;unistring.cpython-313.pyc&#x27;, &#x27;lexer.cpython-313.pyc&#x27;, &#x27;console.cpython-313.pyc&#x27;, &#x27;scanner.cpython-313.pyc&#x27;, &#x27;modeline.cpython-313.pyc&#x27;, &#x27;__init__.cpython-313.pyc&#x27;, &#x27;filter.cpython-313.pyc&#x27;, &#x27;__main__.cpython-313.pyc&#x27;, &#x27;formatter.cpython-313.pyc&#x27;, &#x27;sphinxext.cpython-313.pyc&#x27;, &#x27;regexopt.cpython-313.pyc&#x27;, &#x27;plugin.cpython-313.pyc&#x27;, &#x27;token.cpython-313.pyc&#x27;, &#x27;style.cpython-313.pyc&#x27;, &#x27;util.cpython-313.pyc&#x27;]
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pygments/lexers [&#x27;__pycache__&#x27;] [&#x27;_mapping.py&#x27;, &#x27;__init__.py&#x27;, &#x27;python.py&#x27;]
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pygments/lexers/__pycache__ [] [&#x27;_mapping.cpython-313.pyc&#x27;, &#x27;python.cpython-313.pyc&#x27;, &#x27;__init__.cpython-313.pyc&#x27;]
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pygments/styles [&#x27;__pycache__&#x27;] [&#x27;_mapping.py&#x27;, &#x27;__init__.py&#x27;]
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pygments/styles/__pycache__ [] [&#x27;_mapping.cpython-313.pyc&#x27;, &#x27;__init__.cpython-313.pyc&#x27;]
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pkg_resources [&#x27;__pycache__&#x27;] [&#x27;LICENSE&#x27;, &#x27;__init__.py&#x27;]
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pkg_resources/__pycache__ [] [&#x27;__init__.cpython-313.pyc&#x27;]
+/root/work/venv/lib/python3.13/site-packages/click [&#x27;__pycache__&#x27;] [&#x27;_compat.py&#x27;, &#x27;formatting.py&#x27;, &#x27;globals.py&#x27;, &#x27;py.typed&#x27;, &#x27;shell_completion.py&#x27;, &#x27;core.py&#x27;, &#x27;_termui_impl.py&#x27;, &#x27;_utils.py&#x27;, &#x27;decorators.py&#x27;, &#x27;parser.py&#x27;, &#x27;__init__.py&#x27;, &#x27;testing.py&#x27;, &#x27;_winconsole.py&#x27;, &#x27;types.py&#x27;, &#x27;_textwrap.py&#x27;, &#x27;exceptions.py&#x27;, &#x27;utils.py&#x27;, &#x27;termui.py&#x27;]
+/root/work/venv/lib/python3.13/site-packages/click/__pycache__ [] [&#x27;globals.cpython-313.pyc&#x27;, &#x27;utils.cpython-313.pyc&#x27;, &#x27;formatting.cpython-313.pyc&#x27;, &#x27;_textwrap.cpython-313.pyc&#x27;, &#x27;_winconsole.cpython-313.pyc&#x27;, &#x27;__init__.cpython-313.pyc&#x27;, &#x27;types.cpython-313.pyc&#x27;, &#x27;_termui_impl.cpython-313.pyc&#x27;, &#x27;termui.cpython-313.pyc&#x27;, &#x27;parser.cpython-313.pyc&#x27;, &#x27;decorators.cpython-313.pyc&#x27;, &#x27;core.cpython-313.pyc&#x27;, &#x27;shell_completion.cpython-313.pyc&#x27;, &#x27;_utils.cpython-313.pyc&#x27;, &#x27;testing.cpython-313.pyc&#x27;, &#x27;_compat.cpython-313.pyc&#x27;, &#x27;exceptions.cpython-313.pyc&#x27;]
+/root/work/out [&#x27;install&#x27;, &#x27;r1&#x27;, &#x27;r5&#x27;, &#x27;r3&#x27;, &#x27;r0&#x27;, &#x27;r4&#x27;, &#x27;r2&#x27;] []
+/root/work/out/install [] [&#x27;trace.log&#x27;, &#x27;events.json&#x27;, &#x27;stdout&#x27;, &#x27;venv.log&#x27;, &#x27;exit&#x27;, &#x27;stderr&#x27;]
+/root/work/out/r1 [] [&#x27;trace.log&#x27;, &#x27;events.json&#x27;, &#x27;sink.jsonl&#x27;, &#x27;sink.ready&#x27;, &#x27;reply.txt&#x27;, &#x27;sink.out&#x27;, &#x27;driver.py&#x27;, &#x27;stdout&#x27;, &#x27;exit&#x27;, &#x27;stderr&#x27;]
+/root/work/out/r5 [] [&#x27;trace.log&#x27;, &#x27;sink.jsonl&#x27;, &#x27;sink.ready&#x27;, &#x27;reply.txt&#x27;, &#x27;sink.out&#x27;, &#x27;driver.py&#x27;, &#x27;stdout&#x27;, &#x27;stderr&#x27;]
+/root/work/out/r3 [] [&#x27;trace.log&#x27;, &#x27;events.json&#x27;, &#x27;sink.jsonl&#x27;, &#x27;sink.ready&#x27;, &#x27;reply.txt&#x27;, &#x27;sink.out&#x27;, &#x27;driver.py&#x27;, &#x27;stdout&#x27;, &#x27;exit&#x27;, &#x27;stderr&#x27;]
+/root/work/out/r0 [] [&#x27;trace.log&#x27;, &#x27;events.json&#x27;, &#x27;sink.jsonl&#x27;, &#x27;sink.ready&#x27;, &#x27;reply.txt&#x27;, &#x27;sink.out&#x27;, &#x27;driver.py&#x27;, &#x27;stdout&#x27;, &#x27;exit&#x27;, &#x27;stderr&#x27;]
+/root/work/out/r4 [] [&#x27;trace.log&#x27;, &#x27;events.json&#x27;, &#x27;sink.jsonl&#x27;, &#x27;sink.ready&#x27;, &#x27;reply.txt&#x27;, &#x27;sink.out&#x27;, &#x27;driver.py&#x27;, &#x27;stdout&#x27;, &#x27;exit&#x27;, &#x27;stderr&#x27;]
+/root/work/out/r2 [] [&#x27;trace.log&#x27;, &#x27;events.json&#x27;, &#x27;sink.jsonl&#x27;, &#x27;sink.ready&#x27;, &#x27;reply.txt&#x27;, &#x27;sink.out&#x27;, &#x27;driver.py&#x27;, &#x27;stdout&#x27;, &#x27;exit&#x27;, &#x27;stderr&#x27;]
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">6</td><td data-l="Label">auto-lure <span class="chip lure">lure</span></td><td data-l="Exit">0</td><td data-l="Duration">1313 ms</td><td data-l="Events"><span class="chip kind">gate_exit ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.085,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;gate_exit&quot;,
+  &quot;data&quot;: {
+   &quot;reason&quot;: &quot;exited 0 after 0.1s with no observable behaviour&quot;
+  },
+  &quot;round&quot;: 6
+ }
+]</pre><h4>stdout</h4><pre>imported click
+</pre><h4>stderr</h4><pre></pre></details></td></tr></tbody></table></details><details class="card" open><summary><h2>Limitations</h2></summary><ul><li>Dynamic analysis runs on Linux only; Windows executables are not executed.</li><li>HTTPS request bodies cannot be read without interception: TLS destinations are recorded by SNI only.</li><li>Evasive code that detects tracing or waits longer than the probe timeout may look quiet; such runs are reported as inconclusive, never clean.</li><li>Canary proof covers the credential types we plant (ssh key, aws, npm, .env).</li></ul></details><footer>Sandboxes: sb-01m561thctk2y7ymp2z73pbtm5 &middot; sandbox destroyed: yes</footer></main><script>function t(o){document.querySelectorAll('details.card').forEach(function(d){d.open=o})}document.getElementById('ex').onclick=function(){t(true)};document.getElementById('co').onclick=function(){t(false)};</script></body></html>

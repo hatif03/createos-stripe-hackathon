@@ -1,0 +1,519 @@
+{
+  "job": "655ac960af",
+  "target": "npm:D:\\createos-stripe-hackathon\\fixtures\\npm-postinstall-beacon",
+  "target_kind": "package",
+  "sha256": "a89ff771c03db8ba4f686d43981787ec01da9974f6656d48197b1d3825175e54",
+  "created_at": "2026-10-17T23:02:56+00:00",
+  "verdict": "malicious",
+  "score": 100,
+  "confidence": "high",
+  "findings": [
+    {
+      "id": "cred_read_outbound",
+      "title": "Credential file read followed by outbound attempt",
+      "severity": "high",
+      "proof": "intent",
+      "attack": [
+        {
+          "id": "T1041",
+          "name": "Exfiltration Over C2 Channel",
+          "url": "https://attack.mitre.org/techniques/T1041/"
+        },
+        {
+          "id": "T1552.001",
+          "name": "Credentials In Files",
+          "url": "https://attack.mitre.org/techniques/T1552/001/"
+        }
+      ],
+      "evidence": [
+        {
+          "round": 0,
+          "event_index": 2,
+          "excerpt": "file_read_sensitive:/root/.npmrc"
+        },
+        {
+          "round": 0,
+          "event_index": 6,
+          "excerpt": "file_read_sensitive:/root/.npmrc"
+        },
+        {
+          "round": 0,
+          "event_index": 10,
+          "excerpt": "file_read_sensitive:/root/.npmrc"
+        },
+        {
+          "round": 0,
+          "event_index": 14,
+          "excerpt": "file_read_sensitive:/root/.npmrc"
+        },
+        {
+          "round": 0,
+          "event_index": 15,
+          "excerpt": "dns_query:telemetry.pkg-cdn.example"
+        },
+        {
+          "round": 0,
+          "event_index": 16,
+          "excerpt": "dns_query:telemetry.pkg-cdn.example"
+        },
+        {
+          "round": 1,
+          "event_index": 1,
+          "excerpt": "file_read_sensitive:/root/.npmrc"
+        },
+        {
+          "round": 1,
+          "event_index": 2,
+          "excerpt": "dns_query:telemetry.pkg-cdn.example"
+        },
+        {
+          "round": 1,
+          "event_index": 3,
+          "excerpt": "dns_query:telemetry.pkg-cdn.example"
+        },
+        {
+          "round": 1,
+          "event_index": 4,
+          "excerpt": "sink_request:telemetry.pkg-cdn.example canaries=SNDTRP-8355d254-NPM"
+        }
+      ]
+    },
+    {
+      "id": "canary_exfil",
+      "title": "Canary credentials exfiltrated",
+      "severity": "high",
+      "proof": "proof",
+      "attack": [
+        {
+          "id": "T1041",
+          "name": "Exfiltration Over C2 Channel",
+          "url": "https://attack.mitre.org/techniques/T1041/"
+        },
+        {
+          "id": "T1552.001",
+          "name": "Credentials In Files",
+          "url": "https://attack.mitre.org/techniques/T1552/001/"
+        }
+      ],
+      "evidence": [
+        {
+          "round": 1,
+          "event_index": 4,
+          "excerpt": "sink_request:telemetry.pkg-cdn.example canaries=SNDTRP-8355d254-NPM"
+        }
+      ]
+    },
+    {
+      "id": "lure_only",
+      "title": "Behaviour only appears under lure (sandbox evasion)",
+      "severity": "high",
+      "proof": "proof",
+      "attack": [
+        {
+          "id": "T1497",
+          "name": "Virtualization/Sandbox Evasion",
+          "url": "https://attack.mitre.org/techniques/T1497/"
+        }
+      ],
+      "evidence": [
+        {
+          "round": 1,
+          "event_index": 4,
+          "excerpt": "sink_request:telemetry.pkg-cdn.example canaries=SNDTRP-8355d254-NPM"
+        }
+      ]
+    }
+  ],
+  "static_findings": [],
+  "rounds": [
+    {
+      "probe": {
+        "round": -1,
+        "label": "install",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "\nup to date in 434ms\n",
+      "stderr": "",
+      "events": [],
+      "duration_ms": 0,
+      "sandbox_id": "sb-01m561kjwhba6bcy86mjx7wq95",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 0,
+        "label": "baseline",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "#!/bin/bash\ncd /root/work/pkg && npm run --if-present preinstall && npm run --if-present install && npm run --if-present postinstall\necho \"lifecycle exited with $?\"\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "\n> npm-postinstall-beacon@1.0.0 postinstall\n> node beacon.js\n\nlifecycle exited with 0\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.005,
+          "pid": 653,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "npm",
+              "run",
+              "--if-present",
+              "preinstall"
+            ],
+            "suspicious": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.006,
+          "pid": 653,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "node",
+              "/usr/local/bin/npm",
+              "run",
+              "--if-present",
+              "preinstall"
+            ],
+            "suspicious": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.106,
+          "pid": 663,
+          "kind": "file_read_sensitive",
+          "data": {
+            "path": "/root/.npmrc",
+            "canary": "NPM"
+          },
+          "round": 0
+        },
+        {
+          "t": 0.123,
+          "pid": 653,
+          "kind": "file_write",
+          "data": {
+            "path": "/root/.npm/_logs/2026-10-17T23_02_47_918Z-debug-0.log",
+            "persistence": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.158,
+          "pid": 664,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "npm",
+              "run",
+              "--if-present",
+              "install"
+            ],
+            "suspicious": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.159,
+          "pid": 664,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "node",
+              "/usr/local/bin/npm",
+              "run",
+              "--if-present",
+              "install"
+            ],
+            "suspicious": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.259,
+          "pid": 674,
+          "kind": "file_read_sensitive",
+          "data": {
+            "path": "/root/.npmrc",
+            "canary": "NPM"
+          },
+          "round": 0
+        },
+        {
+          "t": 0.275,
+          "pid": 664,
+          "kind": "file_write",
+          "data": {
+            "path": "/root/.npm/_logs/2026-10-17T23_02_48_070Z-debug-0.log",
+            "persistence": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.308,
+          "pid": 675,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "npm",
+              "run",
+              "--if-present",
+              "postinstall"
+            ],
+            "suspicious": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.309,
+          "pid": 675,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "node",
+              "/usr/local/bin/npm",
+              "run",
+              "--if-present",
+              "postinstall"
+            ],
+            "suspicious": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.407,
+          "pid": 685,
+          "kind": "file_read_sensitive",
+          "data": {
+            "path": "/root/.npmrc",
+            "canary": "NPM"
+          },
+          "round": 0
+        },
+        {
+          "t": 0.423,
+          "pid": 675,
+          "kind": "file_write",
+          "data": {
+            "path": "/root/.npm/_logs/2026-10-17T23_02_48_219Z-debug-0.log",
+            "persistence": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.453,
+          "pid": 686,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "sh",
+              "-c",
+              "node beacon.js"
+            ],
+            "suspicious": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.455,
+          "pid": 687,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "node",
+              "beacon.js"
+            ],
+            "suspicious": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.495,
+          "pid": 687,
+          "kind": "file_read_sensitive",
+          "data": {
+            "path": "/root/.npmrc",
+            "canary": "NPM"
+          },
+          "round": 0
+        },
+        {
+          "t": 0.534,
+          "pid": 0,
+          "kind": "dns_query",
+          "data": {
+            "name": "telemetry.pkg-cdn.example",
+            "answered": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.536,
+          "pid": 0,
+          "kind": "dns_query",
+          "data": {
+            "name": "telemetry.pkg-cdn.example",
+            "answered": false
+          },
+          "round": 0
+        }
+      ],
+      "duration_ms": 1827,
+      "sandbox_id": "sb-01m561kjwhba6bcy86mjx7wq95",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 1,
+        "label": "probe-1",
+        "env": {},
+        "lure": true,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "#!/bin/bash\ncd /root/work/pkg\nnode beacon.js\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.009,
+          "pid": 733,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "node",
+              "beacon.js"
+            ],
+            "suspicious": false
+          },
+          "round": 1
+        },
+        {
+          "t": 0.041,
+          "pid": 733,
+          "kind": "file_read_sensitive",
+          "data": {
+            "path": "/root/.npmrc",
+            "canary": "NPM"
+          },
+          "round": 1
+        },
+        {
+          "t": 0.116,
+          "pid": 0,
+          "kind": "dns_query",
+          "data": {
+            "name": "telemetry.pkg-cdn.example",
+            "answered": false
+          },
+          "round": 1
+        },
+        {
+          "t": 0.116,
+          "pid": 0,
+          "kind": "dns_query",
+          "data": {
+            "name": "telemetry.pkg-cdn.example",
+            "answered": true
+          },
+          "round": 1
+        },
+        {
+          "t": 0.118,
+          "pid": 0,
+          "kind": "sink_request",
+          "data": {
+            "host": "telemetry.pkg-cdn.example",
+            "method": "POST",
+            "path": "/p",
+            "body": "39\r\n//registry.npmjs.org/:_authToken=npm_SNDTRP-8355d254-NPM\n\r\n0\r\n\r\n",
+            "canaries": [
+              "SNDTRP-8355d254-NPM"
+            ],
+            "orig_dst": ""
+          },
+          "round": 1
+        }
+      ],
+      "duration_ms": 1375,
+      "sandbox_id": "sb-01m561kjwhba6bcy86mjx7wq95",
+      "error": ""
+    }
+  ],
+  "baseline_only": [],
+  "lure_only": [
+    "sink_request:telemetry.pkg-cdn.example"
+  ],
+  "hypotheses": [
+    "The package exfiltrates the contents of /root/.npmrc to telemetry.pkg-cdn.example via HTTP POST when lure=true."
+  ],
+  "summary": "The package is a simulated malicious postinstall script. Upon execution, it reads the sensitive `/root/.npmrc` file and exfiltrates its contents via an HTTP POST request to `telemetry.pkg-cdn.example/p`. Additionally, it attempts to establish persistence by appending a comment (`# sandtrap-fixture`) to `/root/.bashrc`.",
+  "attempts": [
+    {
+      "round": 0,
+      "label": "baseline",
+      "exit_code": 0,
+      "note": "default import driver"
+    },
+    {
+      "round": 1,
+      "label": "probe-1",
+      "exit_code": 0,
+      "note": "The package exfiltrates the contents of /root/.npmrc to telemetry.pkg-cdn.example via HTTP POST when lure=true."
+    }
+  ],
+  "egress_timeline": [
+    {
+      "phase": "create",
+      "rules": [
+        "pypi.org:443",
+        "files.pythonhosted.org:443",
+        "registry.npmjs.org:443"
+      ],
+      "note": "sandbox sb-01m561kjwhba6bcy86mjx7wq95"
+    },
+    {
+      "phase": "analysis",
+      "rules": [
+        "192.0.2.1:9"
+      ],
+      "note": "registry access closed; lure runs on loopback only"
+    }
+  ],
+  "patch_diff": "",
+  "remediation": "",
+  "capture_method": "strace",
+  "model": "gemini-3.5-flash",
+  "llm_calls": 4,
+  "sandbox_ids": [
+    "sb-01m561kjwhba6bcy86mjx7wq95"
+  ],
+  "destroyed": true,
+  "limitations": [
+    "Dynamic analysis runs on Linux only; Windows executables are not executed.",
+    "HTTPS request bodies cannot be read without interception: TLS destinations are recorded by SNI only.",
+    "Evasive code that detects tracing or waits longer than the probe timeout may look quiet; such runs are reported as inconclusive, never clean.",
+    "Canary proof covers the credential types we plant (ssh key, aws, npm, .env)."
+  ],
+  "report_url": "",
+  "intel": [],
+  "used_skills": [],
+  "learned_skills": [],
+  "threat_brief": "",
+  "from_cache": false
+}

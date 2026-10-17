@@ -1,0 +1,393 @@
+{
+  "job": "127a94fc06",
+  "target": "D:\\createos-stripe-hackathon\\fixtures\\persist-bashrc",
+  "target_kind": "package",
+  "sha256": "075d065647082b8e4061e0f9e42c8810f7c178b5cc5083382906a0b2e85cecf9",
+  "created_at": "2026-10-17T22:58:46+00:00",
+  "verdict": "malicious",
+  "score": 30,
+  "confidence": "medium",
+  "findings": [
+    {
+      "id": "persistence",
+      "title": "Persistence mechanism written",
+      "severity": "high",
+      "proof": "intent",
+      "attack": [
+        {
+          "id": "T1546.004",
+          "name": "Unix Shell Configuration Modification",
+          "url": "https://attack.mitre.org/techniques/T1546/004/"
+        }
+      ],
+      "evidence": [
+        {
+          "round": 0,
+          "event_index": 0,
+          "excerpt": "file_write:/root/.bashrc"
+        }
+      ]
+    }
+  ],
+  "static_findings": [],
+  "rounds": [
+    {
+      "probe": {
+        "round": -1,
+        "label": "install",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "Processing ./root/work/pkg\n  Installing build dependencies: started\n  Installing build dependencies: finished with status 'done'\n  Getting requirements to build wheel: started\n  Getting requirements to build wheel: finished with status 'done'\n  Preparing metadata (pyproject.toml): started\n  Preparing metadata (pyproject.toml): finished with status 'done'\nBuilding wheels for collected packages: persist-bashrc\n  Building wheel for persist-bashrc (pyproject.toml): started\n  Building wheel for persist-bashrc (pyproject.toml): finished with status 'done'\n  Created wheel for persist-bashrc: filename=persist_bashrc-0.1.0-py3-none-any.whl size=1570 sha256=9744ea9b28388e18fa0a9f2a6a82c3606b19ba28db02b42891d8c2fba1a33bc0\n  Stored in directory: /tmp/pip-ephem-wheel-cache-j2aey99m/wheels/13/25/4d/8bd974f2a5e81e37fcc7c028cb3bf8fa1d4ca10e8b1484c5b0\nSuccessfully built persist-bashrc\nInstalling collected packages: persist-bashrc\nSuccessfully installed persist-bashrc-0.1.0\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.476,
+          "pid": 659,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.478,
+          "pid": 659,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "bash",
+              "/usr/local/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.481,
+          "pid": 659,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "asdf",
+              "exec",
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.494,
+          "pid": 664,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "env",
+              "-0"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.504,
+          "pid": 659,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/.asdf/installs/rust/1.83.0/toolchains/1.83.0-x86_64-unknown-linux-gnu/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.554,
+          "pid": 667,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/work/venv/bin/python3",
+              "/root/work/venv/lib/python3.13/site-packages/pip/__pip-runner__.py",
+              "install",
+              "--ignore-installed",
+              "--no-user",
+              "--prefix",
+              "/tmp/pip-build-env-s0vry4nm/overlay",
+              "--no-warn-script-location",
+              "--disable-pip-version-check",
+              "--no-compile",
+              "--target",
+              ""
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 1.019,
+          "pid": 669,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "uname",
+              "-rs"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 1.028,
+          "pid": 670,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 1.03,
+          "pid": 670,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "bash",
+              "/usr/local/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 1.033,
+          "pid": 670,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "asdf",
+              "exec",
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 1.046,
+          "pid": 676,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "env",
+              "-0"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 1.055,
+          "pid": 670,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/.asdf/installs/rust/1.83.0/toolchains/1.83.0-x86_64-unknown-linux-gnu/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 1.646,
+          "pid": 680,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/work/venv/bin/python3",
+              "/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py",
+              "get_requires_for_build_wheel",
+              "/tmp/tmpv9gml33q"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 2.179,
+          "pid": 681,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/work/venv/bin/python3",
+              "/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py",
+              "prepare_metadata_for_build_wheel",
+              "/tmp/tmp4y4wepb1"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 2.504,
+          "pid": 682,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/work/venv/bin/python3",
+              "/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py",
+              "build_wheel",
+              "/tmp/tmpbqoagvyu"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        }
+      ],
+      "duration_ms": 0,
+      "sandbox_id": "sb-01m561ce8vxm5w64py57crw487",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 0,
+        "label": "baseline",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import importlib, sys, traceback\nfor name in ['persistrc']:\n    try:\n        importlib.import_module(name)\n        print('imported', name)\n    except Exception:\n        print('import-error', name); traceback.print_exc()\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "imported persistrc\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.038,
+          "pid": 702,
+          "kind": "file_write",
+          "data": {
+            "path": "/root/.bashrc",
+            "persistence": true
+          },
+          "round": 0
+        }
+      ],
+      "duration_ms": 1218,
+      "sandbox_id": "sb-01m561ce8vxm5w64py57crw487",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 1,
+        "label": "probe-1",
+        "env": {},
+        "lure": true,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import importlib, sys, traceback\nfor name in ['persistrc']:\n    try:\n        importlib.import_module(name)\n        print('imported', name)\n    except Exception:\n        print('import-error', name); traceback.print_exc()\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "imported persistrc\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.046,
+          "pid": 0,
+          "kind": "gate_exit",
+          "data": {
+            "reason": "exited 0 after 0.0s with no observable behaviour"
+          },
+          "round": 1
+        }
+      ],
+      "duration_ms": 1175,
+      "sandbox_id": "sb-01m561ce8vxm5w64py57crw487",
+      "error": ""
+    }
+  ],
+  "baseline_only": [
+    "file_write:/root/.bashrc"
+  ],
+  "lure_only": [],
+  "hypotheses": [
+    "The package is a simulated fixture that only performs local bashrc persistence and has no network activity.",
+    "The package is a simulated fixture that idempotently appends a marker and an env export to /root/.bashrc upon import, with no network activity."
+  ],
+  "summary": "The 'persistrc' package is a simulated fixture designed for testing. Upon import, it checks if a specific marker is present in '/root/.bashrc', and if not, appends a marker and an environment variable export ('export SANDTRAP_FIXTURE=1') to the file. It does not perform any network activity or exfiltrate any credentials.",
+  "attempts": [
+    {
+      "round": 0,
+      "label": "baseline",
+      "exit_code": 0,
+      "note": "default import driver"
+    },
+    {
+      "round": 1,
+      "label": "probe-1",
+      "exit_code": 0,
+      "note": "The package is a simulated fixture that only performs local bashrc persistence and has no network activity."
+    }
+  ],
+  "egress_timeline": [
+    {
+      "phase": "create",
+      "rules": [
+        "pypi.org:443",
+        "files.pythonhosted.org:443",
+        "registry.npmjs.org:443"
+      ],
+      "note": "sandbox sb-01m561ce8vxm5w64py57crw487"
+    },
+    {
+      "phase": "analysis",
+      "rules": [
+        "192.0.2.1:9"
+      ],
+      "note": "registry access closed; lure runs on loopback only"
+    }
+  ],
+  "patch_diff": "",
+  "remediation": "",
+  "capture_method": "strace",
+  "model": "gemini-3.5-flash",
+  "llm_calls": 4,
+  "sandbox_ids": [
+    "sb-01m561ce8vxm5w64py57crw487"
+  ],
+  "destroyed": true,
+  "limitations": [
+    "Dynamic analysis runs on Linux only; Windows executables are not executed.",
+    "HTTPS request bodies cannot be read without interception: TLS destinations are recorded by SNI only.",
+    "Evasive code that detects tracing or waits longer than the probe timeout may look quiet; such runs are reported as inconclusive, never clean.",
+    "Canary proof covers the credential types we plant (ssh key, aws, npm, .env)."
+  ],
+  "report_url": "",
+  "intel": [],
+  "used_skills": [],
+  "learned_skills": [],
+  "threat_brief": "",
+  "from_cache": false
+}

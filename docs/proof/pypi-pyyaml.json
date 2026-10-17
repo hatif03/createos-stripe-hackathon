@@ -1,0 +1,366 @@
+{
+  "job": "8e418d803d",
+  "target": "pypi:pyyaml",
+  "target_kind": "pypi",
+  "sha256": "",
+  "created_at": "2026-10-17T23:09:34+00:00",
+  "verdict": "clean",
+  "score": 0,
+  "confidence": "low",
+  "findings": [],
+  "static_findings": [],
+  "rounds": [
+    {
+      "probe": {
+        "round": -1,
+        "label": "install",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "Collecting pyyaml\n  Downloading pyyaml-6.0.3-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.4 kB)\nDownloading pyyaml-6.0.3-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (801 kB)\n   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 801.6/801.6 kB 33.1 MB/s  0:00:00\nInstalling collected packages: pyyaml\nSuccessfully installed pyyaml-6.0.3\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.378,
+          "pid": 649,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.38,
+          "pid": 649,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "bash",
+              "/usr/local/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.383,
+          "pid": 649,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "asdf",
+              "exec",
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.396,
+          "pid": 654,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "env",
+              "-0"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.405,
+          "pid": 649,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/.asdf/installs/rust/1.83.0/toolchains/1.83.0-x86_64-unknown-linux-gnu/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        }
+      ],
+      "duration_ms": 0,
+      "sandbox_id": "sb-01m561zwhr7kfgmx80xk5pxaba",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 0,
+        "label": "baseline",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import importlib, sys, traceback\nfor name in ['pyyaml']:\n    try:\n        importlib.import_module(name)\n        print('imported', name)\n    except Exception:\n        print('import-error', name); traceback.print_exc()\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "import-error pyyaml\n",
+      "stderr": "Traceback (most recent call last):\n  File \"/root/work/out/r0/driver.py\", line 4, in <module>\n    importlib.import_module(name)\n    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^\n  File \"/root/.asdf/installs/python/3.13.14/lib/python3.13/importlib/__init__.py\", line 88, in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<frozen importlib._bootstrap>\", line 1395, in _gcd_import\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1324, in _find_and_load_unlocked\nModuleNotFoundError: No module named 'pyyaml'\n",
+      "events": [
+        {
+          "t": 0.058,
+          "pid": 0,
+          "kind": "gate_exit",
+          "data": {
+            "reason": "exited 0 after 0.1s with no observable behaviour"
+          },
+          "round": 0
+        }
+      ],
+      "duration_ms": 1276,
+      "sandbox_id": "sb-01m561zwhr7kfgmx80xk5pxaba",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 1,
+        "label": "probe-1",
+        "env": {},
+        "lure": true,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import yaml\nprint(yaml.__version__)\nprint(yaml.safe_load(\"a: 1\"))\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "6.0.3\n{'a': 1}\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.068,
+          "pid": 0,
+          "kind": "gate_exit",
+          "data": {
+            "reason": "exited 0 after 0.1s with no observable behaviour"
+          },
+          "round": 1
+        }
+      ],
+      "duration_ms": 1286,
+      "sandbox_id": "sb-01m561zwhr7kfgmx80xk5pxaba",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 2,
+        "label": "probe-2",
+        "env": {},
+        "lure": true,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import os\nfor root, dirs, files in os.walk('/root/work/venv/lib/python3.13/site-packages'):\n    for file in files:\n        path = os.path.join(root, file)\n        if 'pip' not in path and 'yaml' not in path:\n            print(path)\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.056,
+          "pid": 0,
+          "kind": "gate_exit",
+          "data": {
+            "reason": "exited 0 after 0.1s with no observable behaviour"
+          },
+          "round": 2
+        }
+      ],
+      "duration_ms": 1284,
+      "sandbox_id": "sb-01m561zwhr7kfgmx80xk5pxaba",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 3,
+        "label": "probe-3",
+        "env": {},
+        "lure": true,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import os\nfor root, dirs, files in os.walk('/root/work/venv/lib/python3.13/site-packages'):\n    for file in files:\n        print(os.path.join(root, file))\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "_/dumper.cpython-313.pyc\n/root/work/venv/lib/python3.13/site-packages/yaml/__pycache__/emitter.cpython-313.pyc\n/root/work/venv/lib/python3.13/site-packages/yaml/__pycache__/loader.cpython-313.pyc\n/root/work/venv/lib/python3.13/site-packages/yaml/__pycache__/nodes.cpython-313.pyc\n/root/work/venv/lib/python3.13/site-packages/yaml/__pycache__/cyaml.cpython-313.pyc\n/root/work/venv/lib/python3.13/site-packages/yaml/__pycache__/representer.cpython-313.pyc\n/root/work/venv/lib/python3.13/site-packages/yaml/__pycache__/__init__.cpython-313.pyc\n/root/work/venv/lib/python3.13/site-packages/yaml/__pycache__/scanner.cpython-313.pyc\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/METADATA\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/WHEEL\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/INSTALLER\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/entry_points.txt\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/REQUESTED\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/RECORD\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/AUTHORS.txt\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/LICENSE.txt\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/pyproject_hooks/LICENSE\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/urllib3/LICENSE.txt\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/certifi/LICENSE\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/tomli_w/LICENSE\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/distro/LICENSE\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/distlib/LICENSE.txt\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/resolvelib/LICENSE\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/packaging/LICENSE.APACHE\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/packaging/LICENSE\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/packaging/LICENSE.BSD\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/idna/LICENSE.md\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/msgpack/COPYING\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/requests/LICENSE\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/pygments/LICENSE\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/cachecontrol/LICENSE.txt\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/rich/LICENSE\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/tomli/LICENSE\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/platformdirs/LICENSE\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/pkg_resources/LICENSE\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/truststore/LICENSE\n/root/work/venv/lib/python3.13/site-packages/pyyaml-6.0.3.dist-info/top_level.txt\n/root/work/venv/lib/python3.13/site-packages/pyyaml-6.0.3.dist-info/METADATA\n/root/work/venv/lib/python3.13/site-packages/pyyaml-6.0.3.dist-info/WHEEL\n/root/work/venv/lib/python3.13/site-packages/pyyaml-6.0.3.dist-info/INSTALLER\n/root/work/venv/lib/python3.13/site-packages/pyyaml-6.0.3.dist-info/REQUESTED\n/root/work/venv/lib/python3.13/site-packages/pyyaml-6.0.3.dist-info/RECORD\n/root/work/venv/lib/python3.13/site-packages/pyyaml-6.0.3.dist-info/licenses/LICENSE\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.059,
+          "pid": 0,
+          "kind": "gate_exit",
+          "data": {
+            "reason": "exited 0 after 0.1s with no observable behaviour"
+          },
+          "round": 3
+        }
+      ],
+      "duration_ms": 1586,
+      "sandbox_id": "sb-01m561zwhr7kfgmx80xk5pxaba",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 4,
+        "label": "probe-4",
+        "env": {},
+        "lure": true,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import importlib.metadata\nfor dist in importlib.metadata.distributions():\n    print(f\"{dist.metadata['Name']}=={dist.version}\")\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "pip==26.1.2\nPyYAML==6.0.3\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.115,
+          "pid": 0,
+          "kind": "gate_exit",
+          "data": {
+            "reason": "exited 0 after 0.1s with no observable behaviour"
+          },
+          "round": 4
+        }
+      ],
+      "duration_ms": 1335,
+      "sandbox_id": "sb-01m561zwhr7kfgmx80xk5pxaba",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 5,
+        "label": "probe-5",
+        "env": {},
+        "lure": true,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import os\nprint(os.listdir('/root/work'))\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "['out', 'canary_tokens.txt', '.env', 'venv']\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.032,
+          "pid": 0,
+          "kind": "gate_exit",
+          "data": {
+            "reason": "exited 0 after 0.0s with no observable behaviour"
+          },
+          "round": 5
+        }
+      ],
+      "duration_ms": 1250,
+      "sandbox_id": "sb-01m561zwhr7kfgmx80xk5pxaba",
+      "error": ""
+    }
+  ],
+  "baseline_only": [],
+  "lure_only": [],
+  "hypotheses": [
+    "Importing and using yaml works and does not trigger any malicious behavior under default conditions",
+    "Find any files not belonging to pip or yaml in site-packages",
+    "List all files in site-packages",
+    "List all installed packages via importlib.metadata",
+    "Check if there are other files in /root/work",
+    "The baseline failed because it attempted to import 'pyyaml' instead of 'yaml'.",
+    "Importing and using 'yaml' with lure=True does not trigger any network requests, file access, or malicious behavior.",
+    "The package is a standard, benign installation of PyYAML 6.0.3."
+  ],
+  "summary": "The package 'pyyaml' is a standard, benign installation of PyYAML (version 6.0.3). The baseline run failed because it attempted to import 'pyyaml' directly, whereas the correct module name is 'yaml'. Importing and using the 'yaml' module with fake internet enabled (lure=True) results in normal YAML parsing behavior with no network requests, credential exfiltration, or other suspicious activities.",
+  "attempts": [
+    {
+      "round": 0,
+      "label": "baseline",
+      "exit_code": 0,
+      "note": "default import driver"
+    },
+    {
+      "round": 1,
+      "label": "probe-1",
+      "exit_code": 0,
+      "note": "Importing and using yaml works and does not trigger any malicious behavior under default conditions"
+    },
+    {
+      "round": 2,
+      "label": "probe-2",
+      "exit_code": 0,
+      "note": "Find any files not belonging to pip or yaml in site-packages"
+    },
+    {
+      "round": 3,
+      "label": "probe-3",
+      "exit_code": 0,
+      "note": "List all files in site-packages"
+    },
+    {
+      "round": 4,
+      "label": "probe-4",
+      "exit_code": 0,
+      "note": "List all installed packages via importlib.metadata"
+    },
+    {
+      "round": 5,
+      "label": "probe-5",
+      "exit_code": 0,
+      "note": "Check if there are other files in /root/work"
+    }
+  ],
+  "egress_timeline": [
+    {
+      "phase": "create",
+      "rules": [
+        "pypi.org:443",
+        "files.pythonhosted.org:443",
+        "registry.npmjs.org:443"
+      ],
+      "note": "sandbox sb-01m561zwhr7kfgmx80xk5pxaba"
+    },
+    {
+      "phase": "analysis",
+      "rules": [
+        "192.0.2.1:9"
+      ],
+      "note": "registry access closed; lure runs on loopback only"
+    }
+  ],
+  "patch_diff": "",
+  "remediation": "",
+  "capture_method": "strace",
+  "model": "gemini-3.5-flash",
+  "llm_calls": 13,
+  "sandbox_ids": [
+    "sb-01m561zwhr7kfgmx80xk5pxaba"
+  ],
+  "destroyed": true,
+  "limitations": [
+    "Dynamic analysis runs on Linux only; Windows executables are not executed.",
+    "HTTPS request bodies cannot be read without interception: TLS destinations are recorded by SNI only.",
+    "Evasive code that detects tracing or waits longer than the probe timeout may look quiet; such runs are reported as inconclusive, never clean.",
+    "Canary proof covers the credential types we plant (ssh key, aws, npm, .env)."
+  ],
+  "report_url": "",
+  "intel": [],
+  "used_skills": [],
+  "learned_skills": [],
+  "threat_brief": "",
+  "from_cache": false
+}

@@ -1,0 +1,432 @@
+{
+  "job": "f70617cf49",
+  "target": "npm:<tmp>/sandtrap-real-hhqx9gqd\\nodemon_3.1.7\\package",
+  "target_kind": "package",
+  "sha256": "66c72f1adf9790e5a89fb342582fe98c44e291f7e98e646a8623fd176286351f",
+  "created_at": "2026-10-17T23:18:24+00:00",
+  "verdict": "clean",
+  "score": 0,
+  "confidence": "low",
+  "findings": [],
+  "static_findings": [],
+  "rounds": [
+    {
+      "probe": {
+        "round": -1,
+        "label": "install",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "npm notice\nnpm notice New major version of npm available! 11.19.0 -> 12.2.0\nnpm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0\nnpm notice To update run: npm install -g npm@12.2.0\nnpm notice\n",
+      "stderr": "",
+      "events": [],
+      "duration_ms": 0,
+      "sandbox_id": "sb-01m562f0hjtabw5cgfkhgaemp7",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 0,
+        "label": "baseline",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "#!/bin/bash\ncd /root/work/pkg && npm run --if-present preinstall && npm run --if-present install && npm run --if-present postinstall\necho \"lifecycle exited with $?\"\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "lifecycle exited with 0\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.012,
+          "pid": 654,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "npm",
+              "run",
+              "--if-present",
+              "preinstall"
+            ],
+            "suspicious": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.014,
+          "pid": 654,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "node",
+              "/usr/local/bin/npm",
+              "run",
+              "--if-present",
+              "preinstall"
+            ],
+            "suspicious": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.163,
+          "pid": 664,
+          "kind": "file_read_sensitive",
+          "data": {
+            "path": "/root/.npmrc",
+            "canary": "NPM"
+          },
+          "round": 0
+        },
+        {
+          "t": 0.187,
+          "pid": 654,
+          "kind": "file_write",
+          "data": {
+            "path": "/root/.npm/_logs/2026-10-17T23_17_48_694Z-debug-0.log",
+            "persistence": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.229,
+          "pid": 665,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "npm",
+              "run",
+              "--if-present",
+              "install"
+            ],
+            "suspicious": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.23,
+          "pid": 665,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "node",
+              "/usr/local/bin/npm",
+              "run",
+              "--if-present",
+              "install"
+            ],
+            "suspicious": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.351,
+          "pid": 675,
+          "kind": "file_read_sensitive",
+          "data": {
+            "path": "/root/.npmrc",
+            "canary": "NPM"
+          },
+          "round": 0
+        },
+        {
+          "t": 0.375,
+          "pid": 665,
+          "kind": "file_write",
+          "data": {
+            "path": "/root/.npm/_logs/2026-10-17T23_17_48_882Z-debug-0.log",
+            "persistence": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.415,
+          "pid": 676,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "npm",
+              "run",
+              "--if-present",
+              "postinstall"
+            ],
+            "suspicious": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.416,
+          "pid": 676,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "node",
+              "/usr/local/bin/npm",
+              "run",
+              "--if-present",
+              "postinstall"
+            ],
+            "suspicious": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.546,
+          "pid": 686,
+          "kind": "file_read_sensitive",
+          "data": {
+            "path": "/root/.npmrc",
+            "canary": "NPM"
+          },
+          "round": 0
+        },
+        {
+          "t": 0.57,
+          "pid": 676,
+          "kind": "file_write",
+          "data": {
+            "path": "/root/.npm/_logs/2026-10-17T23_17_49_077Z-debug-0.log",
+            "persistence": false
+          },
+          "round": 0
+        }
+      ],
+      "duration_ms": 1770,
+      "sandbox_id": "sb-01m562f0hjtabw5cgfkhgaemp7",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 1,
+        "label": "auto-lure",
+        "env": {
+          "CI": "true"
+        },
+        "lure": true,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "#!/bin/bash\ncd /root/work/pkg && npm run --if-present preinstall && npm run --if-present install && npm run --if-present postinstall\necho \"lifecycle exited with $?\"\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "lifecycle exited with 0\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.008,
+          "pid": 754,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "npm",
+              "run",
+              "--if-present",
+              "preinstall"
+            ],
+            "suspicious": false
+          },
+          "round": 1
+        },
+        {
+          "t": 0.01,
+          "pid": 754,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "node",
+              "/usr/local/bin/npm",
+              "run",
+              "--if-present",
+              "preinstall"
+            ],
+            "suspicious": false
+          },
+          "round": 1
+        },
+        {
+          "t": 0.151,
+          "pid": 764,
+          "kind": "file_read_sensitive",
+          "data": {
+            "path": "/root/.npmrc",
+            "canary": "NPM"
+          },
+          "round": 1
+        },
+        {
+          "t": 0.175,
+          "pid": 754,
+          "kind": "file_write",
+          "data": {
+            "path": "/root/.npm/_logs/2026-10-17T23_18_24_560Z-debug-0.log",
+            "persistence": false
+          },
+          "round": 1
+        },
+        {
+          "t": 0.216,
+          "pid": 765,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "npm",
+              "run",
+              "--if-present",
+              "install"
+            ],
+            "suspicious": false
+          },
+          "round": 1
+        },
+        {
+          "t": 0.217,
+          "pid": 765,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "node",
+              "/usr/local/bin/npm",
+              "run",
+              "--if-present",
+              "install"
+            ],
+            "suspicious": false
+          },
+          "round": 1
+        },
+        {
+          "t": 0.34,
+          "pid": 775,
+          "kind": "file_read_sensitive",
+          "data": {
+            "path": "/root/.npmrc",
+            "canary": "NPM"
+          },
+          "round": 1
+        },
+        {
+          "t": 0.363,
+          "pid": 765,
+          "kind": "file_write",
+          "data": {
+            "path": "/root/.npm/_logs/2026-10-17T23_18_24_748Z-debug-0.log",
+            "persistence": false
+          },
+          "round": 1
+        },
+        {
+          "t": 0.404,
+          "pid": 776,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "npm",
+              "run",
+              "--if-present",
+              "postinstall"
+            ],
+            "suspicious": false
+          },
+          "round": 1
+        },
+        {
+          "t": 0.405,
+          "pid": 776,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "node",
+              "/usr/local/bin/npm",
+              "run",
+              "--if-present",
+              "postinstall"
+            ],
+            "suspicious": false
+          },
+          "round": 1
+        },
+        {
+          "t": 0.528,
+          "pid": 786,
+          "kind": "file_read_sensitive",
+          "data": {
+            "path": "/root/.npmrc",
+            "canary": "NPM"
+          },
+          "round": 1
+        },
+        {
+          "t": 0.552,
+          "pid": 776,
+          "kind": "file_write",
+          "data": {
+            "path": "/root/.npm/_logs/2026-10-17T23_18_24_936Z-debug-0.log",
+            "persistence": false
+          },
+          "round": 1
+        }
+      ],
+      "duration_ms": 1637,
+      "sandbox_id": "sb-01m562f0hjtabw5cgfkhgaemp7",
+      "error": ""
+    }
+  ],
+  "baseline_only": [],
+  "lure_only": [],
+  "hypotheses": [],
+  "summary": "Analysis stopped at the iteration limit without a final summary.",
+  "attempts": [
+    {
+      "round": 0,
+      "label": "baseline",
+      "exit_code": 0,
+      "note": "default import driver"
+    }
+  ],
+  "egress_timeline": [
+    {
+      "phase": "create",
+      "rules": [
+        "pypi.org:443",
+        "files.pythonhosted.org:443",
+        "registry.npmjs.org:443"
+      ],
+      "note": "sandbox sb-01m562f0hjtabw5cgfkhgaemp7"
+    },
+    {
+      "phase": "analysis",
+      "rules": [
+        "192.0.2.1:9"
+      ],
+      "note": "registry access closed; lure runs on loopback only"
+    }
+  ],
+  "patch_diff": "",
+  "remediation": "",
+  "capture_method": "strace",
+  "model": "gemini-3.5-flash",
+  "llm_calls": 19,
+  "sandbox_ids": [
+    "sb-01m562f0hjtabw5cgfkhgaemp7"
+  ],
+  "destroyed": true,
+  "limitations": [
+    "Dynamic analysis runs on Linux only; Windows executables are not executed.",
+    "HTTPS request bodies cannot be read without interception: TLS destinations are recorded by SNI only.",
+    "Evasive code that detects tracing or waits longer than the probe timeout may look quiet; such runs are reported as inconclusive, never clean.",
+    "Canary proof covers the credential types we plant (ssh key, aws, npm, .env)."
+  ],
+  "report_url": "",
+  "intel": [],
+  "used_skills": [],
+  "learned_skills": [],
+  "threat_brief": "",
+  "from_cache": false
+}
