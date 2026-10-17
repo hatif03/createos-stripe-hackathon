@@ -17,3 +17,4 @@ analyzer/bin/
 .env
 .env.*
 !.env.example
+media/
