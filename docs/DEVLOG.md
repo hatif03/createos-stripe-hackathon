@@ -72,3 +72,10 @@ Times are PT, 2026-10-17. The build started at 12:44 PT; submissions lock at 17:
 - Verified: 78 unit tests; `doctor` all OK; API and SSE live; MCP live; email live; public report live; Langfuse traces visible in the Langfuse
   dashboard (confirmed by the author).
 - Not verified or not built: HTTPS body interception, the DeBERTa injection classifier, Grafana, a decompiler, Docker-in-sandbox execution.
+
+## 2026-10-18: real-software run, fixes, video assets
+- Ran `scripts/real_world.py` (6 packages, 2 installers): first result had three false "malicious" verdicts and two "inconclusive"; see decision 18.
+- Added tests for the scorer cases and for malformed tool arguments (87 tests pass); re-ran the 14-fixture benchmark (12/12 vs 4/12; one
+  fixture needed a rerun after the model sent a malformed tool argument, now handled).
+- The CLI no longer prints structured logs to the terminal (they still go to `logs/`).
+- Built `scripts/make_clips.py` (silent B-roll from real outputs) and `docs/VIDEO-TIMELINE.md`.

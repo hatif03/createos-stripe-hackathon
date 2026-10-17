@@ -109,3 +109,13 @@ Each entry: context, decision, **tradeoffs**. Evidence for every number is in [D
 ## 17. Tracing must never hide the real error
 - A Langfuse helper swallowed any exception raised inside its block and then failed with "generator didn't stop after throw()", which hid the real
   cause of a one-off benchmark failure. The context managers now re-raise errors from the traced block unchanged.
+
+## 18. The first run on real software was wrong, and what we changed
+- **Context:** scanning real packages (not fixtures) made `core-js`, nvm and rustup "malicious" and `requests`/`click` "inconclusive". Cause: the
+  baseline-versus-lure diff compared *every* event, so the analyst's own commands (`find`, `node -e ...`), temp files and npm log files counted as
+  "behaviour only under lure"; and for two packages the model never ran a lure experiment at all.
+- **Decision:** the diff only counts behaviour a sample can own (credential reads, persistence, drop-and-run, outbound network); a network-only
+  difference is reported as `outbound` (medium), not as evasion; `graph.py` runs one automatic lure probe when the agent ran none; tool arguments
+  from the model are coerced (a list where an object belongs crashed a benchmark attempt twice).
+- **Tradeoffs:** + real software is no longer called malicious for being scanned; - installers that download code stay *suspicious*, which is
+  honest but noisy; no allow-list of known installers.

@@ -129,6 +129,25 @@ host resolves, the plain sandbox says *clean* while Sandtrap proves the exfiltra
 [docs/BENCHMARK.md](docs/BENCHMARK.md). The fixtures are small samples written for this project (several model the incidents above), so this shows
 the mechanism works, not detection rates on real-world malware.
 
+## Evidence on real software
+
+Not only our fixtures: `scripts/real_world.py` scans public software exactly as published and commits every report to [`docs/proof/`](docs/proof/)
+(each `.html` opens in a browser, each `.json` is the machine-readable report; the table is in [docs/PROOF.md](docs/PROOF.md)).
+
+| Target | Verdict | Note |
+| --- | --- | --- |
+| `pypi:six`, `pypi:requests`, `pypi:click`, `pypi:pyyaml` | clean | ordinary libraries, including an HTTP client and a package with C extensions |
+| `npm:core-js@3.38.1`, `npm:nodemon@3.1.7` | clean | real packages that ship a real `postinstall` script |
+| nvm `install.sh` (v0.40.1), `rustup-init.sh` (1.27.1) | inconclusive / suspicious | they download code from the internet by design (flagged as outbound connections, and `curl` for rustup); no credential access or exfiltration was observed |
+
+The first real-world run was **wrong**, and we fixed the scorer instead of hiding it: `core-js`, nvm and rustup came out "malicious" because
+the analyst's own driver commands and temp files differed between the baseline and lure rounds and were counted as "evasion". Evasion now
+needs the sample itself to do something sensitive (read credentials, persist, drop and run a file, leak a canary), the analyst always runs
+at least one lure experiment (two packages were previously judged without one), and the benchmark was re-run afterwards. Installers still land
+on *inconclusive* or *suspicious* because downloading and running code is exactly what a stealer does too; Sandtrap reports what they do, it does not whitelist them.
+
+Health checks (unit tests, `doctor`, Stripe Projects status) are saved next to the reports in `docs/proof/`.
+
 ## Run it
 
 Prerequisites: Python 3.13 with [uv](https://docs.astral.sh/uv/), the Stripe CLI with the Projects plugin, and a `gcloud` login for Gemini
