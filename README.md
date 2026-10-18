@@ -15,6 +15,7 @@ with [Stripe Projects](https://docs.stripe.com/projects).
 | Project | **Sandtrap** |
 | Public repo | https://github.com/hatif03/createos-stripe-hackathon |
 | Deployed project (evidence site, served from a CreateOS sandbox) | https://01m5667hx5b0za6xb7s30xappg-8080.app.sb.createos.sh/ |
+| Deployed API (FastAPI app, no credentials, so scans are disabled there) | https://01m566s4y7h9x4pzjd3yxvwzcg-8000.app.sb.createos.sh/docs |
 | Stripe Projects stack | https://projects.dev/s#v1:AgentMail~api,createos~project,Neon~postgres |
 | Stripe account | `acct_1MfcCTSIDE0yiWfk` |
 | Hackathon code | `stripe-eindhoven-2026` |
