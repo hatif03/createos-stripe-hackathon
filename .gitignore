@@ -10,6 +10,8 @@ out/
 # large third-party binaries fetched at setup time
 analyzer/bin/
 
+media/
+
 .projects/cache
 .projects/vault
 .projects/state.test.json
@@ -17,4 +19,3 @@ analyzer/bin/
 .env
 .env.*
 !.env.example
-media/
