@@ -8,6 +8,28 @@ with [Stripe Projects](https://docs.stripe.com/projects).
 
 ---
 
+## Submission details
+
+| | |
+| --- | --- |
+| Project | **Sandtrap** |
+| Public repo | https://github.com/hatif03/createos-stripe-hackathon |
+| Deployed project (evidence site, served from a CreateOS sandbox) | https://01m5667hx5b0za6xb7s30xappg-8080.app.sb.createos.sh/ |
+| Stripe Projects stack | https://projects.dev/s#v1:AgentMail~api,createos~project,Neon~postgres |
+| Stripe account | `acct_1MfcCTSIDE0yiWfk` |
+| Hackathon code | `stripe-eindhoven-2026` |
+| Evidence | [docs/PROOF.md](docs/PROOF.md): reports for 14 fixtures and 8 real packages and installers, screenshots, test and `doctor` output |
+| Answers (problem, services, what went well / not well) | [docs/SUBMISSION-ANSWERS.md](docs/SUBMISSION-ANSWERS.md) |
+| Demo video plan and narration | [docs/VIDEO-TIMELINE.md](docs/VIDEO-TIMELINE.md), [docs/NARRATION.md](docs/NARRATION.md) |
+
+The deployed site is static HTML (the evidence reports), not a public scanner: scans run from the CLI, API or MCP with your own credentials,
+and the scan API is deliberately not exposed on the internet.
+
+**Stripe Projects services added** (all free plans, recorded in `.projects/state.json`): CreateOS (`createos/project`, the Sandbox API),
+Neon Postgres (`neon/postgres`, LangGraph checkpoints) and AgentMail (`agentmail/api`, the agent's inbox).
+
+---
+
 ## Why this exists
 
 Every `pip install`, `npm install` and `curl | sh` runs a stranger's code on your machine or in your CI. The attacks are not hypothetical:
