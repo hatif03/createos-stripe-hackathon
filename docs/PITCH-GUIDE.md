@@ -54,7 +54,7 @@ Finish with the numbers (section 8) and the honest limits (section 10): judges a
 | Fix | Patch, re-run the same lure, run a smoke test. |
 | CreateOS | Create / destroy per scan, command + files API, live egress control, pause + fork, public URL (ingress), strace/iptables/date -s/gcc as root inside the VM. |
 | Stripe Projects | Provisioned CreateOS (Sandbox), Neon Postgres, AgentMail; all free. |
-| Numbers | 14 samples: 12/12 vs 4/12. 6 real packages clean. 87 unit tests. A scan takes about 30 to 80 s (median 37 s). |
+| Numbers | 14 samples: 12/12 vs 4/12. 6 real packages clean. 88 unit tests. A scan takes about 30 to 80 s (median 37 s). |
 | Honest limit | Fixtures are harmless simulations; HTTPS bodies unreadable; tracer-aware samples can hide; installers that download code stay "suspicious". |
 
 ---
@@ -197,7 +197,65 @@ referee who watches the replay rather than listening to the players.
 
 ## 7. The recorded demo, scene by scene
 
-<!--REEL-->
+The reel `media/demo/sandtrap-demo-reel.mp4` runs **7:31**. Every scene is a replay of a real run captured on 2026-10-20; idle waits over 5 seconds are shortened and the video says so. A **blue CreateOS banner** at the bottom of each scene names the CreateOS feature in use at that moment, and each run ends with a **proof card** (sandbox id, firewall timeline, create / egress / destroy events). You can also play any scene on its own: `media/demo/<name>.mp4`.
+
+| Reel time | Length | Scene | File |
+| --- | --- | --- | --- |
+| 0:00 - 0:05 | 0:05 | Title card | `_title.mp4` |
+| 0:05 - 0:30 | 0:25 | Stack: Stripe Projects status and doctor | `stack.mp4` |
+| 0:30 - 1:37 | 1:07 | Scan 1: Python package with an environment-gated stealer | `hero.mp4` |
+| 1:37 - 2:31 | 0:53 | Scan 2: npm package with a malicious postinstall | `npm.mp4` |
+| 2:31 - 3:27 | 0:56 | Scan 3: C program compiled and analysed inside the sandbox | `elf.mp4` |
+| 3:27 - 4:16 | 0:49 | Scan 4: tampered CI uploader script | `script.mp4` |
+| 4:16 - 5:51 | 1:34 | Scan 5: a real package (requests) | `real.mp4` |
+| 5:51 - 6:28 | 0:37 | Fork-and-race: pause, fork, three clones | `race.mp4` |
+| 6:28 - 6:51 | 0:22 | MCP: a coding agent asks first | `mcp.mp4` |
+| 6:51 - 7:24 | 0:32 | Email intake via AgentMail | `mail.mp4` |
+| 7:24 - 7:31 | 0:07 | Closing card | `_closing.mp4` |
+
+Total 7:31. For a shorter slot, play only: stack, hero, race, real, mail (about 4 minutes).
+
+**0:05 - Stack: Stripe Projects status and doctor**
+- *What it is:* Stripe Projects status, then `doctor`.
+- *Say / point at:* Three free services came from `stripe projects add`: CreateOS (Sandbox API), Neon Postgres, AgentMail. `doctor` checks that every one is alive: stack, **CreateOS Sandbox API**, LLM, Neon, Langfuse, capa, and zero leftover sandboxes.
+
+**0:30 - Scan 1: Python package with an environment-gated stealer**
+- *What it is:* The flagship scan. `gated-stealer` reads AWS and SSH credentials and POSTs them, but only if its host resolves **and** `CI` is set.
+- *Say / point at:* Walk it in order. **Setup:** a CreateOS microVM is created with only the package registries reachable. **Install** under strace. **`egress locked`:** one `set_egress` call blocks everything. **Baseline:** quiet, a plain sandbox stops here. **Analyst:** reads the code, hypothesis panel says DNS + `CI`. **Probe:** fake DNS + `CI=1` inside the VM, the sink receives the fake credentials: **PROOF**. **Remediate:** patch, same attack re-run in the same VM, nothing leaves. **Verdict:** MALICIOUS 100/100, confidence high. Closing proof card: the sandbox id, the firewall timeline and the create / egress / destroy events from the log.
+
+**1:37 - Scan 2: npm package with a malicious postinstall**
+- *What it is:* An npm package whose `postinstall` reads `~/.npmrc`, POSTs it, and appends to `~/.bashrc`.
+- *Say / point at:* Same pipeline for a different ecosystem: `npm install --ignore-scripts` runs in the sandbox, then the lifecycle scripts run **under the lure**. Findings: credential read then outbound, persistence written, canary exfiltrated. This is the ua-parser-js / Nx / Shai-Hulud pattern.
+
+**2:31 - Scan 3: C program compiled and analysed inside the sandbox**
+- *What it is:* A C program with the same gate, **compiled inside the CreateOS sandbox**.
+- *Say / point at:* `gcc` runs in the VM so the binary never exists on your machine. The static layer (**capa**, run inside the VM) lists 12 capabilities; the lure then proves the exfiltration. Highlight: a plain sandbox calls this binary *clean* (see the benchmark).
+
+**3:27 - Scan 4: tampered CI uploader script**
+- *What it is:* A Codecov-style tampered CI uploader: it posts `git remote -v` and the environment with `curl`.
+- *Say / point at:* `script:` targets run a shell script with CI-style fake credentials in the environment. The sink captures `AWS_SECRET_ACCESS_KEY` / `GITHUB_TOKEN` canaries sent to `coverage-sync-service.example`. Say: this is what a customer would have seen in the 2021 Codecov incident, as a counterfactual.
+
+**4:16 - Scan 5: a real package (requests)**
+- *What it is:* A real PyPI package: `requests`.
+- *Say / point at:* The agent reads the real code, runs lure probes, finds nothing and the verdict is **clean** (score 0, **low** confidence: absence of evidence is never reported as 'safe'). 16 model calls and 8 rounds because there is a lot of real code to read. This is the answer to 'what about false positives?'.
+
+**5:51 - Fork-and-race: pause, fork, three clones**
+- *What it is:* Fork-and-race with `hash-gated-stealer`: it only acts for one value of `NODE_ENV`, which we do not know.
+- *Say / point at:* **CreateOS pause + fork:** the prepared sandbox is paused, cloned into three sandboxes with identical state, each with its own all-blocked firewall. They test `staging`, `production` and `dev` at the same time. Only `production` produces PROOF. Then the clones are destroyed and the parent resumes. Point out that some forks were parked as paused by the platform and Sandtrap resumed them automatically (see the lifecycle log on the card).
+
+**6:28 - MCP: a coding agent asks first**
+- *What it is:* A coding agent calls the MCP tool `scan_package` before installing.
+- *Say / point at:* This is the slopsquatting and unattended-agent use case: an agent asks Sandtrap first. The scan ran in a CreateOS sandbox and was destroyed; the agent gets a short verdict, the evidence and the remediation. The tool also refuses targets outside the allow-list (`fixture:` and `pypi:`).
+
+**6:51 - Email intake via AgentMail**
+- *What it is:* Email intake through **AgentMail** (a Stripe Projects service).
+- *Say / point at:* A tester inbox emails the agent's inbox; Sandtrap scans in a CreateOS sandbox and replies with the verdict, ATT&CK ids, the remediation and a public report link. (The inbox address is masked in the video; the real intake is rate-limited to 6 scans per hour.)
+
+**Facts for the proof cards (all real, from `docs/proof/demo/`):**
+- Every scan created **one** CreateOS sandbox (shape `s-1vcpu-2gb`) and destroyed it; publishing a report created a second small one (`s-1vcpu-256mb`) with ingress on.
+- The race run created **three forks** of one parent; all four were destroyed afterwards. The platform sometimes parks a fork as paused; Sandtrap resumes it.
+- The firewall timeline on every card reads: `create` = the three package registries, then `analysis` = `192.0.2.1:9` (block everything).
+- Sandbox ids and UTC timestamps are in `docs/proof/demo/<run>/sandbox-lifecycle.txt` so anyone can check the lifecycle.
 
 ---
 
@@ -210,7 +268,7 @@ referee who watches the replay rather than listening to the players.
   **clean**; nvm `install.sh` **inconclusive** and `rustup-init.sh` **suspicious** (they download code by design).
 - **A scan takes about 30 to 80 seconds** on the fixtures (median 37 s), about one to three minutes on real packages; **4 to 6 LLM calls** on a
   fixture, more on a real package; **one CreateOS sandbox per scan** (plus up to three forks when racing, plus one when publishing).
-- **87 unit tests** pass. 12 fixtures malicious, 2 benign.
+- **88 unit tests** pass. 12 fixtures malicious, 2 benign.
 - **Fork-and-race:** three hypotheses tested at once, about 38 s end to end in a live test.
 - **Stripe Projects:** 3 services, all on free plans.
 - **Verdict values:** `malicious`, `suspicious`, `clean` (with low confidence unless proven), `inconclusive`.
@@ -232,7 +290,7 @@ The stack can be reproduced with the share URL `https://projects.dev/s#v1:AgentM
 
 **Rest of the stack:** Python 3.13 + uv; LangGraph (pipeline and checkpoints); Gemini 3.5 Flash via Vertex AI for the analyst (K2 and Groq work via
 `LLM_PROVIDER`); FastAPI with Server-Sent Events; an MCP server (`scan_package`, `get_report`); Langfuse tracing of every agent step; capa for binaries;
-a threat memory in SQLite; HTML/JSON reports; 87 unit tests.
+a threat memory in SQLite; HTML/JSON reports; 88 unit tests.
 
 ---
 

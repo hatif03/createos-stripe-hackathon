@@ -30,7 +30,7 @@ Three, all on free plans, provisioned with `stripe projects add` and recorded in
 **Went well.** Stripe Projects gave us a sandbox account, a database and an inbox with synced credentials in minutes, and `sandtrap doctor` checks all
 of them. CreateOS did what the idea needed: a real VM with `strace`, `iptables` and `date -s`, live egress changes, and fork/pause/ingress all
 worked on the Free plan. Keeping the verdict in code (the model only forms hypotheses) made the system testable: a prompt-injection fixture cannot
-flip a result, and there are 87 unit tests. Working from real incidents exposed real gaps (environment-variable canaries, base64 inside URLs,
+flip a result, and there are 88 unit tests. Working from real incidents exposed real gaps (environment-variable canaries, base64 inside URLs,
 script targets) that we then built and proved.
 
 **Not well.** Our first run on real software was wrong: `core-js`, nvm and rustup came out "malicious" because the analyst's own commands were
