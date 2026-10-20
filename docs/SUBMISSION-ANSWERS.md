@@ -35,8 +35,8 @@ script targets) that we then built and proved.
 
 **Not well.** Our first run on real software was wrong: `core-js`, nvm and rustup came out "malicious" because the analyst's own commands were
 counted as evasion, and two packages were judged without any lure test. We fixed the scorer and the loop, re-ran the benchmark, and wrote it up
-in `docs/DECISIONS.md` (18). A smaller bug still appears now and then: a scan occasionally fails with `'list' object has no attribute 'get'` and
-passes on retry; we added a guard but did not find the root cause. Other friction: Gemini 3.x needs `thought_signature` echoed back on tool calls,
+in `docs/DECISIONS.md` (18). An intermittent crash (`'list' object has no attribute 'get'`) turned out, days later, to be our Gemini transport shim choking on Vertex 429
+errors, which arrive as a JSON array; fixed with a test, and 429s are now retried. Other friction: Gemini 3.x needs `thought_signature` echoed back on tool calls,
 which LangChain drops (we wrote a transport shim); the first research agent hallucinated when its search failed, so it now refuses to answer
 without sources; the Free plan allows five concurrent sandboxes (paused ones count) although the page suggests one, and forks can be parked
 paused; environment keys must be declared at sandbox creation. Limits we state openly: HTTPS bodies are unreadable, samples that detect `strace`

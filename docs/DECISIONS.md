@@ -119,3 +119,10 @@ Each entry: context, decision, **tradeoffs**. Evidence for every number is in [D
   from the model are coerced (a list where an object belongs crashed a benchmark attempt twice).
 - **Tradeoffs:** + real software is no longer called malicious for being scanned; - installers that download code stay *suspicious*, which is
   honest but noisy; no allow-list of known installers.
+
+## 19. The intermittent "'list' object has no attribute 'get'" was Vertex rate limiting
+- **Context:** during the build, scans failed now and then with this error and passed on retry. It surfaced again when recording the demo (ELF and a real-package scan).
+- **Cause:** the Gemini transport shim (`gemini_vertex.py`) parsed every non-streaming response as an object, but Vertex answers some quota and
+  overload errors (`429 resource exhausted`) as a JSON array, so the shim crashed before the OpenAI client could raise a normal error.
+- **Decision:** the shim ignores non-object bodies, the LLM client retries 429 up to five times with backoff, and a unit test covers the array case.
+- **Tradeoffs:** + real rate limits now surface as retries instead of crashes; - a sustained quota problem still fails a scan, after the retries.
