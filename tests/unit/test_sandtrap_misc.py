@@ -138,3 +138,14 @@ def test_analyst_tolerates_malformed_tool_arguments():
     assert _env({"CI": 1}) == {"CI": "1"}
     assert _env([{"name": "CI", "value": "true"}, "A=b", 3]) == {"CI": "true", "A": "b"}
     assert _env(None) == {}
+
+
+def test_vertex_error_arrays_do_not_crash_the_transport_shim():
+    # Vertex answers some errors (quota, overload) with a JSON array: this used to raise "'list' object has no attribute 'get'"
+    from src.app.core.llm.gemini_vertex import _remember
+
+    sigs: dict = {}
+    _remember(b'[{"error": {"code": 429, "message": "quota"}}]', sigs)
+    _remember(b"not json", sigs)
+    _remember(b'{"choices": [{"message": {"tool_calls": [{"id": "c1", "extra_content": {"google": {"thought_signature": "s"}}}]}}]}', sigs)
+    assert sigs == {"c1": {"google": {"thought_signature": "s"}}}

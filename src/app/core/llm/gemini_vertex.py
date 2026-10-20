@@ -71,6 +71,8 @@ def _remember(response_body: bytes, signatures: dict[str, dict]) -> None:
         data = json.loads(response_body)
     except ValueError:
         return
+    if not isinstance(data, dict):
+        return  # Vertex answers some errors (quota, overload) with a JSON array; let the OpenAI client raise and retry instead of crashing here
     for choice in data.get("choices", []):
         for call in (choice.get("message") or {}).get("tool_calls") or []:
             if call.get("id") and call.get("extra_content"):
