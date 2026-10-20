@@ -302,7 +302,7 @@ def build_chat_model_kwargs(
             kwargs["http_client"] = http_client
             kwargs["http_async_client"] = http_async_client
             kwargs.setdefault("timeout", 75)  # fail fast and retry once instead of hanging a scan
-            kwargs.setdefault("max_retries", 1)
+            kwargs.setdefault("max_retries", 5)  # Vertex answers bursts with 429 "resource exhausted"; the client backs off between tries
             kwargs.setdefault("reasoning_effort", resolved_settings.GEMINI_REASONING_EFFORT)
         if "api.ifm.ai" in resolved_settings.LLM_BASE_URL:  # K2: cap reasoning to keep latency sane
             kwargs.setdefault("extra_body", {"chat_template_kwargs": {"reasoning_effort": resolved_settings.K2_REASONING_EFFORT}})
