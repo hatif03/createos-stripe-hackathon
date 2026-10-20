@@ -31,6 +31,59 @@ Neon Postgres (`neon/postgres`, LangGraph checkpoints) and AgentMail (`agentmail
 
 ---
 
+## See it work
+
+Real runs of the application, recorded on 2026-10-20 (replays of the captured terminal output; waits over 5 seconds are shortened). The blue bar names the
+**CreateOS Sandbox** feature in use at each moment. Reports and the CreateOS sandbox logs (ids, firewall changes, forks, destroys, with UTC times) for every
+run are in [docs/proof/demo/](docs/proof/demo/).
+
+### A Python package that hides until it sees CI and a resolvable host
+
+![Sandtrap scanning a gated stealer: install, firewall closes, baseline, agent hypothesis, canary proof, patch, verdict](docs/demo/hero.gif)
+
+The package does nothing in a plain run. Sandtrap installs it under `strace` in a CreateOS sandbox, closes the firewall, lets the agent read the code and guess the
+gate, rebuilds that world (fake DNS, `CI=1`) inside the VM, and catches the planted fake credentials in its sink. Then it patches the package and re-runs the same
+attack in the same sandbox. The verdict (`malicious`, 100/100, confidence high) is computed from the observed events by code.
+
+### A compiled C binary, built and analysed inside the sandbox
+
+![Sandtrap compiling a C program inside the sandbox, running capa and proving exfiltration](docs/demo/elf.gif)
+
+`gcc` runs inside the VM, so the binary never exists on your machine; capa lists its capabilities and the lure proves what it does. A plain sandbox calls this binary clean.
+
+### Fork-and-race: three guesses at once
+
+![Sandtrap pausing a CreateOS sandbox, forking three clones and racing three hypotheses](docs/demo/race.gif)
+
+When the trigger is unknown, the prepared sandbox is paused and forked into three clones with identical state. Only the `production` guess made the sample act. The clones are destroyed afterwards.
+
+<details>
+<summary>More runs: npm package, tampered CI script, a real package, MCP tool, email intake</summary>
+
+**npm `postinstall` that steals `.npmrc` and persists** (the ua-parser-js / Nx / Shai-Hulud pattern):
+
+![npm postinstall scan](docs/demo/npm.gif)
+
+**A Codecov-style tampered CI uploader** posting `git remote -v` and the environment:
+
+![CI script scan](docs/demo/script.gif)
+
+**A real PyPI package (`requests`)**: clean, with low confidence, never "safe":
+
+![requests scan](docs/demo/real.gif)
+
+**MCP tool**: a coding agent asks Sandtrap before installing a package:
+
+![MCP scan_package call](docs/demo/mcp.gif)
+
+**Email intake (AgentMail)**: email a package name, get the verdict and a report link back:
+
+![Email intake](docs/demo/mail.gif)
+
+</details>
+
+---
+
 ## Why this exists
 
 Every `pip install`, `npm install` and `curl | sh` runs a stranger's code on your machine or in your CI. The attacks are not hypothetical:
