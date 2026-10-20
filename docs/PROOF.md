@@ -50,7 +50,7 @@ Raw table: [proof/bench.json](proof/bench.json), explanation: [BENCHMARK.md](BEN
 
 ## 3. Health checks
 
-Unit tests ([proof/unit-tests.txt](proof/unit-tests.txt)): `87 passed, 1 warning in 5.44s`
+Unit tests ([proof/unit-tests.txt](proof/unit-tests.txt)): `88 passed, 1 warning in 20.77s`
 
 `sandtrap doctor` ([proof/doctor.txt](proof/doctor.txt)):
 
@@ -76,11 +76,28 @@ Rendered from the files above (full-page captures with headless Edge, `scripts/m
 | [Benchmark: plain sandbox vs Sandtrap](proof/screenshots/benchmark.png) | [Real packages and installers](proof/screenshots/real-world.png) |
 | [Public report hosted by a CreateOS sandbox (live URL in the banner)](proof/screenshots/public-report-hosted.png) | [Compiled-binary report with capa](proof/screenshots/elf-report.png) |
 
-## 5. Reproduce
+## 5. Recorded demo runs (2026-10-20)
+
+Eight runs of the real application, captured with `scripts/record_demo.py` and rendered into videos by `scripts/render_demo.py`. For each: the report (when the run
+produces one) and the **CreateOS sandbox log**: the sandbox ids and UTC times of every create, egress change, fork and destroy, taken from the application log.
+
+| Run | Duration | Report | CreateOS sandbox log | Meta |
+| --- | --- | --- | --- | --- |
+| Python package with an environment-gated stealer | 178 s | [report](proof/demo/hero/report.html) | [CreateOS sandbox log](proof/demo/hero/sandbox-lifecycle.txt) | [meta](proof/demo/hero/meta.json) |
+| npm package with a malicious postinstall | 221 s | [report](proof/demo/npm/report.html) | [CreateOS sandbox log](proof/demo/npm/sandbox-lifecycle.txt) | [meta](proof/demo/npm/meta.json) |
+| C program compiled and analysed inside the sandbox (capa) | 204 s | [report](proof/demo/elf/report.html) | [CreateOS sandbox log](proof/demo/elf/sandbox-lifecycle.txt) | [meta](proof/demo/elf/meta.json) |
+| Tampered CI uploader script (Codecov-style) | 122 s | [report](proof/demo/script/report.html) | [CreateOS sandbox log](proof/demo/script/sandbox-lifecycle.txt) | [meta](proof/demo/script/meta.json) |
+| A real PyPI package: requests | 160 s | [report](proof/demo/real/report.html) | [CreateOS sandbox log](proof/demo/real/sandbox-lifecycle.txt) | [meta](proof/demo/real/meta.json) |
+| Fork-and-race: pause, fork three clones, race hypotheses | 74 s | - | [CreateOS sandbox log](proof/demo/race/sandbox-lifecycle.txt) | [meta](proof/demo/race/meta.json) |
+| MCP: a coding agent asks Sandtrap before installing a package | 146 s | [report](proof/demo/mcp/report.html) | [CreateOS sandbox log](proof/demo/mcp/sandbox-lifecycle.txt) | [meta](proof/demo/mcp/meta.json) |
+| Email intake through AgentMail (Stripe Projects) | 156 s | - | [CreateOS sandbox log](proof/demo/mail/sandbox-lifecycle.txt) | [meta](proof/demo/mail/meta.json) |
+
+## 6. Reproduce
 
 ```
 uv run python scripts/bench.py                 # 14 fixtures, writes out/bench.json
 uv run python scripts/real_world.py            # real PyPI/npm packages and installers, writes docs/proof/
+uv run python scripts/record_demo.py           # records the demo runs into docs/proof/demo/
 uv run python scripts/make_proof_page.py       # regenerates this page
 uv run pytest tests/unit -q
 ```

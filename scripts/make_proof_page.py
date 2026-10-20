@@ -14,6 +14,19 @@ def cell(slug, ext):
     return f"[{ext}](proof/{slug}.{ext})" if (P / f"{slug}.{ext}").exists() else "-"
 
 
+demo_meta = [json.loads(m.read_text(encoding="utf-8")) for m in sorted((P / "demo").glob("*/meta.json"))]
+ORDER = ["hero", "npm", "elf", "script", "real", "race", "mcp", "mail"]
+demo_meta.sort(key=lambda m: ORDER.index(m["name"]) if m["name"] in ORDER else 99)
+
+
+def dcell(name, f, label):
+    return f"[{label}](proof/demo/{name}/{f})" if (P / "demo" / name / f).exists() else "-"
+
+
+demo_rows = "\n".join(
+    f"| {m['title']} | {m['seconds']} s | {dcell(m['name'], 'report.html', 'report')} | {dcell(m['name'], 'sandbox-lifecycle.txt', 'CreateOS sandbox log')} | {dcell(m['name'], 'meta.json', 'meta')} |"
+    for m in demo_meta
+)
 mal = [r for r in bench if r["expected"] == "malicious"]
 fx = "\n".join(
     f"| `{r['fixture']}` | {r['expected']} | {r['plain']} | **{r['sandtrap']}** | {r.get('proof', '-')} | {r['probes']} | {r['seconds']} s | "
@@ -77,12 +90,21 @@ Rendered from the files above (full-page captures with headless Edge, `scripts/m
 | [Benchmark: plain sandbox vs Sandtrap](proof/screenshots/benchmark.png) | [Real packages and installers](proof/screenshots/real-world.png) |
 | [Public report hosted by a CreateOS sandbox (live URL in the banner)](proof/screenshots/public-report-hosted.png) | [Compiled-binary report with capa](proof/screenshots/elf-report.png) |
 
-## 5. Reproduce
+## 5. Recorded demo runs (2026-10-20)
+
+Eight runs of the real application, captured with `scripts/record_demo.py` and rendered into videos by `scripts/render_demo.py`. For each: the report (when the run
+produces one) and the **CreateOS sandbox log**: the sandbox ids and UTC times of every create, egress change, fork and destroy, taken from the application log.
+
+| Run | Duration | Report | CreateOS sandbox log | Meta |
+| --- | --- | --- | --- | --- |
+{demo_rows}
+
+## 6. Reproduce
 
 ```
 uv run python scripts/bench.py                 # 14 fixtures, writes out/bench.json
 uv run python scripts/real_world.py            # real PyPI/npm packages and installers, writes docs/proof/
-uv run python scripts/make_proof_page.py       # regenerates this page
+uv run python scripts/record_demo.py           # records the demo runs into docs/proof/demo/\nuv run python scripts/make_proof_page.py       # regenerates this page
 uv run pytest tests/unit -q
 ```
 """

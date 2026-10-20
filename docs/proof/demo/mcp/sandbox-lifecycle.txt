@@ -1,0 +1,3 @@
+# CreateOS sandbox events from the application log for `mcp` (UTC)
+# command: -u scripts/mcp_demo.py fixture:gated-stealer
+

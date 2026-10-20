@@ -1,0 +1,6 @@
+# CreateOS sandbox events from the application log for `mail` (UTC)
+# command: -u scripts/mail_smoke.py fixture:gated-stealer
+2026-10-20T09:16:53.775473Z  sandbox_created name=sandtrap-6bd4ef-43bc0b sandbox_id=sb-01m5c9jvmke8sh07nna45jmnkq shape=s-1vcpu-2gb
+2026-10-20T09:17:09.076542Z  sandbox_egress_set phase=analysis rules=['192.0.2.1:9'] sandbox_id=sb-01m5c9jvmke8sh07nna45jmnkq
+2026-10-20T09:19:00.545287Z  sandbox_destroyed sandbox_id=sb-01m5c9jvmke8sh07nna45jmnkq
+2026-10-20T09:19:04.177944Z  report_published sandbox_id=sb-01m5c8zg0wkdxjryfxj115bpwy url=https://01m5c8zg0wkdxjryfxj115bpwy-8080.app.sb.createos.sh/6bd4efcce2/

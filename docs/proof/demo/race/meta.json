@@ -1,0 +1,9 @@
+{
+  "name": "race",
+  "title": "Fork-and-race: pause, fork three clones, race hypotheses",
+  "exit_code": 0,
+  "seconds": 74,
+  "started_utc": "2026-10-20T09:15:12+00:00",
+  "report_dir": "",
+  "sandbox_events": 13
+}

@@ -1,0 +1,115 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sandtrap report - c:fixtures/c/gated_beacon.c</title><style>
+:root{--bg:#f6f7f9;--fg:#15181d;--muted:#5b6470;--card:#fff;--line:#d9dde3;--code:#eef0f3;
+--clean:#0f7b3f;--susp:#8a5a00;--mal:#b3261e;--inc:#4b5563;--add:#d9f4e0;--del:#fde0de;--accent:#1d4ed8;--lure:#fff1e6}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1216;--fg:#e8ebef;--muted:#9aa4b0;--card:#181c22;--line:#2b323b;--code:#222830;
+--clean:#4ade80;--susp:#fbbf24;--mal:#ff7b72;--inc:#a3acb8;--add:#12331f;--del:#43181a;--accent:#7aa2ff;--lure:#3a2412}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:16px}h1{font-size:1.4rem;margin:.2em 0}h2{display:inline;font-size:1.1rem}h4{margin:.8em 0 .2em}
+.muted{color:var(--muted);font-size:.85em}.empty{color:var(--muted);font-style:italic}
+code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.85em}
+pre{background:var(--code);padding:8px;border-radius:6px;overflow:auto;white-space:pre-wrap;word-break:break-word;max-height:360px;margin:4px 0}
+code{background:var(--code);padding:1px 4px;border-radius:4px;word-break:break-all}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:14px 0}
+.card>summary{cursor:pointer;margin-bottom:8px}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px 16px;margin:0}
+.meta dt{color:var(--muted);font-size:.8em;text-transform:uppercase}.meta dd{margin:0 0 6px;word-break:break-all}
+.hero{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+.badge{border:3px solid currentColor;border-radius:14px;padding:12px 22px;font-weight:800;font-size:2rem;letter-spacing:.04em;text-transform:uppercase}
+.badge small{display:block;font-size:.8rem;font-weight:600;letter-spacing:0;text-transform:none}
+.v-clean{color:var(--clean)}.v-suspicious{color:var(--susp)}.v-malicious{color:var(--mal)}.v-inconclusive{color:var(--inc)}
+.gauge{flex:1;min-width:200px}.bar{height:14px;border-radius:7px;background:var(--code);overflow:hidden;border:1px solid var(--line)}
+.bar i{display:block;height:100%;background:currentColor}
+.chip{display:inline-block;padding:1px 8px;border-radius:999px;font-size:.78em;font-weight:700;border:1px solid currentColor;margin:1px}
+.sev-high,.proof-proof{color:var(--mal)}.sev-medium,.proof-intent{color:var(--susp)}.sev-low,.proof-signal{color:var(--inc)}
+.kind{color:var(--accent);font-weight:500}.lure{color:var(--susp)}
+a.attack{color:var(--accent);font-weight:600;margin-right:6px}
+.timeline,.stepper{list-style:none;padding:0;margin:0}.timeline li{display:flex;gap:10px;padding:6px 0;border-left:2px solid var(--line);margin-left:6px;padding-left:12px;position:relative}
+.timeline .dot{position:absolute;left:-7px;top:12px;width:12px;height:12px;border-radius:50%;background:var(--accent)}
+.timeline .hyp .dot{background:var(--susp)}.timeline .sum .dot{background:var(--clean)}.timeline p{margin:2px 0}
+.diffwrap{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.col{border:2px solid var(--line);border-radius:10px;padding:10px}.col.lure{border-color:var(--mal);background:var(--lure)}
+.col h3{margin:0 0 6px;font-size:1rem}.col ul{margin:0;padding-left:18px}
+.caption{font-weight:700;margin:10px 0 0;color:var(--mal)}
+.stepper li{display:flex;gap:12px;padding:8px 0;border-bottom:1px dashed var(--line)}
+.step{flex:none;width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--card);display:grid;place-items:center;font-weight:700}
+.rules{margin:4px 0;padding-left:18px}
+table.grid{width:100%;border-collapse:collapse}.grid th,.grid td{text-align:left;vertical-align:top;padding:6px 8px;border-bottom:1px solid var(--line)}
+.grid th{font-size:.8em;text-transform:uppercase;color:var(--muted)}
+.diff .dl{display:block}.diff .add{background:var(--add)}.diff .del{background:var(--del)}.diff .hunk{color:var(--accent)}
+.tools{text-align:right}button{font:inherit;padding:4px 10px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
+footer{color:var(--muted);font-size:.85em;margin:20px 0}
+@media(max-width:700px){.diffwrap{grid-template-columns:1fr}.badge{font-size:1.5rem}
+table.grid thead{display:none}.grid tr{display:block;border-bottom:2px solid var(--line);padding:6px 0}
+.grid td{display:block;border:0;padding:2px 0}.grid td::before{content:attr(data-l) ": ";color:var(--muted);font-size:.8em}}
+</style></head><body><main><h1>Sandtrap report</h1><div class="tools"><button id="ex" type="button">Expand all</button> <button id="co" type="button">Collapse all</button></div><section class="card"><dl class="meta"><dt>Target</dt><dd>c:fixtures/c/gated_beacon.c (package)</dd><dt>Job</dt><dd>702b8c9120</dd><dt>Created</dt><dd>2026-10-20T09:22:46+00:00</dd><dt>SHA-256</dt><dd>f2285a8ea2ac13edd80cce2b7eaafdb79b73473fcd9bc9f75db1f226251e7868</dd><dt>Model</dt><dd>gemini-3.5-flash (5 calls)</dd><dt>Capture method</dt><dd>strace</dd></dl></section><section class="card"><div class="hero"><div class="badge v-malicious" role="status">✗ malicious<small>Malicious behaviour demonstrated<br>proof level: proof &middot; confidence: high</small></div><div class="gauge v-malicious"><b>Risk score 100/100</b><div class="bar" role="meter" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"><i style="width:100%"></i></div></div></div></section><details class="card" open><summary><h2>What the agent did</h2></summary><ol class="timeline"><li><span class="dot"></span><div><b>Round 0: baseline</b> <span class="muted">exit 0</span><p>default import driver</p></div></li><li><span class="dot"></span><div><b>Round 1: probe-1</b> <span class="muted">exit 0</span><p>The binary requires the CI environment variable to be set and DNS resolution (lure=true) to succeed to exfiltrate AWS credentials.</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>The binary requires the CI environment variable to be set and DNS resolution (lure=true) to succeed to exfiltrate AWS credentials.</p></div></li><li class="sum"><span class="dot"></span><div><b>Summary</b><p>The binary is a gated beacon that checks for the presence of the &#x27;CI&#x27; environment variable and attempts to resolve the domain &#x27;beacon.c2-demo.example&#x27;. If both conditions are met, it reads the AWS credentials from &#x27;/root/.aws/credentials&#x27; and exfiltrates them via an HTTP POST request to &#x27;127.0.0.1:80/collect&#x27;.</p></div></li></ol></details><details class="card" open><summary><h2>Baseline vs Lure diff</h2></summary><div class="diffwrap"><div class="col"><h3>Baseline only</h3><ul><li class="empty">nothing unique to baseline</li></ul></div><div class="col lure"><h3>Lure only</h3><ul><li><code>dns_query:beacon.c2-demo.example</code></li><li><code>file_read_sensitive:/root/.aws/credentials</code></li><li><code>sink_request:127.0.0.1</code></li></ul></div></div><p class="caption">behaviour that appeared only after the agent changed the environment = evidence of sandbox evasion</p></details><details class="card" open><summary><h2>Findings</h2></summary><table class="grid"><thead><tr><th>Finding</th><th>Severity</th><th>Proof</th><th>ATT&amp;CK</th><th>Evidence</th></tr></thead><tbody><tr><td data-l="Finding"><b>Canary credentials exfiltrated</b><div class="muted">canary_exfil</div></td><td data-l="Severity"><span class="chip sev-high">high</span></td><td data-l="Proof"><span class="chip proof-proof">proof</span></td><td data-l="ATT&amp;CK"><a class="attack" href="https://attack.mitre.org/techniques/T1041/" target="_blank" rel="noopener noreferrer" title="Exfiltration Over C2 Channel">T1041</a> <a class="attack" href="https://attack.mitre.org/techniques/T1552/001/" target="_blank" rel="noopener noreferrer" title="Credentials In Files">T1552.001</a></td><td data-l="Evidence"><pre class="ev">round 1 / event 3
+sink_request:127.0.0.1 canaries=AKIASNDTRPadda3c4c,SNDTRP-adda3c4c-AWS</pre></td></tr><tr><td data-l="Finding"><b>Credential file read followed by outbound attempt</b><div class="muted">cred_read_outbound</div></td><td data-l="Severity"><span class="chip sev-high">high</span></td><td data-l="Proof"><span class="chip proof-intent">intent</span></td><td data-l="ATT&amp;CK"><a class="attack" href="https://attack.mitre.org/techniques/T1041/" target="_blank" rel="noopener noreferrer" title="Exfiltration Over C2 Channel">T1041</a> <a class="attack" href="https://attack.mitre.org/techniques/T1552/001/" target="_blank" rel="noopener noreferrer" title="Credentials In Files">T1552.001</a></td><td data-l="Evidence"><pre class="ev">round 1 / event 1
+file_read_sensitive:/root/.aws/credentials</pre><pre class="ev">round 1 / event 2
+dns_query:beacon.c2-demo.example</pre><pre class="ev">round 1 / event 3
+sink_request:127.0.0.1 canaries=AKIASNDTRPadda3c4c,SNDTRP-adda3c4c-AWS</pre></td></tr><tr><td data-l="Finding"><b>Behaviour only appears under lure (sandbox evasion)</b><div class="muted">lure_only</div></td><td data-l="Severity"><span class="chip sev-high">high</span></td><td data-l="Proof"><span class="chip proof-proof">proof</span></td><td data-l="ATT&amp;CK"><a class="attack" href="https://attack.mitre.org/techniques/T1497/" target="_blank" rel="noopener noreferrer" title="Virtualization/Sandbox Evasion">T1497</a></td><td data-l="Evidence"><pre class="ev">round 1 / event 1
+file_read_sensitive:/root/.aws/credentials</pre><pre class="ev">round 1 / event 2
+dns_query:beacon.c2-demo.example</pre><pre class="ev">round 1 / event 3
+sink_request:127.0.0.1 canaries=AKIASNDTRPadda3c4c,SNDTRP-adda3c4c-AWS</pre></td></tr><tr><td data-l="Finding"><b>capability: create TCP socket</b><div class="muted">static_0_capa</div></td><td data-l="Severity"><span class="chip sev-low">low</span></td><td data-l="Proof"><span class="chip proof-signal">signal</span></td><td data-l="ATT&amp;CK">-</td><td data-l="Evidence">-</td></tr><tr><td data-l="Finding"><b>capability: connect socket</b><div class="muted">static_1_capa</div></td><td data-l="Severity"><span class="chip sev-low">low</span></td><td data-l="Proof"><span class="chip proof-signal">signal</span></td><td data-l="ATT&amp;CK">-</td><td data-l="Evidence">-</td></tr><tr><td data-l="Finding"><b>capability: read file on Linux</b><div class="muted">static_2_capa</div></td><td data-l="Severity"><span class="chip sev-low">low</span></td><td data-l="Proof"><span class="chip proof-signal">signal</span></td><td data-l="ATT&amp;CK">-</td><td data-l="Evidence">-</td></tr><tr><td data-l="Finding"><b>capability: send data on socket</b><div class="muted">static_3_capa</div></td><td data-l="Severity"><span class="chip sev-low">low</span></td><td data-l="Proof"><span class="chip proof-signal">signal</span></td><td data-l="ATT&amp;CK">-</td><td data-l="Evidence">-</td></tr><tr><td data-l="Finding"><b>capability: send HTTP request</b><div class="muted">static_4_capa</div></td><td data-l="Severity"><span class="chip sev-medium">medium</span></td><td data-l="Proof"><span class="chip proof-signal">signal</span></td><td data-l="ATT&amp;CK"><a class="attack" href="https://attack.mitre.org/techniques/T1071/001/" target="_blank" rel="noopener noreferrer" title="Web Protocols">T1071.001</a></td><td data-l="Evidence">-</td></tr><tr><td data-l="Finding"><b>capability: query environment variable</b><div class="muted">static_5_capa</div></td><td data-l="Severity"><span class="chip sev-low">low</span></td><td data-l="Proof"><span class="chip proof-signal">signal</span></td><td data-l="ATT&amp;CK"><a class="attack" href="https://attack.mitre.org/techniques/T1082/" target="_blank" rel="noopener noreferrer" title="System Information Discovery">T1082</a></td><td data-l="Evidence">-</td></tr><tr><td data-l="Finding"><b>capability: resolve DNS</b><div class="muted">static_6_capa</div></td><td data-l="Severity"><span class="chip sev-medium">medium</span></td><td data-l="Proof"><span class="chip proof-signal">signal</span></td><td data-l="ATT&amp;CK"><a class="attack" href="https://attack.mitre.org/techniques/T1071/004/" target="_blank" rel="noopener noreferrer" title="Unknown technique">T1071.004</a></td><td data-l="Evidence">-</td></tr><tr><td data-l="Finding"><b>capability: send data</b><div class="muted">static_7_capa</div></td><td data-l="Severity"><span class="chip sev-low">low</span></td><td data-l="Proof"><span class="chip proof-signal">signal</span></td><td data-l="ATT&amp;CK">-</td><td data-l="Evidence">-</td></tr><tr><td data-l="Finding"><b>capability: connect TCP socket</b><div class="muted">static_8_capa</div></td><td data-l="Severity"><span class="chip sev-low">low</span></td><td data-l="Proof"><span class="chip proof-signal">signal</span></td><td data-l="ATT&amp;CK">-</td><td data-l="Evidence">-</td></tr><tr><td data-l="Finding"><b>capability: act as TCP client</b><div class="muted">static_9_capa</div></td><td data-l="Severity"><span class="chip sev-low">low</span></td><td data-l="Proof"><span class="chip proof-signal">signal</span></td><td data-l="ATT&amp;CK">-</td><td data-l="Evidence">-</td></tr><tr><td data-l="Finding"><b>capability: read and send data from client to server</b><div class="muted">static_10_capa</div></td><td data-l="Severity"><span class="chip sev-medium">medium</span></td><td data-l="Proof"><span class="chip proof-signal">signal</span></td><td data-l="ATT&amp;CK"><a class="attack" href="https://attack.mitre.org/techniques/T1071/" target="_blank" rel="noopener noreferrer" title="Unknown technique">T1071</a></td><td data-l="Evidence">-</td></tr><tr><td data-l="Finding"><b>capability: send HTTP request with Host header</b><div class="muted">static_11_capa</div></td><td data-l="Severity"><span class="chip sev-medium">medium</span></td><td data-l="Proof"><span class="chip proof-signal">signal</span></td><td data-l="ATT&amp;CK"><a class="attack" href="https://attack.mitre.org/techniques/T1071/001/" target="_blank" rel="noopener noreferrer" title="Web Protocols">T1071.001</a></td><td data-l="Evidence">-</td></tr></tbody></table></details><details class="card" open><summary><h2>Static findings</h2></summary><table class="grid"><thead><tr><th>Source</th><th>Title</th><th>Severity</th><th>ATT&amp;CK</th><th>Detail</th></tr></thead><tbody><tr><td data-l="Source">capa</td><td data-l="Title"><b>capability: create TCP socket</b></td><td data-l="Severity"><span class="chip sev-low">low</span></td><td data-l="ATT&amp;CK">-</td><td data-l="Detail">communication/socket/tcp</td></tr><tr><td data-l="Source">capa</td><td data-l="Title"><b>capability: connect socket</b></td><td data-l="Severity"><span class="chip sev-low">low</span></td><td data-l="ATT&amp;CK">-</td><td data-l="Detail">communication/socket</td></tr><tr><td data-l="Source">capa</td><td data-l="Title"><b>capability: read file on Linux</b></td><td data-l="Severity"><span class="chip sev-low">low</span></td><td data-l="ATT&amp;CK">-</td><td data-l="Detail">host-interaction/file-system/read</td></tr><tr><td data-l="Source">capa</td><td data-l="Title"><b>capability: send data on socket</b></td><td data-l="Severity"><span class="chip sev-low">low</span></td><td data-l="ATT&amp;CK">-</td><td data-l="Detail">communication/socket/send</td></tr><tr><td data-l="Source">capa</td><td data-l="Title"><b>capability: send HTTP request</b></td><td data-l="Severity"><span class="chip sev-medium">medium</span></td><td data-l="ATT&amp;CK">T1071.001</td><td data-l="Detail">communication/http/client</td></tr><tr><td data-l="Source">capa</td><td data-l="Title"><b>capability: query environment variable</b></td><td data-l="Severity"><span class="chip sev-low">low</span></td><td data-l="ATT&amp;CK">T1082</td><td data-l="Detail">host-interaction/environment-variable</td></tr><tr><td data-l="Source">capa</td><td data-l="Title"><b>capability: resolve DNS</b></td><td data-l="Severity"><span class="chip sev-medium">medium</span></td><td data-l="ATT&amp;CK">T1071.004</td><td data-l="Detail">communication/dns</td></tr><tr><td data-l="Source">capa</td><td data-l="Title"><b>capability: send data</b></td><td data-l="Severity"><span class="chip sev-low">low</span></td><td data-l="ATT&amp;CK">-</td><td data-l="Detail">communication</td></tr><tr><td data-l="Source">capa</td><td data-l="Title"><b>capability: connect TCP socket</b></td><td data-l="Severity"><span class="chip sev-low">low</span></td><td data-l="ATT&amp;CK">-</td><td data-l="Detail">communication/socket/tcp</td></tr><tr><td data-l="Source">capa</td><td data-l="Title"><b>capability: act as TCP client</b></td><td data-l="Severity"><span class="chip sev-low">low</span></td><td data-l="ATT&amp;CK">-</td><td data-l="Detail">communication/tcp/client</td></tr><tr><td data-l="Source">capa</td><td data-l="Title"><b>capability: read and send data from client to server</b></td><td data-l="Severity"><span class="chip sev-medium">medium</span></td><td data-l="ATT&amp;CK">T1071</td><td data-l="Detail">communication/c2/file-transfer</td></tr><tr><td data-l="Source">capa</td><td data-l="Title"><b>capability: send HTTP request with Host header</b></td><td data-l="Severity"><span class="chip sev-medium">medium</span></td><td data-l="ATT&amp;CK">T1071.001</td><td data-l="Detail">communication/http</td></tr></tbody></table></details><details class="card" open><summary><h2>Egress firewall timeline</h2></summary><ol class="stepper"><li><span class="step">1</span><div><b>create</b><ul class="rules"><li><code>pypi.org:443</code></li><li><code>files.pythonhosted.org:443</code></li><li><code>registry.npmjs.org:443</code></li></ul><p class=muted>sandbox sb-01m5c9qz4yash8s00t131pa9gs</p></div></li><li><span class="step">2</span><div><b>analysis</b><ul class="rules"><li><code>192.0.2.1:9</code></li></ul><p class=muted>registry access closed; lure runs on loopback only</p></div></li></ol></details><details class="card" ><summary><h2>Probe rounds</h2></summary><table class="grid"><thead><tr><th>Round</th><th>Label</th><th>Exit</th><th>Duration</th><th>Events</th><th>Raw</th></tr></thead><tbody><tr><td data-l="Round">-1</td><td data-l="Label">install</td><td data-l="Exit">0</td><td data-l="Duration">0 ms</td><td data-l="Events">-</td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[]</pre><h4>stdout</h4><pre></pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">0</td><td data-l="Label">baseline</td><td data-l="Exit">0</td><td data-l="Duration">1284 ms</td><td data-l="Events"><span class="chip kind">exec ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.01,
+  &quot;pid&quot;: 658,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;/root/work/bin/sample&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 0
+ }
+]</pre><h4>stdout</h4><pre>binary exited with 0
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">1</td><td data-l="Label">probe-1 <span class="chip lure">lure</span></td><td data-l="Exit">0</td><td data-l="Duration">1327 ms</td><td data-l="Events"><span class="chip kind">dns_query ×1</span> <span class="chip kind">exec ×1</span> <span class="chip kind">file_read_sensitive ×1</span> <span class="chip kind">sink_request ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.004,
+  &quot;pid&quot;: 691,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;/root/work/bin/sample&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: 1
+ },
+ {
+  &quot;t&quot;: 0.007,
+  &quot;pid&quot;: 691,
+  &quot;kind&quot;: &quot;file_read_sensitive&quot;,
+  &quot;data&quot;: {
+   &quot;path&quot;: &quot;/root/.aws/credentials&quot;,
+   &quot;canary&quot;: &quot;AWS&quot;
+  },
+  &quot;round&quot;: 1
+ },
+ {
+  &quot;t&quot;: 0.07,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;dns_query&quot;,
+  &quot;data&quot;: {
+   &quot;name&quot;: &quot;beacon.c2-demo.example&quot;,
+   &quot;answered&quot;: true
+  },
+  &quot;round&quot;: 1
+ },
+ {
+  &quot;t&quot;: 0.071,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;sink_request&quot;,
+  &quot;data&quot;: {
+   &quot;host&quot;: &quot;127.0.0.1&quot;,
+   &quot;method&quot;: &quot;POST&quot;,
+   &quot;path&quot;: &quot;/collect&quot;,
+   &quot;body&quot;: &quot;[default]\naws_access_key_id = AKIASNDTRPadda3c4c\naws_secret_access_key = SNDTRP-adda3c4c-AWS/fake/secret/not/real\n&quot;,
+   &quot;canaries&quot;: [
+    &quot;AKIASNDTRPadda3c4c&quot;,
+    &quot;SNDTRP-adda3c4c-AWS&quot;
+   ],
+   &quot;orig_dst&quot;: &quot;&quot;
+  },
+  &quot;round&quot;: 1
+ }
+]</pre><h4>stdout</h4><pre></pre><h4>stderr</h4><pre></pre></details></td></tr></tbody></table></details><details class="card" open><summary><h2>Threat memory</h2></summary><ul><li>known indicator beacon.c2-demo.example (seen in 1 earlier scan, last verdict malicious)</li><li>New skill learned from this scan: <b>gated-ci-and-dns-credential-exfil</b></li></ul></details><details class="card" open><summary><h2>Limitations</h2></summary><ul><li>Dynamic analysis runs on Linux only; Windows executables are not executed.</li><li>HTTPS request bodies cannot be read without interception: TLS destinations are recorded by SNI only.</li><li>Evasive code that detects tracing or waits longer than the probe timeout may look quiet; such runs are reported as inconclusive, never clean.</li><li>Canary proof covers the credential types we plant (ssh key, aws, npm, .env).</li></ul></details><footer>Sandboxes: sb-01m5c9qz4yash8s00t131pa9gs &middot; sandbox destroyed: yes</footer></main><script>function t(o){document.querySelectorAll('details.card').forEach(function(d){d.open=o})}document.getElementById('ex').onclick=function(){t(true)};document.getElementById('co').onclick=function(){t(false)};</script></body></html>

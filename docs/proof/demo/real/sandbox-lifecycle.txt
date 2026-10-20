@@ -1,0 +1,5 @@
+# CreateOS sandbox events from the application log for `real` (UTC)
+# command: -u -m src.cli.sandtrap scan pypi:requests --out out/demo
+2026-10-20T09:24:05.308154Z  sandbox_created name=sandtrap-17dee8-f0ce7d sandbox_id=sb-01m5ca011rb43c4qtyzdrq43sw shape=s-1vcpu-2gb
+2026-10-20T09:24:43.689514Z  sandbox_egress_set phase=analysis rules=['192.0.2.1:9'] sandbox_id=sb-01m5ca011rb43c4qtyzdrq43sw
+2026-10-20T09:26:07.990825Z  sandbox_destroyed sandbox_id=sb-01m5ca011rb43c4qtyzdrq43sw

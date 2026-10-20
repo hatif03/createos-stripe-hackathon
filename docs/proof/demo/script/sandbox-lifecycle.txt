@@ -1,0 +1,5 @@
+# CreateOS sandbox events from the application log for `script` (UTC)
+# command: -u -m src.cli.sandtrap scan script:fixtures/script-ci-uploader/uploader.sh --out out/demo
+2026-10-20T09:11:17.708939Z  sandbox_created name=sandtrap-d5551a-1c4b51 sandbox_id=sb-01m5c98kev5dmv4eqmqtmh78p2 shape=s-1vcpu-2gb
+2026-10-20T09:11:27.106387Z  sandbox_egress_set phase=analysis rules=['192.0.2.1:9'] sandbox_id=sb-01m5c98kev5dmv4eqmqtmh78p2
+2026-10-20T09:13:11.254989Z  sandbox_destroyed sandbox_id=sb-01m5c98kev5dmv4eqmqtmh78p2

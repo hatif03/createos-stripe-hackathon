@@ -1,0 +1,352 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sandtrap report - pypi:requests</title><style>
+:root{--bg:#f6f7f9;--fg:#15181d;--muted:#5b6470;--card:#fff;--line:#d9dde3;--code:#eef0f3;
+--clean:#0f7b3f;--susp:#8a5a00;--mal:#b3261e;--inc:#4b5563;--add:#d9f4e0;--del:#fde0de;--accent:#1d4ed8;--lure:#fff1e6}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1216;--fg:#e8ebef;--muted:#9aa4b0;--card:#181c22;--line:#2b323b;--code:#222830;
+--clean:#4ade80;--susp:#fbbf24;--mal:#ff7b72;--inc:#a3acb8;--add:#12331f;--del:#43181a;--accent:#7aa2ff;--lure:#3a2412}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:16px}h1{font-size:1.4rem;margin:.2em 0}h2{display:inline;font-size:1.1rem}h4{margin:.8em 0 .2em}
+.muted{color:var(--muted);font-size:.85em}.empty{color:var(--muted);font-style:italic}
+code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.85em}
+pre{background:var(--code);padding:8px;border-radius:6px;overflow:auto;white-space:pre-wrap;word-break:break-word;max-height:360px;margin:4px 0}
+code{background:var(--code);padding:1px 4px;border-radius:4px;word-break:break-all}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:14px 0}
+.card>summary{cursor:pointer;margin-bottom:8px}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px 16px;margin:0}
+.meta dt{color:var(--muted);font-size:.8em;text-transform:uppercase}.meta dd{margin:0 0 6px;word-break:break-all}
+.hero{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+.badge{border:3px solid currentColor;border-radius:14px;padding:12px 22px;font-weight:800;font-size:2rem;letter-spacing:.04em;text-transform:uppercase}
+.badge small{display:block;font-size:.8rem;font-weight:600;letter-spacing:0;text-transform:none}
+.v-clean{color:var(--clean)}.v-suspicious{color:var(--susp)}.v-malicious{color:var(--mal)}.v-inconclusive{color:var(--inc)}
+.gauge{flex:1;min-width:200px}.bar{height:14px;border-radius:7px;background:var(--code);overflow:hidden;border:1px solid var(--line)}
+.bar i{display:block;height:100%;background:currentColor}
+.chip{display:inline-block;padding:1px 8px;border-radius:999px;font-size:.78em;font-weight:700;border:1px solid currentColor;margin:1px}
+.sev-high,.proof-proof{color:var(--mal)}.sev-medium,.proof-intent{color:var(--susp)}.sev-low,.proof-signal{color:var(--inc)}
+.kind{color:var(--accent);font-weight:500}.lure{color:var(--susp)}
+a.attack{color:var(--accent);font-weight:600;margin-right:6px}
+.timeline,.stepper{list-style:none;padding:0;margin:0}.timeline li{display:flex;gap:10px;padding:6px 0;border-left:2px solid var(--line);margin-left:6px;padding-left:12px;position:relative}
+.timeline .dot{position:absolute;left:-7px;top:12px;width:12px;height:12px;border-radius:50%;background:var(--accent)}
+.timeline .hyp .dot{background:var(--susp)}.timeline .sum .dot{background:var(--clean)}.timeline p{margin:2px 0}
+.diffwrap{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.col{border:2px solid var(--line);border-radius:10px;padding:10px}.col.lure{border-color:var(--mal);background:var(--lure)}
+.col h3{margin:0 0 6px;font-size:1rem}.col ul{margin:0;padding-left:18px}
+.caption{font-weight:700;margin:10px 0 0;color:var(--mal)}
+.stepper li{display:flex;gap:12px;padding:8px 0;border-bottom:1px dashed var(--line)}
+.step{flex:none;width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--card);display:grid;place-items:center;font-weight:700}
+.rules{margin:4px 0;padding-left:18px}
+table.grid{width:100%;border-collapse:collapse}.grid th,.grid td{text-align:left;vertical-align:top;padding:6px 8px;border-bottom:1px solid var(--line)}
+.grid th{font-size:.8em;text-transform:uppercase;color:var(--muted)}
+.diff .dl{display:block}.diff .add{background:var(--add)}.diff .del{background:var(--del)}.diff .hunk{color:var(--accent)}
+.tools{text-align:right}button{font:inherit;padding:4px 10px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
+footer{color:var(--muted);font-size:.85em;margin:20px 0}
+@media(max-width:700px){.diffwrap{grid-template-columns:1fr}.badge{font-size:1.5rem}
+table.grid thead{display:none}.grid tr{display:block;border-bottom:2px solid var(--line);padding:6px 0}
+.grid td{display:block;border:0;padding:2px 0}.grid td::before{content:attr(data-l) ": ";color:var(--muted);font-size:.8em}}
+</style></head><body><main><h1>Sandtrap report</h1><div class="tools"><button id="ex" type="button">Expand all</button> <button id="co" type="button">Collapse all</button></div><section class="card"><dl class="meta"><dt>Target</dt><dd>pypi:requests (pypi)</dd><dt>Job</dt><dd>17dee8495a</dd><dt>Created</dt><dd>2026-10-20T09:26:07+00:00</dd><dt>SHA-256</dt><dd>-</dd><dt>Model</dt><dd>gemini-3.5-flash (16 calls)</dd><dt>Capture method</dt><dd>strace</dd></dl></section><section class="card"><div class="hero"><div class="badge v-clean" role="status">✓ clean<small>No malicious behaviour observed<br>proof level: none &middot; confidence: low</small></div><div class="gauge v-clean"><b>Risk score 0/100</b><div class="bar" role="meter" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"><i style="width:0%"></i></div></div></div></section><details class="card" open><summary><h2>What the agent did</h2></summary><ol class="timeline"><li><span class="dot"></span><div><b>Round 0: baseline</b> <span class="muted">exit 0</span><p>default import driver</p></div></li><li><span class="dot"></span><div><b>Round 1: probe-1</b> <span class="muted">exit 0</span><p>Scan site-packages for suspicious patterns to find the malicious code location.</p></div></li><li><span class="dot"></span><div><b>Round 2: probe-2</b> <span class="muted">exit 0</span><p>Find suspicious lines in site-packages files.</p></div></li><li><span class="dot"></span><div><b>Round 3: probe-3</b> <span class="muted">exit 0</span><p>List all files in /root/work recursively with sizes and hashes.</p></div></li><li><span class="dot"></span><div><b>Round 4: probe-4</b> <span class="muted">exit 0</span><p>List files in /root/work excluding venv and out.</p></div></li><li><span class="dot"></span><div><b>Round 5: probe-5</b> <span class="muted">exit 0</span><p>List top-level items in site-packages.</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>Scan site-packages for suspicious patterns to find the malicious code location.</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>Find suspicious lines in site-packages files.</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>List all files in /root/work recursively with sizes and hashes.</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>List files in /root/work excluding venv and out.</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>List top-level items in site-packages.</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>The package might contain CI-gated or DNS-gated credential harvesting malware.</p></div></li><li class="hyp"><span class="dot"></span><div><b>Hypothesis</b><p>The package is a clean, standard installation of the requests library with no malicious modifications.</p></div></li><li class="sum"><span class="dot"></span><div><b>Summary</b><p>The installed package is a standard, clean version of the &#x27;requests&#x27; HTTP library (version 2.34.2) along with its standard dependencies (&#x27;urllib3&#x27;, &#x27;idna&#x27;, &#x27;charset_normalizer&#x27;, &#x27;certifi&#x27;). A comprehensive scan of the codebase for suspicious patterns (such as obfuscated code, credential harvesting, or unauthorized network connections) revealed only standard library code. No malicious behavior or exfiltration was observed.</p></div></li></ol></details><details class="card" open><summary><h2>Baseline vs Lure diff</h2></summary><div class="diffwrap"><div class="col"><h3>Baseline only</h3><ul><li class="empty">nothing unique to baseline</li></ul></div><div class="col lure"><h3>Lure only</h3><ul><li class="empty">nothing unique to lure</li></ul></div></div><p class="caption">behaviour that appeared only after the agent changed the environment = evidence of sandbox evasion</p></details><details class="card" open><summary><h2>Findings</h2></summary><p class="empty">No dynamic findings.</p></details><details class="card" ><summary><h2>Static findings</h2></summary><p class="empty">No static findings.</p></details><details class="card" open><summary><h2>Egress firewall timeline</h2></summary><ol class="stepper"><li><span class="step">1</span><div><b>create</b><ul class="rules"><li><code>pypi.org:443</code></li><li><code>files.pythonhosted.org:443</code></li><li><code>registry.npmjs.org:443</code></li></ul><p class=muted>sandbox sb-01m5ca011rb43c4qtyzdrq43sw</p></div></li><li><span class="step">2</span><div><b>analysis</b><ul class="rules"><li><code>192.0.2.1:9</code></li></ul><p class=muted>registry access closed; lure runs on loopback only</p></div></li></ol></details><details class="card" ><summary><h2>Probe rounds</h2></summary><table class="grid"><thead><tr><th>Round</th><th>Label</th><th>Exit</th><th>Duration</th><th>Events</th><th>Raw</th></tr></thead><tbody><tr><td data-l="Round">-1</td><td data-l="Label">install</td><td data-l="Exit">0</td><td data-l="Duration">0 ms</td><td data-l="Events"><span class="chip kind">exec ×5</span> <span class="chip kind">sleep ×2</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.354,
+  &quot;pid&quot;: 649,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.355,
+  &quot;pid&quot;: 649,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;bash&quot;,
+    &quot;/usr/local/bin/rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.358,
+  &quot;pid&quot;: 649,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;asdf&quot;,
+    &quot;exec&quot;,
+    &quot;rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.366,
+  &quot;pid&quot;: 654,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;env&quot;,
+    &quot;-0&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.374,
+  &quot;pid&quot;: 649,
+  &quot;kind&quot;: &quot;exec&quot;,
+  &quot;data&quot;: {
+   &quot;argv&quot;: [
+    &quot;/root/.asdf/installs/rust/1.83.0/toolchains/1.83.0-x86_64-unknown-linux-gnu/bin/rustc&quot;,
+    &quot;--version&quot;
+   ],
+   &quot;suspicious&quot;: false
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.385,
+  &quot;pid&quot;: 646,
+  &quot;kind&quot;: &quot;sleep&quot;,
+  &quot;data&quot;: {
+   &quot;seconds&quot;: 36.0
+  },
+  &quot;round&quot;: -1
+ },
+ {
+  &quot;t&quot;: 0.385,
+  &quot;pid&quot;: 646,
+  &quot;kind&quot;: &quot;sleep&quot;,
+  &quot;data&quot;: {
+   &quot;seconds&quot;: 36.0
+  },
+  &quot;round&quot;: -1
+ }
+]</pre><h4>stdout</h4><pre>Collecting requests
+  Downloading requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+Collecting charset_normalizer&lt;4,&gt;=2 (from requests)
+  Downloading charset_normalizer-3.5.2-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (46 kB)
+Collecting idna&lt;4,&gt;=2.5 (from requests)
+  Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+Collecting urllib3&lt;3,&gt;=1.26 (from requests)
+  Downloading urllib3-2.8.0-py3-none-any.whl.metadata (7.4 kB)
+Collecting certifi&gt;=2023.5.7 (from requests)
+  Downloading certifi-2026.10.19-py3-none-any.whl.metadata (2.5 kB)
+Downloading requests-2.34.2-py3-none-any.whl (73 kB)
+Downloading charset_normalizer-3.5.2-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (254 kB)
+Downloading idna-3.20-py3-none-any.whl (69 kB)
+Downloading urllib3-2.8.0-py3-none-any.whl (135 kB)
+Downloading certifi-2026.10.19-py3-none-any.whl (136 kB)
+Installing collected packages: urllib3, idna, charset_normalizer, certifi, requests
+
+Successfully installed certifi-2026.10.19 charset_normalizer-3.5.2 idna-3.20 requests-2.34.2 urllib3-2.8.0
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">0</td><td data-l="Label">baseline</td><td data-l="Exit">0</td><td data-l="Duration">1512 ms</td><td data-l="Events"><span class="chip kind">gate_exit ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.202,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;gate_exit&quot;,
+  &quot;data&quot;: {
+   &quot;reason&quot;: &quot;exited 0 after 0.2s with no observable behaviour&quot;
+  },
+  &quot;round&quot;: 0
+ }
+]</pre><h4>stdout</h4><pre>imported requests
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">1</td><td data-l="Label">probe-1</td><td data-l="Exit">0</td><td data-l="Duration">1638 ms</td><td data-l="Events"><span class="chip kind">gate_exit ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.187,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;gate_exit&quot;,
+  &quot;data&quot;: {
+   &quot;reason&quot;: &quot;exited 0 after 0.2s with no observable behaviour&quot;
+  },
+  &quot;round&quot;: 1
+ }
+]</pre><h4>stdout</h4><pre>xers/_mapping.py
+Found pattern b&#x27;CI&#x27; in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/pygments/lexers/_mapping.py
+Found pattern b&#x27;exec\\(&#x27; in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/pygments/lexers/__init__.py
+Found pattern b&#x27;CI&#x27; in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/tomli_w/_writer.py
+Found pattern b&#x27;CI&#x27; in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/tomli/_parser.py
+Found pattern b&#x27;CI&#x27; in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/packaging/utils.py
+Found pattern b&#x27;eval\\(&#x27; in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/packaging/_parser.py
+Found pattern b&#x27;CI&#x27; in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/packaging/_parser.py
+Found pattern b&#x27;subprocess&#x27; in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/packaging/tags.py
+Found pattern b&#x27;\\.env&#x27; in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/packaging/pylock.py
+Found pattern b&#x27;CI&#x27; in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/packaging/version.py
+Found pattern b&#x27;CI&#x27; in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/packaging/_tokenizer.py
+Found pattern b&#x27;subprocess&#x27; in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/packaging/_musllinux.py
+Found pattern b&#x27;CI&#x27; in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/packaging/licenses/_spdx.py
+Found pattern b&#x27;subprocess&#x27; in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_impl.py
+Found pattern b&#x27;\\.env&#x27; in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_impl.py
+Found pattern b&#x27;subprocess&#x27; in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/__init__.py
+Found pattern b&#x27;subprocess&#x27; in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py
+Found pattern b&#x27;\\.env&#x27; in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py
+Found pattern b&#x27;CI&#x27; in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/exceptions.py
+Found pattern b&#x27;socket\\.gethostbyname&#x27; in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/poolmanager.py
+Found pattern b&#x27;CI&#x27; in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/fields.py
+Found pattern b&#x27;socket\\.gethostbyname&#x27; in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/connectionpool.py
+Found pattern b&#x27;CI&#x27; in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/contrib/pyopenssl.py
+Found pattern b&#x27;\\.env&#x27; in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/util/ssl_.py
+Found pattern b&#x27;CI&#x27; in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/util/ssl_.py
+Found pattern b&#x27;CI&#x27; in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/util/retry.py
+Found pattern b&#x27;CI&#x27; in /root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/http2/connection.py
+Found pattern b&#x27;CI&#x27; in /root/work/venv/lib/python3.13/site-packages/urllib3/exceptions.py
+Found pattern b&#x27;socket\\.gethostbyname&#x27; in /root/work/venv/lib/python3.13/site-packages/urllib3/poolmanager.py
+Found pattern b&#x27;CI&#x27; in /root/work/venv/lib/python3.13/site-packages/urllib3/fields.py
+Found pattern b&#x27;socket\\.gethostbyname&#x27; in /root/work/venv/lib/python3.13/site-packages/urllib3/connectionpool.py
+Found pattern b&#x27;CI&#x27; in /root/work/venv/lib/python3.13/site-packages/urllib3/contrib/pyopenssl.py
+Found pattern b&#x27;\\.env&#x27; in /root/work/venv/lib/python3.13/site-packages/urllib3/util/ssl_.py
+Found pattern b&#x27;CI&#x27; in /root/work/venv/lib/python3.13/site-packages/urllib3/util/ssl_.py
+Found pattern b&#x27;CI&#x27; in /root/work/venv/lib/python3.13/site-packages/urllib3/util/url.py
+Found pattern b&#x27;CI&#x27; in /root/work/venv/lib/python3.13/site-packages/urllib3/util/retry.py
+Found pattern b&#x27;credentials&#x27; in /root/work/venv/lib/python3.13/site-packages/urllib3/util/request.py
+Found pattern b&#x27;CI&#x27; in /root/work/venv/lib/python3.13/site-packages/urllib3/http2/connection.py
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">2</td><td data-l="Label">probe-2</td><td data-l="Exit">0</td><td data-l="Duration">2000 ms</td><td data-l="Events"><span class="chip kind">gate_exit ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.42,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;gate_exit&quot;,
+  &quot;data&quot;: {
+   &quot;reason&quot;: &quot;exited 0 after 0.4s with no observable behaviour&quot;
+  },
+  &quot;round&quot;: 2
+ }
+]</pre><h4>stdout</h4><pre>processRunner&quot;) -&gt; Iterator[None]:
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_impl.py:161: found subprocess: :ref:`subprocess runner &lt;Subprocess Runners&gt;`.
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_impl.py:163: found subprocess: :param runner: The new subprocess runner to use within the context.
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_impl.py:168: found subprocess: with hook_caller.subprocess_runner(quiet_subprocess_runner):
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_impl.py:171: found subprocess: prev = self._subprocess_runner
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_impl.py:172: found subprocess: self._subprocess_runner = runner
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_impl.py:176: found subprocess: self._subprocess_runner = prev
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_impl.py:389: found subprocess: # Run the hook in a subprocess
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_impl.py:392: found subprocess: self._subprocess_runner(
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/__init__.py:11: found subprocess: default_subprocess_runner,
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/__init__.py:12: found subprocess: quiet_subprocess_runner,
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/__init__.py:21: found subprocess: &quot;default_subprocess_runner&quot;,
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/__init__.py:22: found subprocess: &quot;quiet_subprocess_runner&quot;,
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py:1: found subprocess: &quot;&quot;&quot;This is invoked in a subprocess to call the build backend hooks.
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py:60: found .env: backend_path = os.environ.get(&quot;_PYPROJECT_HOOKS_BACKEND_PATH&quot;)
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py:61: found .env: ep = os.environ[&quot;_PYPROJECT_HOOKS_BUILD_BACKEND&quot;]
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/exceptions.py:220: found CI: SPECIFIC_ERROR = &quot;too many {status_code} error responses&quot;
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/poolmanager.py:479: found gethostbyname: # conn.is_same_host() which may use socket.gethostbyname() in the future.
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/fields.py:37: found CI: non-ASCII values, like file names. This follows
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/fields.py:41: found CI: The name of the parameter, a string expected to be ASCII only.
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/fields.py:93: found CI: The name of the parameter, an ASCII-only ``str``.
+/root/work/venv/lib/python3.13/site-packages/pip/_vendor/urllib3/fields.py:251: found CI: The name of the parameter, an ASCII-only ``str``.
+/root/work/venv/lib/python3.13/site-packages/urllib3/exceptions.py:220: found CI: SPECIFIC_ERROR = &quot;too many {status_code} error responses&quot;
+/root/work/venv/lib/python3.13/site-packages/urllib3/poolmanager.py:486: found gethostbyname: # conn.is_same_host() which may use socket.gethostbyname() in the future.
+/root/work/venv/lib/python3.13/site-packages/urllib3/fields.py:37: found CI: non-ASCII values, like file names. This follows
+/root/work/venv/lib/python3.13/site-packages/urllib3/fields.py:41: found CI: The name of the parameter, a string expected to be ASCII only.
+/root/work/venv/lib/python3.13/site-packages/urllib3/fields.py:93: found CI: The name of the parameter, an ASCII-only ``str``.
+/root/work/venv/lib/python3.13/site-packages/urllib3/fields.py:251: found CI: The name of the parameter, an ASCII-only ``str``.
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">3</td><td data-l="Label">probe-3</td><td data-l="Exit">0</td><td data-l="Duration">1971 ms</td><td data-l="Events"><span class="chip kind">file_read_sensitive ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.025,
+  &quot;pid&quot;: 770,
+  &quot;kind&quot;: &quot;file_read_sensitive&quot;,
+  &quot;data&quot;: {
+   &quot;path&quot;: &quot;/root/work/.env&quot;,
+   &quot;canary&quot;: &quot;ENV&quot;
+  },
+  &quot;round&quot;: 3
+ }
+]</pre><h4>stdout</h4><pre>ip-26.1.2.dist-info/licenses/src/pip/_vendor/pyproject_hooks/LICENSE (1081 bytes, md5=aad69c93f605003e3342b174d9b0708c)
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/resolvelib/LICENSE (751 bytes, md5=78e1c0248051c32a38a7f820c30bd7a5)
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/truststore/LICENSE (1086 bytes, md5=74420fc3965c4558a4a1529e63c2867f)
+/root/work/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info/licenses/src/pip/_vendor/urllib3/LICENSE.txt (1093 bytes, md5=52d273a3054ced561275d4d15260ecda)
+/root/work/out/r2/reply.txt (12 bytes, md5=fb50bf98d7d4137b4b4604ae138bc57c)
+/root/work/out/r2/sink.ready (5 bytes, md5=b2fdab230a2c39f3595a947861863cb7)
+/root/work/out/r2/stdout (63907 bytes, md5=103cb1a5d77955025dce02e203a6059a)
+/root/work/out/r2/events.json (192 bytes, md5=8afedf7ad068c284c2d65adb8e7d1f0c)
+/root/work/out/r2/driver.py (1854 bytes, md5=a1e2436e807ce8323b7749b85a330a18)
+/root/work/out/r2/stderr (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)
+/root/work/out/r2/sink.out (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)
+/root/work/out/r2/exit (2 bytes, md5=897316929176464ebc9ad085f31e7284)
+/root/work/out/r2/trace.log (102687 bytes, md5=671ffadadf7442acdd500e33c9a12e8a)
+/root/work/out/r2/sink.jsonl (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)
+/root/work/out/r1/reply.txt (12 bytes, md5=fb50bf98d7d4137b4b4604ae138bc57c)
+/root/work/out/r1/sink.ready (5 bytes, md5=b2fdab230a2c39f3595a947861863cb7)
+/root/work/out/r1/stdout (14781 bytes, md5=a67e5313a7d32e379e39e31a90941b50)
+/root/work/out/r1/events.json (194 bytes, md5=fc438216d414d92d65f0d9694c0838ef)
+/root/work/out/r1/driver.py (881 bytes, md5=b0908f14e4c5a00ba6fa802b2b11a190)
+/root/work/out/r1/stderr (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)
+/root/work/out/r1/sink.out (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)
+/root/work/out/r1/exit (2 bytes, md5=897316929176464ebc9ad085f31e7284)
+/root/work/out/r1/trace.log (102686 bytes, md5=9c7f1c27dda24243903585809a276bca)
+/root/work/out/r1/sink.jsonl (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)
+/root/work/out/install/stdout (1121 bytes, md5=f5c37fc7c10999d3c017daf0024fcf80)
+/root/work/out/install/venv.log (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)
+/root/work/out/install/events.json (850 bytes, md5=d26f99b06b79de17394e87875c3cb27f)
+/root/work/out/install/stderr (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)
+/root/work/out/install/exit (2 bytes, md5=897316929176464ebc9ad085f31e7284)
+/root/work/out/install/trace.log (236977 bytes, md5=cf382ca629af6177f53f5fc59f230a4f)
+/root/work/out/r0/reply.txt (12 bytes, md5=fb50bf98d7d4137b4b4604ae138bc57c)
+/root/work/out/r0/sink.ready (5 bytes, md5=b2fdab230a2c39f3595a947861863cb7)
+/root/work/out/r0/stdout (18 bytes, md5=2d5b8292d8d846f8f8196f8d640419a1)
+/root/work/out/r0/events.json (194 bytes, md5=530e23a639de9fd0283c37267fd6f3fe)
+/root/work/out/r0/driver.py (219 bytes, md5=4dda54c71b3fa17a5d983dfbccb0d50e)
+/root/work/out/r0/stderr (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)
+/root/work/out/r0/sink.out (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)
+/root/work/out/r0/exit (2 bytes, md5=897316929176464ebc9ad085f31e7284)
+/root/work/out/r0/trace.log (42207 bytes, md5=1d2d455c620373b3c2f669bc654c376c)
+/root/work/out/r0/sink.jsonl (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)
+/root/work/out/r3/reply.txt (12 bytes, md5=fb50bf98d7d4137b4b4604ae138bc57c)
+/root/work/out/r3/sink.ready (5 bytes, md5=b2fdab230a2c39f3595a947861863cb7)
+/root/work/out/r3/stdout (148762 bytes, md5=2afd93eaef84abda32c5744cbee76f19)
+/root/work/out/r3/driver.py (526 bytes, md5=8bdd79d9c3e6d634022057e38b6eb692)
+/root/work/out/r3/stderr (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)
+/root/work/out/r3/sink.out (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)
+/root/work/out/r3/trace.log (206658 bytes, md5=8c42fb26b199ea82d4dec5bffbc3e652)
+/root/work/out/r3/sink.jsonl (0 bytes, md5=d41d8cd98f00b204e9800998ecf8427e)
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">4</td><td data-l="Label">probe-4</td><td data-l="Exit">0</td><td data-l="Duration">1307 ms</td><td data-l="Events"><span class="chip kind">file_read_sensitive ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.025,
+  &quot;pid&quot;: 793,
+  &quot;kind&quot;: &quot;file_read_sensitive&quot;,
+  &quot;data&quot;: {
+   &quot;path&quot;: &quot;/root/work/.env&quot;,
+   &quot;canary&quot;: &quot;ENV&quot;
+  },
+  &quot;round&quot;: 4
+ }
+]</pre><h4>stdout</h4><pre>/root/work/canary_tokens.txt (99 bytes, md5=ff3e4e8f30c2cdb76f0ead2d0be5d5ea)
+/root/work/.env (46 bytes, md5=cb1aef8e0b3032f2e8911d3204c9bca7)
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">5</td><td data-l="Label">probe-5</td><td data-l="Exit">0</td><td data-l="Duration">1290 ms</td><td data-l="Events"><span class="chip kind">gate_exit ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.025,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;gate_exit&quot;,
+  &quot;data&quot;: {
+   &quot;reason&quot;: &quot;exited 0 after 0.0s with no observable behaviour&quot;
+  },
+  &quot;round&quot;: 5
+ }
+]</pre><h4>stdout</h4><pre>charset_normalizer
+requests-2.34.2.dist-info
+idna
+urllib3-2.8.0.dist-info
+requests
+charset_normalizer-3.5.2.dist-info
+pip
+certifi-2026.10.19.dist-info
+idna-3.20.dist-info
+certifi
+urllib3
+pip-26.1.2.dist-info
+</pre><h4>stderr</h4><pre></pre></details></td></tr><tr><td data-l="Round">6</td><td data-l="Label">auto-lure <span class="chip lure">lure</span></td><td data-l="Exit">0</td><td data-l="Duration">1506 ms</td><td data-l="Events"><span class="chip kind">gate_exit ×1</span></td><td data-l="Raw"><details><summary>raw events / stdout / stderr</summary><h4>events</h4><pre>[
+ {
+  &quot;t&quot;: 0.173,
+  &quot;pid&quot;: 0,
+  &quot;kind&quot;: &quot;gate_exit&quot;,
+  &quot;data&quot;: {
+   &quot;reason&quot;: &quot;exited 0 after 0.2s with no observable behaviour&quot;
+  },
+  &quot;round&quot;: 6
+ }
+]</pre><h4>stdout</h4><pre>imported requests
+</pre><h4>stderr</h4><pre></pre></details></td></tr></tbody></table></details><details class="card" open><summary><h2>Threat memory</h2></summary><ul><li>Skill from an earlier scan tried first: <b>dns-and-ci-gated-stealer</b></li><li>Skill from an earlier scan tried first: <b>ci-and-dns-gated-exfiltration</b></li></ul></details><details class="card" open><summary><h2>Limitations</h2></summary><ul><li>Dynamic analysis runs on Linux only; Windows executables are not executed.</li><li>HTTPS request bodies cannot be read without interception: TLS destinations are recorded by SNI only.</li><li>Evasive code that detects tracing or waits longer than the probe timeout may look quiet; such runs are reported as inconclusive, never clean.</li><li>Canary proof covers the credential types we plant (ssh key, aws, npm, .env).</li></ul></details><footer>Sandboxes: sb-01m5ca011rb43c4qtyzdrq43sw &middot; sandbox destroyed: yes</footer></main><script>function t(o){document.querySelectorAll('details.card').forEach(function(d){d.open=o})}document.getElementById('ex').onclick=function(){t(true)};document.getElementById('co').onclick=function(){t(false)};</script></body></html>

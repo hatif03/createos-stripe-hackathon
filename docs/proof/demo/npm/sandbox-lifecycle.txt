@@ -1,0 +1,5 @@
+# CreateOS sandbox events from the application log for `npm` (UTC)
+# command: -u -m src.cli.sandtrap scan npm:fixtures/npm-postinstall-beacon --out out/demo
+2026-10-20T09:06:33.395938Z  sandbox_created name=sandtrap-e7db74-3e3354 sandbox_id=sb-01m5c8zxt43v58gxvpaf7n4xmv shape=s-1vcpu-2gb
+2026-10-20T09:06:47.936906Z  sandbox_egress_set phase=analysis rules=['192.0.2.1:9'] sandbox_id=sb-01m5c8zxt43v58gxvpaf7n4xmv
+2026-10-20T09:10:04.423803Z  sandbox_destroyed sandbox_id=sb-01m5c8zxt43v58gxvpaf7n4xmv

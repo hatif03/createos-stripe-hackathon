@@ -1,0 +1,9 @@
+{
+  "name": "hero",
+  "title": "Python package with an environment-gated stealer",
+  "exit_code": 0,
+  "seconds": 178,
+  "started_utc": "2026-10-20T09:03:22+00:00",
+  "report_dir": "out/demo/005a10c41b",
+  "sandbox_events": 5
+}

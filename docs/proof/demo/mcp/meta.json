@@ -1,0 +1,9 @@
+{
+  "name": "mcp",
+  "title": "MCP: a coding agent asks Sandtrap before installing a package",
+  "exit_code": 0,
+  "seconds": 146,
+  "started_utc": "2026-10-20T09:29:34+00:00",
+  "report_dir": "D:/createos-stripe-hackathon/out/93fe2b7fb9",
+  "sandbox_events": 0
+}
