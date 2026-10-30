@@ -358,7 +358,7 @@ When the gate is unknown the agent forks the prepared sandbox into three clones 
 **What would you build next?**
 HTTPS interception for request bodies, a hardened Docker-per-sample layer inside the sandbox, a decompiler for stripped binaries, similarity search over past scans, and a sender allow-list for the email intake.
 
-**Is the code open?** Yes, MIT: `github.com/hatif03/createos-stripe-hackathon`.
+**Is the code open?** Yes, MIT: `github.com/hatif03/sandtrap`.
 
 **Why is the demo recorded?** "To keep a live demo on X from depending on network latency; every frame is a replay of a real run, the proof for each is in the repo."
 

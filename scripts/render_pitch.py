@@ -137,7 +137,7 @@ def build_cards():
     c["close"] = card("c_close", """
 <div style="margin-top:170px"><h1 class=hero>Sandtrap</h1>
 <p style="font-size:44px;margin:0;color:#c9d1d9">Make evasive code show itself. Prove it. Fix it.</p>
-<p style="font-size:38px;margin-top:40px" class=blu>github.com/hatif03/createos-stripe-hackathon</p>
+<p style="font-size:38px;margin-top:40px" class=blu>github.com/hatif03/sandtrap</p>
 <p class=mut style="margin-top:28px">Open source (MIT) &middot; 88 tests &middot; Built on <span class=cos>CreateOS Sandbox</span> and <span class=cos>Stripe Projects</span></p></div>""", 9)
     return c
 

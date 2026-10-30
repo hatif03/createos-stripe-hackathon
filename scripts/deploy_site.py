@@ -21,10 +21,10 @@ CSS = ("body{margin:0 auto;max-width:1100px;padding:24px;background:#0d1117;colo
 
 body = markdown.markdown((ROOT / "docs" / "PROOF.md").read_text(encoding="utf-8"), extensions=["tables", "fenced_code"])
 intro = ("<p><b>Sandtrap</b>: an AI analyst that lures evasive code into revealing itself inside CreateOS sandboxes, proves exfiltration with canary "
-         "credentials, and patches it. Source: <a href='https://github.com/hatif03/createos-stripe-hackathon'>github.com/hatif03/createos-stripe-hackathon</a>. "
+         "credentials, and patches it. Source: <a href='https://github.com/hatif03/sandtrap'>github.com/hatif03/sandtrap</a>. "
          "Below: the evidence (reports are static HTML produced by real scans).</p>")
 index = f"<!doctype html><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><title>Sandtrap evidence</title><style>{CSS}</style>{intro}{body}"
-index = re.sub(r'href="\.\./README\.md[^"]*"', 'href="https://github.com/hatif03/createos-stripe-hackathon#limitations"', index)
+index = re.sub(r'href="\.\./README\.md[^"]*"', 'href="https://github.com/hatif03/sandtrap#limitations"', index)
 
 client = make_client()
 instance = _existing(client)

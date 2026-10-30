@@ -191,7 +191,7 @@ def main(names):
                             (36, "Replays of captured terminal output; idle waits over 5 seconds are shortened.", gy)], 5)
         title_card(t_close, [(70, "What you just saw", wh), (38, "Firecracker sandboxes created and destroyed per scan, with live egress control", bl),
                              (38, "Pause + fork to race hypotheses, ingress for public reports, root inside the VM", bl),
-                             (34, "Evidence: docs/PROOF.md and docs/proof/demo/ in github.com/hatif03/createos-stripe-hackathon", gy)], 7)
+                             (34, "Evidence: docs/PROOF.md and docs/proof/demo/ in github.com/hatif03/sandtrap", gy)], 7)
         parts = [t_open] + ([ROOT / "media" / "stack.mp4"] if (ROOT / "media" / "stack.mp4").exists() else []) + [finals[n] for n in ORDER if n in finals] + [t_close]
         concat(parts, DEMO / "sandtrap-demo-reel.mp4")
         print("reel written", flush=True)
